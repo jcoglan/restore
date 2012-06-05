@@ -32,7 +32,7 @@ server.listen(process.argv[2]);
 
 Boot the server on port 80:
 
-    sudo node server.js
+    sudo node server.js 80
 
 Create a user:
 
