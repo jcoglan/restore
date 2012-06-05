@@ -1,0 +1,22 @@
+{ "name"            : "restore"
+, "description"     : "Simple remoteStorage server"
+, "homepage"        : "http://github.com/jcoglan/restore"
+, "author"          : "James Coglan <jcoglan@gmail.com> (http://jcoglan.com/)"
+, "keywords"        : ["remoteStorage", "webfinger", "oauth", "webdav"]
+
+, "version"         : "0.1.0"
+, "engines"         : {"node": ">=0.6.0"}
+, "main"            : "./lib/restore.js"
+, "dependencies"    : {"ejs": "", "mkdirp": ""}
+
+, "bugs"            : {"url": "http://github.com/jcoglan/restore/issues"}
+
+, "license"         : { "type"  : "MIT"
+                      , "url"   : "http://www.opensource.org/licenses/mit-license.php"
+                      }
+
+, "repository"      : { "type"  : "git"
+                      , "url"   : "git://github.com/jcoglan/restore.git"
+                      }
+}
+

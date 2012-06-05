@@ -1,0 +1,34 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Authorize</title>
+  </head>
+  <body>
+    
+    <p>The page at <%= client_id %> wants to access <%= scope %>.</p>
+    
+    <% if (typeof error !== 'undefined') { %>
+      <p class="error"><%= error %></p>
+    <% } %>
+    
+    <form method="POST" action="/auth">
+      <input type="hidden" name="client_id" value="<%= client_id %>">
+      <input type="hidden" name="redirect_uri" value="<%= redirect_uri %>">
+      <input type="hidden" name="response_type" value="<%= response_type %>">
+      <input type="hidden" name="scope" value="<%= scope %>">
+      <input type="hidden" name="state" value="<%= state %>">
+      
+      <label for="username">Username</label>
+      <input type="text" name="username" id="username" value="<%= username %>">
+      
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password">
+      
+      <input type="submit" value="Allow">
+    </form>
+    
+  </body>
+</html>
+

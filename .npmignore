@@ -1,0 +1,5 @@
+.git
+.gitignore
+.npmignore
+example/store
+node_modules
