@@ -1,0 +1,3 @@
+[submodule "vendor/remoteStorage"]
+	path = vendor/remoteStorage
+	url = git://github.com/unhosted/remoteStorage.js.git
