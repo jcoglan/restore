@@ -7,7 +7,14 @@
   </head>
   <body>
     
-    <p>The page at <%= client_id %> wants to access <%= scope %>.</p>
+    <p>The page at <%= client_id %> wants:</p>
+    
+    <ul>
+      <% scope.split(/\s+/).forEach(function(module) { %>
+        <% var path = module.split(':') %>
+        <li><%= access_strings[path[1]] %> access to <%= path[0] %></li>
+      <% }) %>
+    </ul>
     
     <% if (typeof error !== 'undefined') { %>
       <p class="error"><%= error %></p>
