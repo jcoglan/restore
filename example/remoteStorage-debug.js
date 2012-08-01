@@ -1,0 +1,1 @@
+../vendor/remoteStorage/build/latest/remoteStorage-debug.js

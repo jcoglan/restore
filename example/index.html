@@ -10,30 +10,17 @@
     
     <h1>remoteStorage example</h1>
     
+    <div id="remotestorage-connect"></div>
+    
     <script type="text/javascript">
-      remoteStorage.getStorageInfo('jcoglan@localhost', function(error, storageInfo) {
-        var token = remoteStorage.receiveToken();
-        
-        if (!token)
-          window.location = remoteStorage.createOAuthAddress(storageInfo, ['vault'], window.location.href);
-        
-        var client = remoteStorage.createClient(storageInfo, 'vault', token);
-        
-        client.put('key', 'client value', function() {
-          
-          client.get('key', function(error, data) {
-            alert('Set value: ' + data);
-            
-            client.delete('key', function() {
-              
-              client.get('key', function(error, data) {
-                alert('Delete value: ' + data);
-                
-              });
-            });
-          });
-        });
+      localStorage.michiel = 'true'; // hack to avoid devsonly
+      remoteStorage.displayWidget('remotestorage-connect');
+      
+      remoteStorage.defineModule('vault', function(client) {
+        return {name: 'vault', exports: client};
       });
+      
+      remoteStorage.loadModule('vault');
     </script>
     
   </body>
