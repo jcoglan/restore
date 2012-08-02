@@ -21,15 +21,21 @@ JS.Test.describe("Storage", function() { with(this) {
   }})
   
   describe("GET", function() { with(this) {
+    define("item", {
+      type:     "custom/type",
+      modified: new Date(2012, 1, 25, 13, 37),
+      value:    "a value"
+    })
+    
     it("asks the store for the item using an access token", function() { with(this) {
-      expect(store, "get").given("a_token", "zebcoe", "locog", "seats").yielding([null, "value"])
+      expect(store, "get").given("a_token", "zebcoe", "locog", "seats").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
       get( "/data/zebcoe/locog/seats", {} )
     }})
     
-    describe("when the store returns a value", function() { with(this) {
+    describe("when the store returns an item", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "get").yields([null, "a value"])
+        stub(store, "get").yields([null, item])
       }})
       
       it("returns the value in the response", function() { with(this) {
@@ -37,12 +43,13 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
-        check_header( "Content-Type", "text/plain" )
+        check_header( "Content-Type", "custom/type" )
+        check_header( "Last-Modified", "Sat Feb 25 2012 13:37:00 GMT+0000 (GMT)" )
         check_body( "a value" )
       }})
     }})
     
-    describe("when the store returns undefined", function() { with(this) {
+    describe("when the item does not exist", function() { with(this) {
       before(function() { with(this) {
         stub(store, "get").yields([null, undefined])
       }})
@@ -71,7 +78,7 @@ JS.Test.describe("Storage", function() { with(this) {
   
   describe("PUT", function() { with(this) {
     it("tells the store to save the given value", function() { with(this) {
-      expect(store, "put").given("a_token", "zebcoe", "locog", "seats", "a value").yielding([null])
+      expect(store, "put").given("a_token", "zebcoe", "locog", "seats", "text/plain", "a value").yielding([null])
       header( "Authorization", "Bearer a_token" )
       put( "/data/zebcoe/locog/seats", "a value" )
     }})
