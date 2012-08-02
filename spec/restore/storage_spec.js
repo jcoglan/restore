@@ -35,6 +35,7 @@ JS.Test.describe("Storage", function() { with(this) {
       it("returns the value in the response", function() { with(this) {
         get( "/data/zebcoe/locog/seats", {} )
         check_status( 200 )
+        check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
         check_header( "Content-Type", "text/plain" )
         check_body( "a value" )
@@ -49,6 +50,7 @@ JS.Test.describe("Storage", function() { with(this) {
       it("returns an empty 404 response", function() { with(this) {
         get( "/data/zebcoe/locog/seats", {} )
         check_status( 404 )
+        check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
     }})
@@ -61,6 +63,7 @@ JS.Test.describe("Storage", function() { with(this) {
       it("returns an empty 401 response", function() { with(this) {
         get( "/data/zebcoe/locog/seats", {} )
         check_status( 401 )
+        check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
     }})
@@ -81,6 +84,7 @@ JS.Test.describe("Storage", function() { with(this) {
       it("returns an empty 204 response", function() { with(this) {
         put( "/data/zebcoe/locog/seats", "a value" )
         check_status( 204 )
+        check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
     }})
@@ -93,6 +97,7 @@ JS.Test.describe("Storage", function() { with(this) {
       it("returns an empty 401 response", function() { with(this) {
         put( "/data/zebcoe/locog/seats", "a value" )
         check_status( 401 )
+        check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
     }})
@@ -113,6 +118,7 @@ JS.Test.describe("Storage", function() { with(this) {
       it("returns an empty 204 response", function() { with(this) {
         this.delete( "/data/zebcoe/locog/seats", {} )
         check_status( 204 )
+        check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
     }})
@@ -125,6 +131,7 @@ JS.Test.describe("Storage", function() { with(this) {
       it("returns an empty 401 response", function() { with(this) {
         this.delete( "/data/zebcoe/locog/seats", {} )
         check_status( 401 )
+        check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
     }})
