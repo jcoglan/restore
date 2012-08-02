@@ -93,6 +93,11 @@ module.exports = JS.Test.asyncSteps({
     else
       this.assertMatch(expectedBody, actualBody)
     process.nextTick(callback)
+  },
+  
+  check_json: function(data, callback) {
+    this.assertEqual(data, JSON.parse(this.response.body))
+    process.nextTick(callback)
   }
 })
 

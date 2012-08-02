@@ -54,7 +54,7 @@ JS.Test.describe("OAuth", function() { with(this) {
       post("/auth", auth_params)
       check_status( 401 )
       check_header( "Content-Type","text/html" )
-      check_body( /The page at the_client_id wants to access the_scope/ )
+      check_body( /The page at the_client_id wants/ )
     }})
   }})
 }})

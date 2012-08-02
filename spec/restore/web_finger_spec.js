@@ -19,8 +19,30 @@ JS.Test.describe("WebFinger", function() { with(this) {
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n\
   <Link rel="lrdd"\n\
         type="application/xrd+xml"\n\
-        template="' + host + '/webfinger/{uri}" />\n\
+        template="' + host + '/webfinger/xrd/{uri}" />\n\
 </XRD>' )
+  }})
+  
+  it("returns host metadata as JSON", function() { with(this) {
+    get( "/.well-known/host-meta.json", {resource: "acct:zebcoe@locog"} )
+    
+    check_status( 200 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+    check_header( "Content-Type", "application/json" )
+    
+    check_json({
+      "links": [
+        {
+          "href": "http://localhost/data/zebcoe",
+          "rel":  "remoteStorage",
+          "type": "https://www.w3.org/community/rww/wiki/read-write-web-00#simple",
+          "properties": {
+            "auth-method":    "https://tools.ietf.org/html/draft-ietf-oauth-v2-26#section-4.2",
+            "auth-endpoint":  "http://localhost/auth/zebcoe"
+          }
+        }
+      ]
+    })
   }})
   
   it("returns account metadata as XRD", function() { with(this) {
