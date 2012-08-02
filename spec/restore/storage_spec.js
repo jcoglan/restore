@@ -21,7 +21,7 @@ JS.Test.describe("Storage", function() { with(this) {
   }})
   
   describe("GET", function() { with(this) {
-    it("askes the store for the item using an access token", function() { with(this) {
+    it("asks the store for the item using an access token", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "locog", "seats").yielding([null, "value"])
       header( "Authorization", "Bearer a_token" )
       get( "/data/zebcoe/locog/seats", {} )
@@ -104,7 +104,7 @@ JS.Test.describe("Storage", function() { with(this) {
     
     describe("when the store returns an error", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "put").yields([new Error])
+        stub(store, "put").yields([new Error()])
       }})
       
       it("returns an empty 401 response", function() { with(this) {
@@ -151,7 +151,7 @@ JS.Test.describe("Storage", function() { with(this) {
     
     describe("when the store returns an error", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "delete").yields([new Error])
+        stub(store, "delete").yields([new Error()])
       }})
       
       it("returns an empty 401 response", function() { with(this) {
