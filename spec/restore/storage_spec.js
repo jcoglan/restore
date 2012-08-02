@@ -76,14 +76,27 @@ JS.Test.describe("Storage", function() { with(this) {
       put( "/data/zebcoe/locog/seats", "a value" )
     }})
     
-    describe("when the store returns successfully", function() { with(this) {
+    describe("when the store says the item was created", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "put").yields([null])
+        stub(store, "put").yields([null, true])
       }})
       
-      it("returns an empty 204 response", function() { with(this) {
+      it("returns an empty 201 response", function() { with(this) {
         put( "/data/zebcoe/locog/seats", "a value" )
-        check_status( 204 )
+        check_status( 201 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_body( "" )
+      }})
+    }})
+    
+    describe("when the store says the item was not created but updated", function() { with(this) {
+      before(function() { with(this) {
+        stub(store, "put").yields([null, false])
+      }})
+      
+      it("returns an empty 200 response", function() { with(this) {
+        put( "/data/zebcoe/locog/seats", "a value" )
+        check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
@@ -104,20 +117,33 @@ JS.Test.describe("Storage", function() { with(this) {
   }})
   
   describe("DELETE", function() { with(this) {
-    it("tells the store to delete the given key", function() { with(this) {
+    it("tells the store to delete the given item", function() { with(this) {
       expect(store, "delete").given("a_token", "zebcoe", "locog", "seats").yielding([null])
       header( "Authorization", "Bearer a_token" )
       this.delete( "/data/zebcoe/locog/seats", {} )
     }})
     
-    describe("when the store returns successfully", function() { with(this) {
+    describe("when the store says the item was deleted", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "delete").yields([null])
+        stub(store, "delete").yields([null, true])
       }})
       
-      it("returns an empty 204 response", function() { with(this) {
+      it("returns an empty 200 response", function() { with(this) {
         this.delete( "/data/zebcoe/locog/seats", {} )
-        check_status( 204 )
+        check_status( 200 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_body( "" )
+      }})
+    }})
+    
+    describe("when the store says the item was not deleted", function() { with(this) {
+      before(function() { with(this) {
+        stub(store, "delete").yields([null, false])
+      }})
+      
+      it("returns an empty 404 response", function() { with(this) {
+        this.delete( "/data/zebcoe/locog/seats", {} )
+        check_status( 404 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
