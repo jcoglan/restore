@@ -8,7 +8,7 @@ JS.Test.describe("Storage", function() { with(this) {
   
   define("store", {})
   
-  describe("OPTIONS /data/:username/:category/:key", function() { with(this) {
+  describe("OPTIONS", function() { with(this) {
     it("returns access control headers", function() { with(this) {
       options( "/data/zebcoe/locog/seats", {} )
       check_status( 200 )
@@ -20,7 +20,7 @@ JS.Test.describe("Storage", function() { with(this) {
     }})
   }})
   
-  describe("GET /data/:username/:category/:key", function() { with(this) {
+  describe("GET", function() { with(this) {
     it("askes the store for the item using an access token", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "locog", "seats").yielding([null, "value"])
       header( "Authorization", "Bearer a_token" )
@@ -60,6 +60,70 @@ JS.Test.describe("Storage", function() { with(this) {
       
       it("returns an empty 401 response", function() { with(this) {
         get( "/data/zebcoe/locog/seats", {} )
+        check_status( 401 )
+        check_body( "" )
+      }})
+    }})
+  }})
+  
+  describe("PUT", function() { with(this) {
+    it("tells the store to save the given value", function() { with(this) {
+      expect(store, "put").given("a_token", "zebcoe", "locog", "seats", "a value").yielding([null])
+      header( "Authorization", "Bearer a_token" )
+      put( "/data/zebcoe/locog/seats", "a value" )
+    }})
+    
+    describe("when the store returns successfully", function() { with(this) {
+      before(function() { with(this) {
+        stub(store, "put").yields([null])
+      }})
+      
+      it("returns an empty 204 response", function() { with(this) {
+        put( "/data/zebcoe/locog/seats", "a value" )
+        check_status( 204 )
+        check_body( "" )
+      }})
+    }})
+    
+    describe("when the store returns an error", function() { with(this) {
+      before(function() { with(this) {
+        stub(store, "put").yields([new Error])
+      }})
+      
+      it("returns an empty 401 response", function() { with(this) {
+        put( "/data/zebcoe/locog/seats", "a value" )
+        check_status( 401 )
+        check_body( "" )
+      }})
+    }})
+  }})
+  
+  describe("DELETE", function() { with(this) {
+    it("tells the store to delete the given key", function() { with(this) {
+      expect(store, "delete").given("a_token", "zebcoe", "locog", "seats").yielding([null])
+      header( "Authorization", "Bearer a_token" )
+      this.delete( "/data/zebcoe/locog/seats", {} )
+    }})
+    
+    describe("when the store returns successfully", function() { with(this) {
+      before(function() { with(this) {
+        stub(store, "delete").yields([null])
+      }})
+      
+      it("returns an empty 204 response", function() { with(this) {
+        this.delete( "/data/zebcoe/locog/seats", {} )
+        check_status( 204 )
+        check_body( "" )
+      }})
+    }})
+    
+    describe("when the store returns an error", function() { with(this) {
+      before(function() { with(this) {
+        stub(store, "delete").yields([new Error])
+      }})
+      
+      it("returns an empty 401 response", function() { with(this) {
+        this.delete( "/data/zebcoe/locog/seats", {} )
         check_status( 401 )
         check_body( "" )
       }})

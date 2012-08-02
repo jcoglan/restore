@@ -10,12 +10,16 @@ var request = function(self, host, port, method, path, params, headers, callback
     path:     path,
     headers:  headers || {}
   }
-  var query = qs.stringify(params)
+  var query = (typeof params === "string")
+            ? params
+            : qs.stringify(params)
   
-  if (method === "POST" || method === "PUT")
-    options.headers["Content-Type"] = "application/x-www-form-urlencoded"
+  if ((method === "POST" || method === "PUT") && !options.headers["Content-Type"])
+    options.headers["Content-Type"] = (typeof params === "object")
+                                    ? "application/x-www-form-urlencoded"
+                                    : "text/plain"
   else if (query)
-    options.path += '?' + query
+    options.path += "?" + query
   
   var request = http.request(options, function(response) {
     var body = ""
@@ -58,6 +62,14 @@ module.exports = JS.Test.asyncSteps({
   
   post: function(path, params, callback) {
     request(this, "localhost", this._port, "POST", path, params, this._headers, callback)
+  },
+  
+  put: function(path, params, callback) {
+    request(this, "localhost", this._port, "PUT", path, params, this._headers, callback)
+  },
+  
+  delete: function(path, params, callback) {
+    request(this, "localhost", this._port, "DELETE", path, params, this._headers, callback)
   },
   
   options: function(path, params, callback) {
