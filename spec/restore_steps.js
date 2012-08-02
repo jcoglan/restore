@@ -2,17 +2,18 @@ var Restore = require("../lib/restore"),
     http    = require("http"),
     qs      = require("querystring")
 
-var request = function(self, host, port, method, path, params, callback) {
+var request = function(self, host, port, method, path, params, headers, callback) {
   var options = {
     host:     host,
     port:     port,
     method:   method,
-    path:     path
+    path:     path,
+    headers:  headers || {}
   }
   var query = qs.stringify(params)
   
   if (method === "POST" || method === "PUT")
-    options.headers = {"Content-Type": "application/x-www-form-urlencoded"}
+    options.headers["Content-Type"] = "application/x-www-form-urlencoded"
   else if (query)
     options.path += '?' + query
   
@@ -37,30 +38,40 @@ module.exports = JS.Test.asyncSteps({
     this._server = new Restore({store: this.store})
     this._port = port
     this._server.listen(port)
-    setTimeout(callback, 10)
+    process.nextTick(callback)
   },
   
   stop: function(callback) {
     this._server.stop()
-    setTimeout(callback, 10)
+    process.nextTick(callback)
+  },
+  
+  header: function(name, value, callback) {
+    this._headers = this._headers || {}
+    this._headers[name] = value
+    process.nextTick(callback)
   },
   
   get: function(path, params, callback) {
-    request(this, "localhost", this._port, "GET", path, params, callback)
+    request(this, "localhost", this._port, "GET", path, params, this._headers, callback)
   },
   
   post: function(path, params, callback) {
-    request(this, "localhost", this._port, "POST", path, params, callback)
+    request(this, "localhost", this._port, "POST", path, params, this._headers, callback)
+  },
+  
+  options: function(path, params, callback) {
+    request(this, "localhost", this._port, "OPTIONS", path, params, this._headers, callback)
   },
   
   check_status: function(status, callback) {
     this.assertEqual(status, this.response.statusCode)
-    callback()
+    process.nextTick(callback)
   },
   
   check_header: function(name, value, callback) {
     this.assertEqual(value, this.response.headers[name.toLowerCase()])
-    callback()
+    process.nextTick(callback)
   },
   
   check_body: function(expectedBody, callback) {
@@ -69,7 +80,7 @@ module.exports = JS.Test.asyncSteps({
       this.assertEqual(expectedBody, actualBody)
     else
       this.assertMatch(expectedBody, actualBody)
-    callback()
+    process.nextTick(callback)
   }
 })
 

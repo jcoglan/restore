@@ -22,11 +22,11 @@ JS.Test.describe("OAuth", function() { with(this) {
     before(function() { with(this) {
       expect(store, "authenticate")
           .given( objectIncluding({username: "zebcoe", password: "locog"}) )
-          .yields( [null] )
+          .yielding( [null] )
     }})
     
     it("authorizes the client", function() { with(this) {
-      expect(store, "authorize").given("the_client_id", "zebcoe", "the_scope").yields([null, "a_token"])
+      expect(store, "authorize").given("the_client_id", "zebcoe", "the_scope").yielding([null, "a_token"])
       post("/auth", auth_params)
     }})
     
@@ -42,7 +42,7 @@ JS.Test.describe("OAuth", function() { with(this) {
     before(function() { with(this) {
       expect(store, "authenticate")
           .given( objectIncluding({username: "zebcoe", password: "locog"}) )
-          .yields( [new Error()] )
+          .yielding( [new Error()] )
     }})
     
     it("does not authorize the client", function() { with(this) {
