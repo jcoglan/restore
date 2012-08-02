@@ -82,7 +82,11 @@ module.exports = JS.Test.asyncSteps({
   },
   
   check_header: function(name, value, callback) {
-    this.assertEqual(value, this.response.headers[name.toLowerCase()])
+    var header = this.response.headers[name.toLowerCase()]
+    if (typeof value === "string")
+      this.assertEqual(value, header)
+    else
+      this.assertMatch(value, header)
     process.nextTick(callback)
   },
   

@@ -44,7 +44,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
         check_header( "Content-Type", "custom/type" )
-        check_header( "Last-Modified", "Sat Feb 25 2012 13:37:00 GMT+0000 (GMT)" )
+        check_header( "Last-Modified", /^Sat Feb 25 2012 13:37:00 GMT\+0000 \(.*?\)$/ )
         check_body( "a value" )
       }})
     }})
