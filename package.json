@@ -7,8 +7,8 @@
 , "version"         : "0.1.0"
 , "engines"         : {"node": ">=0.6.0"}
 , "main"            : "./lib/restore.js"
-, "dependencies"    : {"ejs": "", "mkdirp": ""}
-, "devDependencies" : {"jsclass": "", "fs.extra": ""}
+, "dependencies"    : {"ejs": "", "fs.extra": ""}
+, "devDependencies" : {"jsclass": ""}
 
 , "scripts"         : {"test": "node spec/runner.js"}
 
