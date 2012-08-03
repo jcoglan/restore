@@ -69,6 +69,229 @@ JS.Test.describe("Stores", function() { with(this) {
         })
       }})
     }})
+    
+    describe("storage methods", function() { with(this) {
+      before(function(resume) { with(this) {
+        this.date = new Date(2012,1,25,13,37)
+        stub("new", "Date").returns(date)
+        
+        this.token = null
+        
+        store.createUser({username: "boris", password: "dangle"}, function() {
+          store.authorize("www.example.com", "boris", "documents photos", function(error, accessToken) {
+            token = accessToken
+            store.createUser({username: "zebcoe", password: "locog"}, resume)
+          })
+        })
+      }})
+      
+      describe("put", function() { with(this) {
+        before(function(resume) { with(this) {
+          store.put(token, "boris", "photos", "election", "image/jpeg", "hair", resume)
+        }})
+        
+        it("sets the value of an item", function(resume) { with(this) {
+          store.put(token, "boris", "photos", "zipwire", "image/poster", "vertibo", function() {
+            store.get(token, "boris", "photos", "zipwire", function(error, item) {
+              resume(function() { assertEqual( "vertibo", item.value ) })
+            })
+          })
+        }})
+        
+        it("returns true when a new item is created", function(resume) { with(this) {
+          store.put(token, "boris", "photos", "zipwire", "image/poster", "vertibo", function(error, created) {
+            resume(function() {
+              assertNull( error )
+              assert( created )
+            })
+          })
+        }})
+        
+        it("returns true when a new category is created", function(resume) { with(this) {
+          store.put(token, "boris", "documents", "zipwire", "image/poster", "vertibo", function(error, created) {
+            resume(function() {
+              assertNull( error )
+              assert( created )
+            })
+          })
+        }})
+        
+        it("returns false when an existing item is modified", function(resume) { with(this) {
+          store.put(token, "boris", "photos", "election", "text/plain", "hair", function(error, created) {
+            resume(function() {
+              assertNull( error )
+              assert( !created )
+            })
+          })
+        }})
+        
+        it("returns an error when the token is modified", function(resume) { with(this) {
+          token = token.replace(/[a-e]/g, "x")
+          store.put(token, "boris", "photos", "zipwire", "image/poster", "vertibo", function(error, created) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, created )
+            })
+          })
+        }})
+        
+        it("returns an error when writing to an unauthorized category", function(resume) { with(this) {
+          store.put(token, "boris", "calendar", "zipwire", "image/poster", "vertibo", function(error, created) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, created )
+            })
+          })
+        }})
+        
+        it("returns an error when writing to an unauthorized user", function(resume) { with(this) {
+          store.put(token, "zebcoe", "photos", "zipwire", "image/poster", "vertibo", function(error, created) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, created )
+            })
+          })
+        }})
+        
+        it("returns an error when writing to a non-existant user", function(resume) { with(this) {
+          store.put(token, "roderick", "photos", "zipwire", "image/poster", "vertibo", function(error, created) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, created )
+            })
+          })
+        }})
+      }})
+      
+      describe("get", function() { with(this) {
+        before(function(resume) { with(this) {
+          store.put(token, "boris", "photos", "zipwire", "image/poster", "vertibo", resume)
+        }})
+        
+        it("returns an existing resource", function(resume) { with(this) {
+          store.get(token, "boris", "photos", "zipwire", function(error, item) {
+            resume(function() {
+              assertNull( error )
+              assertEqual( {type: "image/poster", modified: date, value: "vertibo"}, item )
+            })
+          })
+        }})
+        
+        it("returns null for a non-existant key", function(resume) { with(this) {
+          store.get(token, "boris", "photos", "lympics", function(error, item) {
+            resume(function() {
+              assertNull( error )
+              assertNull( item )
+            })
+          })
+        }})
+        
+        it("returns null for a non-existant category", function(resume) { with(this) {
+          store.get(token, "boris", "documents", "zipwire", function(error, item) {
+            resume(function() {
+              assertNull( error )
+              assertNull( item )
+            })
+          })
+        }})
+        
+        it("returns an error for an unauthorized category", function(resume) { with(this) {
+          store.get(token, "boris", "calendar", "zipwire", function(error, item) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, item )
+            })
+          })
+        }})
+        
+        it("returns an error for an non-existant user", function(resume) { with(this) {
+          store.get(token, "roderick", "photos", "zipwire", function(error, item) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, item )
+            })
+          })
+        }})
+        
+        it("returns an error for an unauthorized user", function(resume) { with(this) {
+          store.get(token, "zebcoe", "photos", "zipwire", function(error, item) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, item )
+            })
+          })
+        }})
+      }})
+      
+      describe("delete", function() { with(this) {
+        before(function(resume) { with(this) {
+          store.put(token, "boris", "photos", "election", "image/jpeg", "hair", resume)
+        }})
+        
+        it("deletes an item", function(resume) { with(this) {
+          store.delete(token, "boris", "photos", "election", function() {
+            store.get(token, "boris", "photos", "election", function(error, item) {
+              resume(function() { assertNull( item ) })
+            })
+          })
+        }})
+        
+        it("returns true when an existing item is deleted", function(resume) { with(this) {
+          store.delete(token, "boris", "photos", "election", function(error, deleted) {
+            resume(function() {
+              assertNull( error )
+              assert( deleted )
+            })
+          })
+        }})
+        
+        it("returns false when a non-existant item is deleted", function(resume) { with(this) {
+          store.delete(token, "boris", "photos", "zipwire", function(error, deleted) {
+            resume(function() {
+              assertNull( error )
+              assert( !deleted )
+            })
+          })
+        }})
+        
+        it("returns an error when the token is modified", function(resume) { with(this) {
+          token = token.replace(/[a-e]/g, "x")
+          store.delete(token, "boris", "photos", "zipwire", function(error, deleted) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, deleted )
+            })
+          })
+        }})
+        
+        it("returns an error when deleting from an unauthorized category", function(resume) { with(this) {
+          store.delete(token, "boris", "calendar", "zipwire", function(error, deleted) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, deleted )
+            })
+          })
+        }})
+        
+        it("returns an error when deleting from an unauthorized user", function(resume) { with(this) {
+          store.delete(token, "zebcoe", "documents", "zipwire", function(error, deleted) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, deleted )
+            })
+          })
+        }})
+        
+        it("returns an error when deleting from a non-existant user", function(resume) { with(this) {
+          store.delete(token, "roderick", "documents", "zipwire", function(error, deleted) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, deleted )
+            })
+          })
+        }})
+      }})
+    }})
   }})
 }})
 
