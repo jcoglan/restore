@@ -18,9 +18,7 @@ JS.Test.describe("Stores", function() { with(this) {
         
         it("returns an error", function(resume) { with(this) {
           store.createUser(params, function(error) {
-            resume(function() {
-              assertEqual( "Username must be at least 2 characters long", error.message )
-            })
+            resume(function() { assertEqual( "Username must be at least 2 characters long", error.message ) })
           })
         }})
       }})
@@ -30,9 +28,7 @@ JS.Test.describe("Stores", function() { with(this) {
         
         it("returns an error", function(resume) { with(this) {
           store.createUser(params, function(error) {
-            resume(function() {
-              assertEqual( "Password must not be blank", error.message )
-            })
+            resume(function() { assertEqual( "Password must not be blank", error.message ) })
           })
         }})
       }})
@@ -44,9 +40,7 @@ JS.Test.describe("Stores", function() { with(this) {
         
         it("returns an error", function(resume) { with(this) {
           store.createUser(params, function(error) {
-            resume(function() {
-              assertEqual( "The username is already taken", error.message )
-            })
+            resume(function() { assertEqual( "The username is already taken", error.message ) })
           })
         }})
       }})
@@ -65,17 +59,13 @@ JS.Test.describe("Stores", function() { with(this) {
       
       it("returns an error if the password is wrong", function(resume) { with(this) {
         store.authenticate({username: "boris", password: "bikes"}, function(error) {
-          resume(function() {
-            assertEqual( "Incorrect password", error.message )
-          })
+          resume(function() { assertEqual( "Incorrect password", error.message ) })
         })
       }})
       
       it("returns an error if the user does not exist", function(resume) { with(this) {
         store.authenticate({username: "zeb", password: "zipwire"}, function(error) {
-          resume(function() {
-            assertEqual( "Username not found", error.message )
-          })
+          resume(function() { assertEqual( "Username not found", error.message ) })
         })
       }})
     }})
