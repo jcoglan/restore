@@ -78,7 +78,8 @@ JS.Test.describe("Stores", function() { with(this) {
         this.token = null
         
         store.createUser({username: "boris", password: "dangle"}, function() {
-          store.authorize("www.example.com", "boris", "documents photos", function(error, accessToken) {
+          var permissions = {documents: ["w"], photos: ["r","w"], contacts: ["r"]}
+          store.authorize("www.example.com", "boris", permissions, function(error, accessToken) {
             token = accessToken
             store.createUser({username: "zebcoe", password: "locog"}, resume)
           })
@@ -87,7 +88,7 @@ JS.Test.describe("Stores", function() { with(this) {
       
       describe("put", function() { with(this) {
         before(function(resume) { with(this) {
-          store.put(token, "boris", "photos", "election", "image/jpeg", "hair", resume)
+          store.put(token, "boris", "photos", "election", "image/jpeg", "hair", function() { resume() })
         }})
         
         it("sets the value of an item", function(resume) { with(this) {
@@ -128,6 +129,15 @@ JS.Test.describe("Stores", function() { with(this) {
         it("returns an error when the token is modified", function(resume) { with(this) {
           token = token.replace(/[a-e]/g, "x")
           store.put(token, "boris", "photos", "zipwire", "image/poster", "vertibo", function(error, created) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, created )
+            })
+          })
+        }})
+        
+        it("returns an error when writing to a write-unauthorized category", function(resume) { with(this) {
+          store.put(token, "boris", "contacts", "zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( undefined, created )
@@ -187,10 +197,19 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns null for a non-existant category", function(resume) { with(this) {
-          store.get(token, "boris", "documents", "zipwire", function(error, item) {
+          store.get(token, "boris", "contacts", "zipwire", function(error, item) {
             resume(function() {
               assertNull( error )
               assertNull( item )
+            })
+          })
+        }})
+        
+        it("returns an error for a read-unauthorized category", function(resume) { with(this) {
+          store.get(token, "boris", "documents", "zipwire", function(error, item) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, item )
             })
           })
         }})
@@ -264,6 +283,15 @@ JS.Test.describe("Stores", function() { with(this) {
           })
         }})
         
+        it("returns an error when deleting from a write-unauthorized category", function(resume) { with(this) {
+          store.delete(token, "boris", "contacts", "zipwire", function(error, deleted) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( undefined, deleted )
+            })
+          })
+        }})
+        
         it("returns an error when deleting from an unauthorized category", function(resume) { with(this) {
           store.delete(token, "boris", "calendar", "zipwire", function(error, deleted) {
             resume(function() {
@@ -274,7 +302,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when deleting from an unauthorized user", function(resume) { with(this) {
-          store.delete(token, "zebcoe", "documents", "zipwire", function(error, deleted) {
+          store.delete(token, "zebcoe", "photos", "zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( undefined, deleted )
@@ -283,7 +311,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when deleting from a non-existant user", function(resume) { with(this) {
-          store.delete(token, "roderick", "documents", "zipwire", function(error, deleted) {
+          store.delete(token, "roderick", "photos", "zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( undefined, deleted )
