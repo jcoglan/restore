@@ -26,7 +26,7 @@ JS.Test.describe("OAuth", function() { with(this) {
     }})
     
     it("authorizes the client", function() { with(this) {
-      expect(store, "authorize").given("the_client_id", "zebcoe", "the_scope").yielding([null, "a_token"])
+      expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r", "w"]}).yielding([null, "a_token"])
       post("/auth", auth_params)
     }})
     
