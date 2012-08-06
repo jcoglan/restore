@@ -8,15 +8,17 @@ JS.Test.describe("OAuth", function() { with(this) {
   
   define("store", {})
   
-  define("auth_params", {
-    username:       "zebcoe",
-    password:       "locog",
-    client_id:      "the_client_id",
-    redirect_uri:   "http://example.com/cb",
-    response_type:  "token",
-    scope:          "the_scope",
-    state:          "the_state"
-  })
+  before(function() { with(this) {
+    this.auth_params = {
+      username:       "zebcoe",
+      password:       "locog",
+      client_id:      "the_client_id",
+      redirect_uri:   "http://example.com/cb",
+      response_type:  "token",
+      scope:          "the_scope",
+      state:          "the_state"
+    }
+  }})
   
   describe("with valid login credentials", function() { with(this) {
     before(function() { with(this) {
@@ -25,9 +27,31 @@ JS.Test.describe("OAuth", function() { with(this) {
           .yielding( [null] )
     }})
     
-    it("authorizes the client", function() { with(this) {
-      expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r", "w"]}).yielding([null, "a_token"])
-      post("/auth", auth_params)
+    describe("without explicit read/write permissions", function() { with(this) {
+      before(function() { this.auth_params.scope = "the_scope" })
+        
+      it("authorizes the client to read and write", function() { with(this) {
+        expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r", "w"]}).yielding([null, "a_token"])
+        post("/auth", auth_params)
+      }})
+    }})
+    
+    describe("with explicit read permission", function() { with(this) {
+      before(function() { this.auth_params.scope = "the_scope:r" })
+        
+      it("authorizes the client to read", function() { with(this) {
+        expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r"]}).yielding([null, "a_token"])
+        post("/auth", auth_params)
+      }})
+    }})
+    
+    describe("with explicit read/write permission", function() { with(this) {
+      before(function() { this.auth_params.scope = "the_scope:rw" })
+        
+      it("authorizes the client to read and write", function() { with(this) {
+        expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r", "w"]}).yielding([null, "a_token"])
+        post("/auth", auth_params)
+      }})
     }})
     
     it("redirects with an access token", function() { with(this) {
