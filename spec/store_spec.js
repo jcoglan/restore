@@ -74,6 +74,7 @@ JS.Test.describe("Stores", function() { with(this) {
       before(function(resume) { with(this) {
         this.date = new Date(2012,1,25,13,37)
         stub("new", "Date").returns(date)
+        stub(Date, "now").returns(date.getTime()) // make Node 0.9 happy
         
         this.token = null
         
