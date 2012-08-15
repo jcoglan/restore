@@ -34,9 +34,12 @@ Boot the server on port 80:
 
     sudo node server.js 80
 
+You'll need to bind `127.0.0.1` to the host `local.dev` for the remoteStorage
+demo to work correctly.
+
 Create a user:
 
-    curl -X POST localhost/users -d 'username=jcoglan' -d 'password=foo'
+    curl -X POST local.dev/users -d 'username=me' -d 'password=foo'
 
 Serve the example app using Python:
 
@@ -45,7 +48,7 @@ Serve the example app using Python:
 
 And open the example app:
 
-    open http://localhost:8000/
+    open http://local.dev:8000/
 
 
 ## License

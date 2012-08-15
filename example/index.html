@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>remoteStorage example</title>
-    <script type="text/javascript" src="./remoteStorage.js"></script>
+    <script type="text/javascript" src="./remoteStorage-debug.js"></script>
   </head>
   <body>
     
@@ -13,7 +13,6 @@
     <div id="remotestorage-connect"></div>
     
     <script type="text/javascript">
-      localStorage.michiel = 'true'; // hack to avoid devsonly
       remoteStorage.displayWidget('remotestorage-connect');
       
       remoteStorage.defineModule('vault', function(client) {
