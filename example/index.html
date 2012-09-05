@@ -19,7 +19,9 @@
         return {name: 'vault', exports: client};
       });
       
-      remoteStorage.loadModule('vault', 'rw');
+      remoteStorage.claimAccess('vault', 'rw');
+      remoteStorage.vault.storeObject('text/test', 'foo', {hello: 'world'});
+      remoteStorage.vault.sync();
     </script>
     
   </body>
