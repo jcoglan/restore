@@ -3,16 +3,46 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link href='http://fonts.googleapis.com/css?family=Ubuntu+Mono|Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
     <title>Authorize</title>
+    <style type="text/css">
+      body {
+        background:   #f4f4f4;
+        color:        #464646;
+        font:         36px/1.5 Open Sans, FreeSans, Helvetica, Arial, sans-serif;
+        margin:       0;
+        padding:      0;
+      }
+      
+      p, ul, form {
+        margin:       1em auto;
+        padding:      0;
+        width:        600px;
+      }
+      
+      th {
+        font-size:    80%;
+        font-weight:  normal;
+        text-align:   left;
+      }
+      
+      input {
+        font-size:    80%;
+      }
+      
+      code {
+        font-family:  Ubuntu Mono, Monaco, Courier New, monospace;
+      }
+    </style>
   </head>
   <body>
     
-    <p>The page at <%= client_id %> wants:</p>
+    <p>The page at <code><%= client_id %></code> wants:</p>
     
     <ul>
       <% scope.split(/\s+/).forEach(function(module) { %>
         <% var path = module.split(':') %>
-        <li><%= access_strings[path[1]] %> access to <%= path[0] %></li>
+        <li><b><%= access_strings[path[1]] %></b> access to <i><%= path[0] %></i></li>
       <% }) %>
     </ul>
     
@@ -27,11 +57,16 @@
       <input type="hidden" name="scope" value="<%= scope %>">
       <input type="hidden" name="state" value="<%= state %>">
       
-      <label for="username">Username</label>
-      <input type="text" name="username" id="username" value="<%= username %>">
-      
-      <label for="password">Password</label>
-      <input type="password" name="password" id="password">
+      <table>
+        <tr>
+          <th scope="row"><label for="username">Username</label></th>
+          <td><input type="text" name="username" id="username" value="<%= username %>"></td>
+        </tr>
+        <tr>
+          <th scope="row"><label for="password">Password</label></th>
+          <td><input type="password" name="password" id="password"></td>
+        </tr>
+      </table>
       
       <input type="submit" value="Allow">
     </form>
