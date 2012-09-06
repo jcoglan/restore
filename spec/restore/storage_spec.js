@@ -98,7 +98,7 @@ JS.Test.describe("Storage", function() { with(this) {
     
     describe("when the store returns an error", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "get").yields([new Error(), undefined])
+        stub(store, "get").yields([{status: 401}, undefined])
       }})
       
       it("returns an empty 401 response", function() { with(this) {
@@ -145,12 +145,12 @@ JS.Test.describe("Storage", function() { with(this) {
     
     describe("when the store returns an error", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "put").yields([new Error()])
+        stub(store, "put").yields([{status: 403}])
       }})
       
-      it("returns an empty 401 response", function() { with(this) {
+      it("returns an empty 403 response", function() { with(this) {
         put( "/data/zebcoe/locog/seats", "a value" )
-        check_status( 401 )
+        check_status( 403 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
@@ -192,7 +192,7 @@ JS.Test.describe("Storage", function() { with(this) {
     
     describe("when the store returns an error", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "delete").yields([new Error()])
+        stub(store, "delete").yields([{status: 401}])
       }})
       
       it("returns an empty 401 response", function() { with(this) {

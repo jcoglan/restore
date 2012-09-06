@@ -132,6 +132,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.put(token, "boris", "photos", "/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 401, error.status )
               assertEqual( undefined, created )
             })
           })
@@ -141,6 +142,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.put(token, "boris", "contacts", "/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 403, error.status )
               assertEqual( undefined, created )
             })
           })
@@ -150,6 +152,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.put(token, "boris", "calendar", "/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 403, error.status )
               assertEqual( undefined, created )
             })
           })
@@ -159,6 +162,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.put(token, "zebcoe", "photos", "/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 401, error.status )
               assertEqual( undefined, created )
             })
           })
@@ -168,6 +172,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.put(token, "roderick", "photos", "/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 401, error.status )
               assertEqual( undefined, created )
             })
           })
@@ -211,6 +216,7 @@ JS.Test.describe("Stores", function() { with(this) {
             store.get(token, "boris", "documents", "/zipwire", function(error, item) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
+                assertEqual( 403, error.status )
                 assertEqual( undefined, item )
               })
             })
@@ -220,6 +226,7 @@ JS.Test.describe("Stores", function() { with(this) {
             store.get(token, "boris", "calendar", "/zipwire", function(error, item) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
+                assertEqual( 403, error.status )
                 assertEqual( undefined, item )
               })
             })
@@ -229,6 +236,7 @@ JS.Test.describe("Stores", function() { with(this) {
             store.get(token, "roderick", "photos", "/zipwire", function(error, item) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
+                assertEqual( 401, error.status )
                 assertEqual( undefined, item )
               })
             })
@@ -238,6 +246,7 @@ JS.Test.describe("Stores", function() { with(this) {
             store.get(token, "zebcoe", "photos", "/zipwire", function(error, item) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
+                assertEqual( 401, error.status )
                 assertEqual( undefined, item )
               })
             })
@@ -308,6 +317,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.delete(token, "boris", "photos", "/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 401, error.status )
               assertEqual( undefined, deleted )
             })
           })
@@ -317,6 +327,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.delete(token, "boris", "contacts", "/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 403, error.status )
               assertEqual( undefined, deleted )
             })
           })
@@ -326,6 +337,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.delete(token, "boris", "calendar", "/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 403, error.status )
               assertEqual( undefined, deleted )
             })
           })
@@ -335,6 +347,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.delete(token, "zebcoe", "photos", "/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 401, error.status )
               assertEqual( undefined, deleted )
             })
           })
@@ -344,6 +357,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.delete(token, "roderick", "photos", "/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
+              assertEqual( 401, error.status )
               assertEqual( undefined, deleted )
             })
           })
