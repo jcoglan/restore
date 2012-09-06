@@ -69,6 +69,20 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
     }})
     
+    describe("when the store returns an empty directory listing", function() { with(this) {
+      before(function() { with(this) {
+        stub(store, "get").yields([null, []])
+      }})
+      
+      it("returns a 200 response with an empty JSON object", function() { with(this) {
+        get( "/data/zebcoe/locog/seats/", {} )
+        check_status( 200 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_header( "Cache-Control", "no-cache, no-store" )
+        check_json( {} )
+      }})
+    }})
+    
     describe("when the item does not exist", function() { with(this) {
       before(function() { with(this) {
         stub(store, "get").yields([null, undefined])
