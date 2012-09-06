@@ -177,6 +177,28 @@ JS.Test.describe("Stores", function() { with(this) {
             })
           })
         }})
+        
+        describe("for a nested document", function() { with(this) {
+          before(function(resume) { with(this) {
+            store.put(token, "boris", "photos", "/foo/bar/qux", "image/poster", "vertibo", resume)
+          }})
+          
+          it("creates the parent directory", function(resume) { with(this) {
+            store.get(token, "boris", "photos", "/foo/bar/", function(error, items) {
+              resume(function() {
+                assertEqual( [{name: "qux", modified: date}], items )
+              })
+            })
+          }})
+          
+          it("creates the grandparent directory", function(resume) { with(this) {
+            store.get(token, "boris", "photos", "/foo/", function(error, items) {
+              resume(function() {
+                assertEqual( [{name: "bar/", modified: date}], items )
+              })
+            })
+          }})
+        }})
       }})
       
       describe("get", function() { with(this) {
