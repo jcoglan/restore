@@ -392,6 +392,16 @@ JS.Test.describe("Stores", function() { with(this) {
           })
         }})
         
+        it("removes empty directories when items are deleted", function(resume) { with(this) {
+          store.delete(token, "boris", "photos", "/bar/baz/boo", function() {
+            store.get(token, "boris", "photos", "/", function(error, items) {
+              resume(function() {
+                assertNotEqual( arrayIncluding(objectIncluding({name: "bar/"})), items )
+              })
+            })
+          })
+        }})
+        
         it("returns true when an existing item is deleted", function(resume) { with(this) {
           store.delete(token, "boris", "photos", "/election", function(error, deleted) {
             resume(function() {
