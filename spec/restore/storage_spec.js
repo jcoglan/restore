@@ -125,26 +125,28 @@ JS.Test.describe("Storage", function() { with(this) {
     
     describe("when the store says the item was created", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "put").yields([null, true])
+        stub(store, "put").yields([null, true, new Date(1347016875231)])
       }})
       
       it("returns an empty 201 response", function() { with(this) {
         put( "/data/zebcoe/locog/seats", "a value" )
         check_status( 201 )
         check_header( "Access-Control-Allow-Origin", "*" )
+        check_header( "Last-Modified", "Fri, 07 Sep 2012 11:21:15 GMT" )
         check_body( "" )
       }})
     }})
     
     describe("when the store says the item was not created but updated", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "put").yields([null, false])
+        stub(store, "put").yields([null, false, new Date(1347016875231)])
       }})
       
       it("returns an empty 200 response", function() { with(this) {
         put( "/data/zebcoe/locog/seats", "a value" )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
+        check_header( "Last-Modified", "Fri, 07 Sep 2012 11:21:15 GMT" )
         check_body( "" )
       }})
     }})

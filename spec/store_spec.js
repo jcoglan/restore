@@ -110,29 +110,32 @@ JS.Test.describe("Stores", function() { with(this) {
           })
         }})
         
-        it("returns true when a new item is created", function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/zipwire", "image/poster", "vertibo", function(error, created) {
+        it("returns true with a timestamp when a new item is created", function(resume) { with(this) {
+          store.put(token, "boris", "photos", "/zipwire", "image/poster", "vertibo", function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( created )
+              assertEqual( date, modified )
             })
           })
         }})
         
-        it("returns true when a new category is created", function(resume) { with(this) {
-          store.put(token, "boris", "documents", "/zipwire", "image/poster", "vertibo", function(error, created) {
+        it("returns true with a timestamp when a new category is created", function(resume) { with(this) {
+          store.put(token, "boris", "documents", "/zipwire", "image/poster", "vertibo", function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( created )
+              assertEqual( date, modified )
             })
           })
         }})
         
-        it("returns false when an existing item is modified", function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/election", "text/plain", "hair", function(error, created) {
+        it("returns false with a timestamp when an existing item is modified", function(resume) { with(this) {
+          store.put(token, "boris", "photos", "/election", "text/plain", "hair", function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( !created )
+              assertEqual( date, modified )
             })
           })
         }})
