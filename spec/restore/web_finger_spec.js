@@ -46,7 +46,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
   }})
   
   it("returns account metadata as XRD", function() { with(this) {
-    get( "/webfinger/acct:zebcoe@locog", {} )
+    get( "/webfinger/xrd/acct:zebcoe@locog", {} )
     
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
