@@ -100,6 +100,16 @@ JS.Test.describe("Stores", function() { with(this) {
           })
         }})
         
+        it("does not set the value of a directory", function(resume) { with(this) {
+          store.put(token, "boris", "photos", "/zipwire/", "image/poster", "vertibo", function() {
+            store.get(token, "boris", "photos", "/", function(error, items) {
+              resume(function() {
+                assertNotEqual( arrayIncluding(objectIncluding({name: "zipwire/"})), items )
+              })
+            })
+          })
+        }})
+        
         it("returns true when a new item is created", function(resume) { with(this) {
           store.put(token, "boris", "photos", "/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
@@ -120,6 +130,15 @@ JS.Test.describe("Stores", function() { with(this) {
         
         it("returns false when an existing item is modified", function(resume) { with(this) {
           store.put(token, "boris", "photos", "/election", "text/plain", "hair", function(error, created) {
+            resume(function() {
+              assertNull( error )
+              assert( !created )
+            })
+          })
+        }})
+        
+        it("returns false when writing to a directory", function(resume) { with(this) {
+          store.put(token, "boris", "photos", "/election/", "text/plain", "hair", function(error, created) {
             resume(function() {
               assertNull( error )
               assert( !created )
@@ -347,13 +366,25 @@ JS.Test.describe("Stores", function() { with(this) {
       
       describe("delete", function() { with(this) {
         before(function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/election", "image/jpeg", "hair", resume)
+          store.put(token, "boris", "photos", "/election", "image/jpeg", "hair", function() {
+            store.put(token, "boris", "photos", "/bar/baz/boo", "text/plain", "some content", resume)
+          })
         }})
         
         it("deletes an item", function(resume) { with(this) {
           store.delete(token, "boris", "photos", "/election", function() {
             store.get(token, "boris", "photos", "/election", function(error, item) {
               resume(function() { assertNull( item ) })
+            })
+          })
+        }})
+        
+        it("does not delete a directory", function(resume) { with(this) {
+          store.delete(token, "boris", "photos", "/bar/baz/", function() {
+            store.get(token, "boris", "photos", "/bar/baz/boo", function(error, item) {
+              resume(function() {
+                assertEqual( {type: "text/plain", modified: date, value: "some content"}, item )
+              })
             })
           })
         }})
@@ -369,6 +400,15 @@ JS.Test.describe("Stores", function() { with(this) {
         
         it("returns false when a non-existant item is deleted", function(resume) { with(this) {
           store.delete(token, "boris", "photos", "/zipwire", function(error, deleted) {
+            resume(function() {
+              assertNull( error )
+              assert( !deleted )
+            })
+          })
+        }})
+        
+        it("returns false when deleting a directory", function(resume) { with(this) {
+          store.delete(token, "boris", "photos", "/bar/baz/", function(error, deleted) {
             resume(function() {
               assertNull( error )
               assert( !deleted )
