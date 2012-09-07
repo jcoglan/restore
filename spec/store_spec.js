@@ -301,6 +301,48 @@ JS.Test.describe("Stores", function() { with(this) {
             })
           }})
         }})
+        
+        describe("for public resources", function() { with(this) {
+          before(function(resume) { with(this) {
+            store.put(token, "boris", "public/photos", "/zipwire", "image/poster", "vertibo", resume)
+          }})
+          
+          it("returns an existing resource with authorization", function(resume) { with(this) {
+            store.get(token, "boris", "public/photos", "/zipwire", function(error, item) {
+              resume(function() {
+                assertNull( error )
+                assertEqual( {type: "image/poster", modified: date, value: "vertibo"}, item )
+              })
+            })
+          }})
+          
+          it("returns an existing resource without authorization", function(resume) { with(this) {
+            store.get("", "boris", "public/photos", "/zipwire", function(error, item) {
+              resume(function() {
+                assertNull( error )
+                assertEqual( {type: "image/poster", modified: date, value: "vertibo"}, item )
+              })
+            })
+          }})
+          
+          it("returns a directory listing with authorization", function(resume) { with(this) {
+            store.get(token, "boris", "public/photos", "/", function(error, items) {
+              resume(function() {
+                assertNull( error )
+                assertEqual( [{name: "zipwire", modified: date}], items )
+              })
+            })
+          }})
+          
+          it("returns an error for a directory listing without authorization", function(resume) { with(this) {
+            store.get("", "boris", "public/photos", "/", function(error, items) {
+              resume(function() {
+                assertEqual( "Invalid access token", error.message )
+                assertEqual( undefined, items )
+              })
+            })
+          }})
+        }})
       }})
       
       describe("delete", function() { with(this) {

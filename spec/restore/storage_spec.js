@@ -33,6 +33,12 @@ JS.Test.describe("Storage", function() { with(this) {
       get( "/data/zebcoe/locog/seats", {} )
     }})
     
+    it("asks the store for a public item using an access token", function() { with(this) {
+      expect(store, "get").given("a_token", "zebcoe", "public/locog", "/seats").yielding([null, item])
+      header( "Authorization", "Bearer a_token" )
+      get( "/data/zebcoe/public/locog/seats", {} )
+    }})
+    
     it("asks the store for a directory listing using an access token", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "locog", "/").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
