@@ -1,10 +1,16 @@
 # reStore
 
-This is a simple [remoteStorage](http://www.w3.org/community/unhosted/wiki/RemoteStorage)
-server written in Node.js. It is still in the experimental stage, and currently
-implements just enough to make the demo in `example/index.html` work, using the
-standard remoteStorage client. YOU SHOULD NOT INSTALL IT ANYWHERE, THINGS ARE
-GOING TO CHANGE.
+This is a simple [remoteStorage][1] server written in Node.js. It is still in
+the experimental stage, but is designed to be compatible with the 0.6
+([RemoteStorage-2011.10][2]) and 0.7 ([RemoteStorage-2012.04][3]) versions of
+[remoteStorage.js][4].
+
+[1]: http://www.w3.org/community/unhosted/wiki/RemoteStorage
+[2]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2011.10
+[3]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04
+[4]: http://remotestoragejs.com/
+
+YOU SHOULD NOT INSTALL IT ANYWHERE YET, THINGS ARE GOING TO CHANGE.
 
 It uses file-based storage, and is only safe to use at small scale using a
 single server process. It is primarily designed for personal use, although it
@@ -12,8 +18,8 @@ has been built with swappable storage in mind so we can implement a Redis
 backend for bigger installations.
 
 It stores user passwords as salted PBKDF2 hashes. It does not store access
-tokens at all; it issues self-contained tokens signed using HMAC-SHA256 with the
-user's password.
+tokens at all; it issues self-contained tokens containing encrypted
+authorization data.
 
 
 ## Usage
@@ -34,8 +40,16 @@ Boot the server on port 80:
 
     sudo node server.js 80
 
-You'll need to bind `127.0.0.1` to the host `local.dev` for the remoteStorage
-demo to work correctly.
+
+## Running the examples
+
+This repository contains examples using the `stable` and `master` branches of
+remoteStorage.js. You'll need to bind `127.0.0.1` to the host `local.dev` for
+the demo to work correctly.
+
+Run the example server on port 80:
+
+    sudo node example/server.js 80
 
 Create a user:
 
@@ -46,9 +60,10 @@ Serve the example app using Python:
     cd example
     python -m SimpleHTTPServer
 
-And open the example app:
+And open the example apps for each version:
 
-    open http://local.dev:8000/
+    open http://local.dev:8000/rs-stable.html
+    open http://local.dev:8000/rs-master.html
 
 
 ## License
