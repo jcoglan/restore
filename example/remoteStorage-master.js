@@ -1,0 +1,1 @@
+../vendor/remoteStorage-master/build/latest/remoteStorage.js
