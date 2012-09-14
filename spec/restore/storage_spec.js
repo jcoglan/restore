@@ -27,10 +27,15 @@ JS.Test.describe("Storage", function() { with(this) {
       value:    "a value"
     })
     
-    it("asks the store for the item using an access token", function() { with(this) {
+    it("asks the store for the item using an access token from a header", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "locog", "/seats").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
       get( "/data/zebcoe/locog/seats", {} )
+    }})
+    
+    it("asks the store for the item using an access token from the query string", function() { with(this) {
+      expect(store, "get").given("a_token", "zebcoe", "locog", "/seats").yielding([null, item])
+      get( "/data/zebcoe/locog/seats?oauth_token=a_token", {} )
     }})
     
     it("asks the store for a public item using an access token", function() { with(this) {
