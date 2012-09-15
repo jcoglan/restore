@@ -30,7 +30,7 @@ JS.Test.describe("Storage", function() { with(this) {
     it("asks the store for the item using an access token from a header", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "/locog/seats").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
-      get( "/data/zebcoe/locog/seats", {} )
+      get( "/data/zebcoe@local.dev/locog/seats", {} )
     }})
     
     it("asks the store for the item using an access token from the query string", function() { with(this) {
