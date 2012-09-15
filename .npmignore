@@ -1,5 +1,6 @@
 .git
 .gitignore
 .npmignore
+dump.rdb
 example/store
 node_modules
