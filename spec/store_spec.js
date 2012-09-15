@@ -77,12 +77,18 @@ JS.Test.describe("Stores", function() { with(this) {
         stub(Date, "now").returns(date.getTime()) // make Node 0.9 happy
         
         this.token = null
+        this.rootToken = null
+        var permissions = {documents: ["w"], photos: ["r","w"], contacts: ["r"], "deep/dir": ["r","w"]}
         
         store.createUser({username: "boris", password: "dangle"}, function() {
-          var permissions = {documents: ["w"], photos: ["r","w"], contacts: ["r"]}
           store.authorize("www.example.com", "boris", permissions, function(error, accessToken) {
             token = accessToken
-            store.createUser({username: "zebcoe", password: "locog"}, resume)
+            store.createUser({username: "zebcoe", password: "locog"}, function() {
+              store.authorize("admin.example.com", "zebcoe", {"": ["r","w"]}, function(error, accessToken) {
+                rootToken = accessToken
+                resume()
+              })
+            })
           })
         })
       }})
@@ -96,6 +102,35 @@ JS.Test.describe("Stores", function() { with(this) {
           store.put(token, "boris", "/photos/zipwire", "image/poster", "vertibo", function() {
             store.get(token, "boris", "/photos/zipwire", function(error, item) {
               resume(function() { assertEqual( "vertibo", item.value ) })
+            })
+          })
+        }})
+        
+        it("sets the value of a public item", function(resume) { with(this) {
+          store.put(token, "boris", "/public/photos/zipwire", "image/poster", "vertibo", function() {
+            store.get(token, "boris", "/public/photos/zipwire", function(error, item) {
+              resume(function(resume) {
+                assertEqual( "vertibo", item.value )
+                store.get(token, "boris", "/photos/zipwire", function(error, item) {
+                  resume(function() { assertNull( item ) })
+                })
+              })
+            })
+          })
+        }})
+        
+        it("sets the value of a root item", function(resume) { with(this) {
+          store.put(rootToken, "zebcoe", "/manifesto", "text/plain", "gizmos", function() {
+            store.get(rootToken, "zebcoe", "/manifesto", function(error, item) {
+              resume(function() { assertEqual( "gizmos", item.value ) })
+            })
+          })
+        }})
+        
+        it("sets the value of a deep item", function(resume) { with(this) {
+          store.put(token, "boris", "/deep/dir/secret", "text/plain", "gizmos", function() {
+            store.get(token, "boris", "/deep/dir/secret", function(error, item) {
+              resume(function() { assertEqual( "gizmos", item.value ) })
             })
           })
         }})
@@ -172,6 +207,16 @@ JS.Test.describe("Stores", function() { with(this) {
         
         it("returns an error when writing to an unauthorized category", function(resume) { with(this) {
           store.put(token, "boris", "/calendar/zipwire", "image/poster", "vertibo", function(error, created) {
+            resume(function() {
+              assertEqual( "Invalid access token", error.message )
+              assertEqual( 403, error.status )
+              assertEqual( undefined, created )
+            })
+          })
+        }})
+        
+        it("returns an error when writing to a too-broad category", function(resume) { with(this) {
+          store.put(token, "boris", "/deep/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 403, error.status )
@@ -276,6 +321,16 @@ JS.Test.describe("Stores", function() { with(this) {
             })
           }})
           
+          it("returns an error for a too-broad category", function(resume) { with(this) {
+            store.get(token, "boris", "/deep/zipwire", function(error, item) {
+              resume(function() {
+                assertEqual( "Invalid access token", error.message )
+                assertEqual( 403, error.status )
+                assertEqual( undefined, item )
+              })
+            })
+          }})
+          
           it("returns an error for a non-existant user", function(resume) { with(this) {
             store.get(token, "roderick", "/photos/zipwire", function(error, item) {
               resume(function() {
@@ -301,7 +356,9 @@ JS.Test.describe("Stores", function() { with(this) {
           before(function(resume) { with(this) {
             // Example data taken from http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04#GET
             store.put(token, "boris", "/photos/bar/baz/boo", "text/plain", "some content", function() {
-              store.put(token, "boris", "/photos/bla", "application/json", '{"more": "content"}', resume)
+              store.put(token, "boris", "/photos/bla", "application/json", '{"more": "content"}', function() {
+                store.put(rootToken, "zebcoe", "/tv/shows", "application/json", '{"The Day": "Today"}', resume)
+              })
             })
           }})
           
@@ -310,6 +367,25 @@ JS.Test.describe("Stores", function() { with(this) {
               resume(function() {
                 assertNull( error )
                 assertEqual( [{name: "bar/", modified: date}, {name: "bla", modified: date}], items )
+              })
+            })
+          }})
+          
+          it("returns a directory listing for the root category", function(resume) { with(this) {
+            store.get(rootToken, "zebcoe", "/", function(error, items) {
+              resume(function() {
+                assertNull( error )
+                assertEqual( [{name: "tv/", modified: date}], items )
+              })
+            })
+          }})
+          
+          it("returns an error for an unauthorized root category", function(resume) { with(this) {
+            store.get(token, "boris", "/", function(error, items) {
+              resume(function() {
+                assertEqual( "Invalid access token", error.message )
+                assertEqual( 403, error.status )
+                assertEqual( undefined, items )
               })
             })
           }})
