@@ -42,7 +42,7 @@
     <ul>
       <% scope.split(/\s+/).forEach(function(module) { %>
         <% var path = module.split(':') %>
-        <li><b><%= access_strings[path[1]] %></b> access to <i><%= path[0] %></i></li>
+        <li><b><%= access_strings[path[1] || 'rw'] %></b> access to <i><%= path[0] %></i></li>
       <% }) %>
     </ul>
     
