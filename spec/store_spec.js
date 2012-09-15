@@ -89,20 +89,20 @@ JS.Test.describe("Stores", function() { with(this) {
       
       describe("put", function() { with(this) {
         before(function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/election", "image/jpeg", "hair", function() { resume() })
+          store.put(token, "boris", "/photos/election", "image/jpeg", "hair", function() { resume() })
         }})
         
         it("sets the value of an item", function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/zipwire", "image/poster", "vertibo", function() {
-            store.get(token, "boris", "photos", "/zipwire", function(error, item) {
+          store.put(token, "boris", "/photos/zipwire", "image/poster", "vertibo", function() {
+            store.get(token, "boris", "/photos/zipwire", function(error, item) {
               resume(function() { assertEqual( "vertibo", item.value ) })
             })
           })
         }})
         
         it("does not set the value of a directory", function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/zipwire/", "image/poster", "vertibo", function() {
-            store.get(token, "boris", "photos", "/", function(error, items) {
+          store.put(token, "boris", "/photos/zipwire/", "image/poster", "vertibo", function() {
+            store.get(token, "boris", "/photos/", function(error, items) {
               resume(function() {
                 assertNotEqual( arrayIncluding(objectIncluding({name: "zipwire/"})), items )
               })
@@ -111,7 +111,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns true with a timestamp when a new item is created", function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/zipwire", "image/poster", "vertibo", function(error, created, modified) {
+          store.put(token, "boris", "/photos/zipwire", "image/poster", "vertibo", function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( created )
@@ -121,7 +121,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns true with a timestamp when a new category is created", function(resume) { with(this) {
-          store.put(token, "boris", "documents", "/zipwire", "image/poster", "vertibo", function(error, created, modified) {
+          store.put(token, "boris", "/documents/zipwire", "image/poster", "vertibo", function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( created )
@@ -131,7 +131,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns false with a timestamp when an existing item is modified", function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/election", "text/plain", "hair", function(error, created, modified) {
+          store.put(token, "boris", "/photos/election", "text/plain", "hair", function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( !created )
@@ -141,7 +141,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns false when writing to a directory", function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/election/", "text/plain", "hair", function(error, created) {
+          store.put(token, "boris", "/photos/election/", "text/plain", "hair", function(error, created) {
             resume(function() {
               assertNull( error )
               assert( !created )
@@ -151,7 +151,7 @@ JS.Test.describe("Stores", function() { with(this) {
         
         it("returns an error when the token is modified", function(resume) { with(this) {
           token = token.replace(/[a-e]/g, "x")
-          store.put(token, "boris", "photos", "/zipwire", "image/poster", "vertibo", function(error, created) {
+          store.put(token, "boris", "/photos/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 401, error.status )
@@ -161,7 +161,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when writing to a write-unauthorized category", function(resume) { with(this) {
-          store.put(token, "boris", "contacts", "/zipwire", "image/poster", "vertibo", function(error, created) {
+          store.put(token, "boris", "/contacts/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 403, error.status )
@@ -171,7 +171,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when writing to an unauthorized category", function(resume) { with(this) {
-          store.put(token, "boris", "calendar", "/zipwire", "image/poster", "vertibo", function(error, created) {
+          store.put(token, "boris", "/calendar/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 403, error.status )
@@ -181,7 +181,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when writing to an unauthorized user", function(resume) { with(this) {
-          store.put(token, "zebcoe", "photos", "/zipwire", "image/poster", "vertibo", function(error, created) {
+          store.put(token, "zebcoe", "/photos/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 401, error.status )
@@ -191,7 +191,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when writing to a non-existant user", function(resume) { with(this) {
-          store.put(token, "roderick", "photos", "/zipwire", "image/poster", "vertibo", function(error, created) {
+          store.put(token, "roderick", "/photos/zipwire", "image/poster", "vertibo", function(error, created) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 401, error.status )
@@ -202,11 +202,11 @@ JS.Test.describe("Stores", function() { with(this) {
         
         describe("for a nested document", function() { with(this) {
           before(function(resume) { with(this) {
-            store.put(token, "boris", "photos", "/foo/bar/qux", "image/poster", "vertibo", resume)
+            store.put(token, "boris", "/photos/foo/bar/qux", "image/poster", "vertibo", resume)
           }})
           
           it("creates the parent directory", function(resume) { with(this) {
-            store.get(token, "boris", "photos", "/foo/bar/", function(error, items) {
+            store.get(token, "boris", "/photos/foo/bar/", function(error, items) {
               resume(function() {
                 assertEqual( [{name: "qux", modified: date}], items )
               })
@@ -214,7 +214,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("creates the grandparent directory", function(resume) { with(this) {
-            store.get(token, "boris", "photos", "/foo/", function(error, items) {
+            store.get(token, "boris", "/photos/foo/", function(error, items) {
               resume(function() {
                 assertEqual( [{name: "bar/", modified: date}], items )
               })
@@ -226,11 +226,11 @@ JS.Test.describe("Stores", function() { with(this) {
       describe("get", function() { with(this) {
         describe("for documents", function() { with(this) {
           before(function(resume) { with(this) {
-            store.put(token, "boris", "photos", "/zipwire", "image/poster", "vertibo", resume)
+            store.put(token, "boris", "/photos/zipwire", "image/poster", "vertibo", resume)
           }})
           
           it("returns an existing resource", function(resume) { with(this) {
-            store.get(token, "boris", "photos", "/zipwire", function(error, item) {
+            store.get(token, "boris", "/photos/zipwire", function(error, item) {
               resume(function() {
                 assertNull( error )
                 assertEqual( {type: "image/poster", modified: date, value: "vertibo"}, item )
@@ -239,7 +239,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns null for a non-existant key", function(resume) { with(this) {
-            store.get(token, "boris", "photos", "/lympics", function(error, item) {
+            store.get(token, "boris", "/photos/lympics", function(error, item) {
               resume(function() {
                 assertNull( error )
                 assertNull( item )
@@ -248,7 +248,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns null for a non-existant category", function(resume) { with(this) {
-            store.get(token, "boris", "contacts", "/zipwire", function(error, item) {
+            store.get(token, "boris", "/contacts/zipwire", function(error, item) {
               resume(function() {
                 assertNull( error )
                 assertNull( item )
@@ -257,7 +257,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns an error for a read-unauthorized category", function(resume) { with(this) {
-            store.get(token, "boris", "documents", "/zipwire", function(error, item) {
+            store.get(token, "boris", "/documents/zipwire", function(error, item) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
                 assertEqual( 403, error.status )
@@ -267,7 +267,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns an error for an unauthorized category", function(resume) { with(this) {
-            store.get(token, "boris", "calendar", "/zipwire", function(error, item) {
+            store.get(token, "boris", "/calendar/zipwire", function(error, item) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
                 assertEqual( 403, error.status )
@@ -277,7 +277,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns an error for a non-existant user", function(resume) { with(this) {
-            store.get(token, "roderick", "photos", "/zipwire", function(error, item) {
+            store.get(token, "roderick", "/photos/zipwire", function(error, item) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
                 assertEqual( 401, error.status )
@@ -287,7 +287,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns an error for an unauthorized user", function(resume) { with(this) {
-            store.get(token, "zebcoe", "photos", "/zipwire", function(error, item) {
+            store.get(token, "zebcoe", "/photos/zipwire", function(error, item) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
                 assertEqual( 401, error.status )
@@ -300,13 +300,13 @@ JS.Test.describe("Stores", function() { with(this) {
         describe("for directories", function() { with(this) {
           before(function(resume) { with(this) {
             // Example data taken from http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04#GET
-            store.put(token, "boris", "photos", "/bar/baz/boo", "text/plain", "some content", function() {
-              store.put(token, "boris", "photos", "/bla", "application/json", '{"more": "content"}', resume)
+            store.put(token, "boris", "/photos/bar/baz/boo", "text/plain", "some content", function() {
+              store.put(token, "boris", "/photos/bla", "application/json", '{"more": "content"}', resume)
             })
           }})
           
           it("returns a directory listing for a category", function(resume) { with(this) {
-            store.get(token, "boris", "photos", "/", function(error, items) {
+            store.get(token, "boris", "/photos/", function(error, items) {
               resume(function() {
                 assertNull( error )
                 assertEqual( [{name: "bar/", modified: date}, {name: "bla", modified: date}], items )
@@ -315,7 +315,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns an empty listing for a non-existant directory", function(resume) { with(this) {
-            store.get(token, "boris", "photos", "/foo/", function(error, items) {
+            store.get(token, "boris", "/photos/foo/", function(error, items) {
               resume(function() {
                 assertNull( error )
                 assertEqual( [], items )
@@ -326,11 +326,11 @@ JS.Test.describe("Stores", function() { with(this) {
         
         describe("for public resources", function() { with(this) {
           before(function(resume) { with(this) {
-            store.put(token, "boris", "public/photos", "/zipwire", "image/poster", "vertibo", resume)
+            store.put(token, "boris", "/public/photos/zipwire", "image/poster", "vertibo", resume)
           }})
           
           it("returns an existing resource with authorization", function(resume) { with(this) {
-            store.get(token, "boris", "public/photos", "/zipwire", function(error, item) {
+            store.get(token, "boris", "/public/photos/zipwire", function(error, item) {
               resume(function() {
                 assertNull( error )
                 assertEqual( {type: "image/poster", modified: date, value: "vertibo"}, item )
@@ -339,7 +339,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns an existing resource without authorization", function(resume) { with(this) {
-            store.get("", "boris", "public/photos", "/zipwire", function(error, item) {
+            store.get("", "boris", "/public/photos/zipwire", function(error, item) {
               resume(function() {
                 assertNull( error )
                 assertEqual( {type: "image/poster", modified: date, value: "vertibo"}, item )
@@ -348,7 +348,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns a directory listing with authorization", function(resume) { with(this) {
-            store.get(token, "boris", "public/photos", "/", function(error, items) {
+            store.get(token, "boris", "/public/photos/", function(error, items) {
               resume(function() {
                 assertNull( error )
                 assertEqual( [{name: "zipwire", modified: date}], items )
@@ -357,7 +357,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
           
           it("returns an error for a directory listing without authorization", function(resume) { with(this) {
-            store.get("", "boris", "public/photos", "/", function(error, items) {
+            store.get("", "boris", "/public/photos/", function(error, items) {
               resume(function() {
                 assertEqual( "Invalid access token", error.message )
                 assertEqual( undefined, items )
@@ -369,22 +369,22 @@ JS.Test.describe("Stores", function() { with(this) {
       
       describe("delete", function() { with(this) {
         before(function(resume) { with(this) {
-          store.put(token, "boris", "photos", "/election", "image/jpeg", "hair", function() {
-            store.put(token, "boris", "photos", "/bar/baz/boo", "text/plain", "some content", resume)
+          store.put(token, "boris", "/photos/election", "image/jpeg", "hair", function() {
+            store.put(token, "boris", "/photos/bar/baz/boo", "text/plain", "some content", resume)
           })
         }})
         
         it("deletes an item", function(resume) { with(this) {
-          store.delete(token, "boris", "photos", "/election", function() {
-            store.get(token, "boris", "photos", "/election", function(error, item) {
+          store.delete(token, "boris", "/photos/election", function() {
+            store.get(token, "boris", "/photos/election", function(error, item) {
               resume(function() { assertNull( item ) })
             })
           })
         }})
         
         it("does not delete a directory", function(resume) { with(this) {
-          store.delete(token, "boris", "photos", "/bar/baz/", function() {
-            store.get(token, "boris", "photos", "/bar/baz/boo", function(error, item) {
+          store.delete(token, "boris", "/photos/bar/baz/", function() {
+            store.get(token, "boris", "/photos/bar/baz/boo", function(error, item) {
               resume(function() {
                 assertEqual( {type: "text/plain", modified: date, value: "some content"}, item )
               })
@@ -393,8 +393,8 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("removes empty directories when items are deleted", function(resume) { with(this) {
-          store.delete(token, "boris", "photos", "/bar/baz/boo", function() {
-            store.get(token, "boris", "photos", "/", function(error, items) {
+          store.delete(token, "boris", "/photos/bar/baz/boo", function() {
+            store.get(token, "boris", "/photos/", function(error, items) {
               resume(function() {
                 assertNotEqual( arrayIncluding(objectIncluding({name: "bar/"})), items )
               })
@@ -403,7 +403,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns true when an existing item is deleted", function(resume) { with(this) {
-          store.delete(token, "boris", "photos", "/election", function(error, deleted) {
+          store.delete(token, "boris", "/photos/election", function(error, deleted) {
             resume(function() {
               assertNull( error )
               assert( deleted )
@@ -412,7 +412,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns false when a non-existant item is deleted", function(resume) { with(this) {
-          store.delete(token, "boris", "photos", "/zipwire", function(error, deleted) {
+          store.delete(token, "boris", "/photos/zipwire", function(error, deleted) {
             resume(function() {
               assertNull( error )
               assert( !deleted )
@@ -421,7 +421,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns false when deleting a directory", function(resume) { with(this) {
-          store.delete(token, "boris", "photos", "/bar/baz/", function(error, deleted) {
+          store.delete(token, "boris", "/photos/bar/baz/", function(error, deleted) {
             resume(function() {
               assertNull( error )
               assert( !deleted )
@@ -431,7 +431,7 @@ JS.Test.describe("Stores", function() { with(this) {
         
         it("returns an error when the token is modified", function(resume) { with(this) {
           token = token.replace(/[a-e]/g, "x")
-          store.delete(token, "boris", "photos", "/zipwire", function(error, deleted) {
+          store.delete(token, "boris", "/photos/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 401, error.status )
@@ -441,7 +441,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when deleting from a write-unauthorized category", function(resume) { with(this) {
-          store.delete(token, "boris", "contacts", "/zipwire", function(error, deleted) {
+          store.delete(token, "boris", "/contacts/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 403, error.status )
@@ -451,7 +451,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when deleting from an unauthorized category", function(resume) { with(this) {
-          store.delete(token, "boris", "calendar", "/zipwire", function(error, deleted) {
+          store.delete(token, "boris", "/calendar/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 403, error.status )
@@ -461,7 +461,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when deleting from an unauthorized user", function(resume) { with(this) {
-          store.delete(token, "zebcoe", "photos", "/zipwire", function(error, deleted) {
+          store.delete(token, "zebcoe", "/photos/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 401, error.status )
@@ -471,7 +471,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
         
         it("returns an error when deleting from a non-existant user", function(resume) { with(this) {
-          store.delete(token, "roderick", "photos", "/zipwire", function(error, deleted) {
+          store.delete(token, "roderick", "/photos/zipwire", function(error, deleted) {
             resume(function() {
               assertEqual( "Invalid access token", error.message )
               assertEqual( 401, error.status )

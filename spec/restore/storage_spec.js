@@ -28,26 +28,26 @@ JS.Test.describe("Storage", function() { with(this) {
     })
     
     it("asks the store for the item using an access token from a header", function() { with(this) {
-      expect(store, "get").given("a_token", "zebcoe", "locog", "/seats").yielding([null, item])
+      expect(store, "get").given("a_token", "zebcoe", "/locog/seats").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
       get( "/data/zebcoe/locog/seats", {} )
     }})
     
     it("asks the store for the item using an access token from the query string", function() { with(this) {
-      expect(store, "get").given("a_token", "zebcoe", "locog", "/seats").yielding([null, item])
+      expect(store, "get").given("a_token", "zebcoe", "/locog/seats").yielding([null, item])
       get( "/data/zebcoe/locog/seats?oauth_token=a_token", {} )
     }})
     
-    it("asks the store for a public item using an access token", function() { with(this) {
-      expect(store, "get").given("a_token", "zebcoe", "public/locog", "/seats").yielding([null, item])
-      header( "Authorization", "Bearer a_token" )
-      get( "/data/zebcoe/public/locog/seats", {} )
-    }})
-    
     it("asks the store for a directory listing using an access token", function() { with(this) {
-      expect(store, "get").given("a_token", "zebcoe", "locog", "/").yielding([null, item])
+      expect(store, "get").given("a_token", "zebcoe", "/locog/").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
       get( "/data/zebcoe/locog/", {} )
+    }})
+    
+    it("asks the store for a root listing using an access token", function() { with(this) {
+      expect(store, "get").given("a_token", "zebcoe", "/").yielding([null, item])
+      header( "Authorization", "Bearer a_token" )
+      get( "/data/zebcoe/", {} )
     }})
     
     describe("when the store returns an item", function() { with(this) {
@@ -151,7 +151,7 @@ JS.Test.describe("Storage", function() { with(this) {
   
   describe("PUT", function() { with(this) {
     it("tells the store to save the given value", function() { with(this) {
-      expect(store, "put").given("a_token", "zebcoe", "locog", "/seats", "text/plain", "a value").yielding([null])
+      expect(store, "put").given("a_token", "zebcoe", "/locog/seats", "text/plain", "a value").yielding([null])
       header( "Authorization", "Bearer a_token" )
       put( "/data/zebcoe/locog/seats", "a value" )
     }})
@@ -200,7 +200,7 @@ JS.Test.describe("Storage", function() { with(this) {
   
   describe("DELETE", function() { with(this) {
     it("tells the store to delete the given item", function() { with(this) {
-      expect(store, "delete").given("a_token", "zebcoe", "locog", "/seats").yielding([null])
+      expect(store, "delete").given("a_token", "zebcoe", "/locog/seats").yielding([null])
       header( "Authorization", "Bearer a_token" )
       this.delete( "/data/zebcoe/locog/seats", {} )
     }})
