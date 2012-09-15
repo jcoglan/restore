@@ -1,4 +1,4 @@
-# reStore
+# reStore [![Build Status](https://secure.travis-ci.org/jcoglan/restore.png)](http://travis-ci.org/jcoglan/restore)
 
 This is a simple [remoteStorage][1] server written in Node.js. It is still in
 the experimental stage, but is designed to be compatible with the 0.6
