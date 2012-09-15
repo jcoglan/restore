@@ -12,15 +12,6 @@ the experimental stage, but is designed to be compatible with the 0.6
 
 YOU SHOULD NOT INSTALL IT ANYWHERE YET, THINGS ARE GOING TO CHANGE.
 
-It uses file-based storage, and is only safe to use at small scale using a
-single server process. It is primarily designed for personal use, although it
-has been built with swappable storage in mind so we can implement a Redis
-backend for bigger installations.
-
-It stores user passwords as salted PBKDF2 hashes. It does not store access
-tokens at all; it issues self-contained tokens containing encrypted
-authorization data.
-
 
 ## Usage
 
@@ -39,6 +30,35 @@ server.listen(process.argv[2]);
 Boot the server on port 80:
 
     sudo node server.js 80
+
+### Storage backends
+
+reStore supports pluggable storage backends, and comes with two implementations
+out of the box:
+
+* `reStore.File` - stores data in JSON files on disk. Suitable for small-scale
+  use with a single server process
+* `reStore.Redis` - stores data in a Redis database, can be run with any number
+  of server processes
+
+They are configured as follows:
+
+```js
+// To use the file store:
+var store = new reStore.File('path/to/storage');
+
+// To use the Redis store:
+var store = new reStore.Redis({
+  host:     'redis.example.com',    // default is 'localhost'
+  port:     1234,                   // default is 6379
+  database: 2,                      // default is 0
+  password: 'unhosted'              // default is no password
+});
+
+// Then create the server with your store:
+var server = new reStore({store: store});
+server.listen(80);
+```
 
 
 ## Running the examples
