@@ -93,6 +93,23 @@ JS.Test.describe("Stores", function() { with(this) {
         })
       }})
       
+      describe("authorizations", function() { with(this) {
+        it("returns the user's authorizations", function(resume) { with(this) {
+          store.authorizations("boris", function(error, auths) {
+            resume(function() {
+              assertEqual( {
+                  "www.example.com": {
+                    "contacts/":  ["r"],
+                    "deep/dir/":  ["r","w"],
+                    "documents/": ["w"],
+                    "photos/":    ["r","w"]
+                  }
+                }, auths )
+            })
+          })
+        }})
+      }})
+      
       describe("put", function() { with(this) {
         before(function(resume) { with(this) {
           store.put(token, "boris", "/photos/election", "image/jpeg", "hair", function() { resume() })
