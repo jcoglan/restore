@@ -20,6 +20,12 @@ JS.Test.describe("Storage", function() { with(this) {
     }})
   }})
   
+  it("returns a 400 if the client tries to walk up the directory tree", function() { with(this) {
+    get( "/data/zebcoe/locog/../seats" )
+    check_status( 400 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+  }})
+  
   describe("GET", function() { with(this) {
     define("item", {
       type:     "custom/type",
