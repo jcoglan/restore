@@ -110,6 +110,29 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
       }})
       
+      describe("clientForToken", function() { with(this) {
+        it("returns the client for a valid token/user pair", function(resume) { with(this) {
+          store.clientForToken("boris", token, function(error, clientId) {
+            resume(function() {
+              assertNull( error )
+              assertEqual( "www.example.com", clientId )
+            })
+          })
+        }})
+        
+        it("returns an error for the wrong user", function(resume) { with(this) {
+          store.clientForToken("zebcoe", token, function(error, clientId) {
+            resume(function() { assert( error ) })
+          })
+        }})
+        
+        it("returns an error for the wrong token", function(resume) { with(this) {
+          store.clientForToken("boris", rootToken, function(error, clientId) {
+            resume(function() { assert( error ) })
+          })
+        }})
+      }})
+      
       describe("put", function() { with(this) {
         before(function(resume) { with(this) {
           store.put(token, "boris", "/photos/election", "image/jpeg", "hair", function() { resume() })
