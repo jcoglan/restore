@@ -21,7 +21,7 @@ Make a Node script to set up the server:
 // server.js
 
 var reStore = require('restore'),
-    store   = new reStore.File('path/to/storage'),
+    store   = new reStore.File({path: 'path/to/storage'}),
     server  = new reStore({store: store});
 
 server.listen(process.argv[2]);
@@ -48,10 +48,10 @@ They are configured as follows:
 
 ```js
 // To use the file store:
-var store = new reStore.File('path/to/storage');
+var store = new reStore.File({path: 'path/to/storage'});
 
 // To use the file tree store:
-var store = new reStore.FileTree('path/to/storage');
+var store = new reStore.FileTree({path: 'path/to/storage'});
 
 // To use the Redis store:
 var store = new reStore.Redis({
