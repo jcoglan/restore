@@ -10,7 +10,7 @@ JS.Test.describe("Storage", function() { with(this) {
   
   describe("OPTIONS", function() { with(this) {
     it("returns access control headers", function() { with(this) {
-      options( "/data/zebcoe/locog/seats", {} )
+      options( "/storage/zebcoe/locog/seats", {} )
       check_status( 200 )
       check_header( "Access-Control-Allow-Origin", "*" )
       check_header( "Access-Control-Allow-Methods", "GET, PUT, DELETE" )
@@ -21,7 +21,7 @@ JS.Test.describe("Storage", function() { with(this) {
   }})
   
   it("returns a 400 if the client tries to walk up the directory tree", function() { with(this) {
-    get( "/data/zebcoe/locog/../seats" )
+    get( "/storage/zebcoe/locog/../seats" )
     check_status( 400 )
     check_header( "Access-Control-Allow-Origin", "*" )
   }})
@@ -36,24 +36,24 @@ JS.Test.describe("Storage", function() { with(this) {
     it("asks the store for the item using an access token from a header", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "/locog/seats").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
-      get( "/data/zebcoe@local.dev/locog/seats", {} )
+      get( "/storage/zebcoe@local.dev/locog/seats", {} )
     }})
     
     it("asks the store for the item using an access token from the query string", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "/locog/seats").yielding([null, item])
-      get( "/data/zebcoe/locog/seats?oauth_token=a_token", {} )
+      get( "/storage/zebcoe/locog/seats?oauth_token=a_token", {} )
     }})
     
     it("asks the store for a directory listing using an access token", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "/locog/").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
-      get( "/data/zebcoe/locog/", {} )
+      get( "/storage/zebcoe/locog/", {} )
     }})
     
     it("asks the store for a root listing using an access token", function() { with(this) {
       expect(store, "get").given("a_token", "zebcoe", "/").yielding([null, item])
       header( "Authorization", "Bearer a_token" )
-      get( "/data/zebcoe/", {} )
+      get( "/storage/zebcoe/", {} )
     }})
     
     describe("when the store returns an item", function() { with(this) {
@@ -62,7 +62,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns the value in the response", function() { with(this) {
-        get( "/data/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -75,7 +75,7 @@ JS.Test.describe("Storage", function() { with(this) {
       
       it("returns a 304 for conditional GET with If-None-Match", function() { with(this) {
         header( "If-None-Match", "a213df409c704f6efd96811206f894e2" )
-        get( "/data/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe/locog/seats", {} )
         check_status( 304 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -88,7 +88,7 @@ JS.Test.describe("Storage", function() { with(this) {
       
       it("returns a 304 for conditional GET with If-Modified-Since", function() { with(this) {
         header( "If-Modified-Since", "Fri, 24 Feb 2012 13:37:00 GMT" )
-        get( "/data/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe/locog/seats", {} )
         check_status( 304 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -106,7 +106,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns the listing as JSON", function() { with(this) {
-        get( "/data/zebcoe/locog/seats/", {} )
+        get( "/storage/zebcoe/locog/seats/", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -120,7 +120,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns a 200 response with an empty JSON object", function() { with(this) {
-        get( "/data/zebcoe/locog/seats/", {} )
+        get( "/storage/zebcoe/locog/seats/", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -134,7 +134,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns an empty 404 response", function() { with(this) {
-        get( "/data/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe/locog/seats", {} )
         check_status( 404 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
@@ -147,7 +147,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns an empty 401 response", function() { with(this) {
-        get( "/data/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe/locog/seats", {} )
         check_status( 401 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
@@ -159,7 +159,7 @@ JS.Test.describe("Storage", function() { with(this) {
     it("tells the store to save the given value", function() { with(this) {
       expect(store, "put").given("a_token", "zebcoe", "/locog/seats", "text/plain", "a value").yielding([null])
       header( "Authorization", "Bearer a_token" )
-      put( "/data/zebcoe/locog/seats", "a value" )
+      put( "/storage/zebcoe/locog/seats", "a value" )
     }})
     
     describe("when the store says the item was created", function() { with(this) {
@@ -168,7 +168,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns an empty 201 response", function() { with(this) {
-        put( "/data/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe/locog/seats", "a value" )
         check_status( 201 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Last-Modified", "Fri, 07 Sep 2012 11:21:15 GMT" )
@@ -182,7 +182,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns an empty 200 response", function() { with(this) {
-        put( "/data/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe/locog/seats", "a value" )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Last-Modified", "Fri, 07 Sep 2012 11:21:15 GMT" )
@@ -196,7 +196,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns an empty 403 response", function() { with(this) {
-        put( "/data/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe/locog/seats", "a value" )
         check_status( 403 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
@@ -208,7 +208,7 @@ JS.Test.describe("Storage", function() { with(this) {
     it("tells the store to delete the given item", function() { with(this) {
       expect(store, "delete").given("a_token", "zebcoe", "/locog/seats").yielding([null])
       header( "Authorization", "Bearer a_token" )
-      this.delete( "/data/zebcoe/locog/seats", {} )
+      this.delete( "/storage/zebcoe/locog/seats", {} )
     }})
     
     describe("when the store says the item was deleted", function() { with(this) {
@@ -217,7 +217,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns an empty 200 response", function() { with(this) {
-        this.delete( "/data/zebcoe/locog/seats", {} )
+        this.delete( "/storage/zebcoe/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
@@ -230,7 +230,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns an empty 404 response", function() { with(this) {
-        this.delete( "/data/zebcoe/locog/seats", {} )
+        this.delete( "/storage/zebcoe/locog/seats", {} )
         check_status( 404 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
@@ -243,7 +243,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("returns an empty 401 response", function() { with(this) {
-        this.delete( "/data/zebcoe/locog/seats", {} )
+        this.delete( "/storage/zebcoe/locog/seats", {} )
         check_status( 401 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )

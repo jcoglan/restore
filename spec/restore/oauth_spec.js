@@ -32,7 +32,7 @@ JS.Test.describe("OAuth", function() { with(this) {
         
       it("authorizes the client to read and write", function() { with(this) {
         expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r", "w"]}).yielding([null, "a_token"])
-        post("/auth", auth_params)
+        post("/oauth", auth_params)
       }})
     }})
     
@@ -41,7 +41,7 @@ JS.Test.describe("OAuth", function() { with(this) {
         
       it("authorizes the client to read", function() { with(this) {
         expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r"]}).yielding([null, "a_token"])
-        post("/auth", auth_params)
+        post("/oauth", auth_params)
       }})
     }})
     
@@ -50,13 +50,13 @@ JS.Test.describe("OAuth", function() { with(this) {
         
       it("authorizes the client to read and write", function() { with(this) {
         expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r", "w"]}).yielding([null, "a_token"])
-        post("/auth", auth_params)
+        post("/oauth", auth_params)
       }})
     }})
     
     it("redirects with an access token", function() { with(this) {
       stub(store, "authorize").yields([null, "a_token"])
-      post("/auth", auth_params)
+      post("/oauth", auth_params)
       check_status( 302 )
       check_header( "Location", "http://example.com/cb#access_token=a_token&state=the_state" )
     }})
@@ -71,11 +71,11 @@ JS.Test.describe("OAuth", function() { with(this) {
     
     it("does not authorize the client", function() { with(this) {
       expect(store, "authorize").exactly(0)
-      post("/auth", auth_params)
+      post("/oauth", auth_params)
     }})
     
     it("returns a 401 response with the login form", function() { with(this) {
-      post("/auth", auth_params)
+      post("/oauth", auth_params)
       check_status( 401 )
       check_header( "Content-Type","text/html" )
       check_body( /The page at <code>the_client_id<\/code> wants/ )

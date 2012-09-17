@@ -33,12 +33,12 @@ JS.Test.describe("WebFinger", function() { with(this) {
     check_json({
       "links": [
         {
-          "href": "http://localhost/data/zebcoe",
+          "href": "http://localhost/storage/zebcoe",
           "rel":  "remoteStorage",
           "type": "https://www.w3.org/community/rww/wiki/read-write-web-00#simple",
           "properties": {
             "auth-method":    "https://tools.ietf.org/html/draft-ietf-oauth-v2-26#section-4.2",
-            "auth-endpoint":  "http://localhost/auth/zebcoe"
+            "auth-endpoint":  "http://localhost/oauth/zebcoe"
           }
         }
       ]
@@ -64,8 +64,8 @@ JS.Test.describe("WebFinger", function() { with(this) {
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n\
   <Link rel="remoteStorage"\n\
         api="simple"\n\
-        auth="' + host + '/auth/zebcoe@locog"\n\
-        template="' + host + '/data/zebcoe@locog/{category}" />\n\
+        auth="' + host + '/oauth/zebcoe@locog"\n\
+        template="' + host + '/storage/zebcoe@locog/{category}" />\n\
 </XRD>' )
   }})
 }})
