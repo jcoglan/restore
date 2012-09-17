@@ -45,6 +45,14 @@ JS.Test.describe("WebFinger", function() { with(this) {
     })
   }})
   
+  it("returns a 404 if no resource is given", function() { with(this) {
+    get( "/.well-known/host-meta.json" )
+    
+    check_status( 404 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+    check_body( "" )
+  }})
+  
   it("returns account metadata as XRD", function() { with(this) {
     get( "/webfinger/xrd/acct:zebcoe@locog", {} )
     
