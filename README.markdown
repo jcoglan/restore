@@ -33,11 +33,14 @@ Boot the server on port 80:
 
 ### Storage backends
 
-reStore supports pluggable storage backends, and comes with two implementations
-out of the box:
+reStore supports pluggable storage backends, and comes with three
+implementations out of the box:
 
-* `reStore.File` - stores data in JSON files on disk. Suitable for small-scale
-  use with a single server process
+* `reStore.File` - stores each user's entire data set in a single JSON file on
+  disk. Suitable for holding small amounts of data, and must only be run using
+  a single server process
+* `reStore.FileTree` - uses the filesystem hierarchy and stores each item in its
+  own individual file, and must only be run using a single server process
 * `reStore.Redis` - stores data in a Redis database, can be run with any number
   of server processes
 
@@ -46,6 +49,9 @@ They are configured as follows:
 ```js
 // To use the file store:
 var store = new reStore.File('path/to/storage');
+
+// To use the file tree store:
+var store = new reStore.FileTree('path/to/storage');
 
 // To use the Redis store:
 var store = new reStore.Redis({

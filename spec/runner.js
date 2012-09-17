@@ -9,6 +9,7 @@ require('./restore/storage_spec')
 
 require('./store_spec.js')
 require('./stores/file_spec')
+require('./stores/file_tree_spec')
 require('./stores/redis_spec')
 
 JS.Test.autorun()
