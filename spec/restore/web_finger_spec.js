@@ -64,8 +64,8 @@ JS.Test.describe("WebFinger", function() { with(this) {
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n\
   <Link rel="remoteStorage"\n\
         api="simple"\n\
-        auth="' + host + '/oauth/zebcoe@locog"\n\
-        template="' + host + '/storage/zebcoe@locog/{category}" />\n\
+        auth="' + host + '/oauth/zebcoe"\n\
+        template="' + host + '/storage/zebcoe/{category}" />\n\
 </XRD>' )
   }})
 }})
