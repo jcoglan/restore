@@ -130,7 +130,7 @@ Run the example server:
 
 Create a user:
 
-    curl -X POST local.dev/users -d 'username=me' -d 'password=foo'
+    curl -kX POST https://local.dev/users -d 'username=me' -d 'password=foo'
 
 Serve the example app using Python:
 
