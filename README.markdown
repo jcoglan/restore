@@ -22,9 +22,13 @@ Make a Node script to set up the server:
 
 var reStore = require('restore'),
     store   = new reStore.File({path: 'path/to/storage'}),
-    server  = new reStore({store: store});
+    
+    server  = new reStore({
+                store:  store
+                http:   {port: process.argv[2]}
+              });
 
-server.listen(process.argv[2]);
+server.boot();
 ```
 
 Boot the server on port 80:
@@ -62,8 +66,12 @@ var store = new reStore.Redis({
 });
 
 // Then create the server with your store:
-var server = new reStore({store: store});
-server.listen(80);
+var server = new reStore({
+                store:  store
+                http:   {port: process.argv[2]}
+              });
+
+server.boot();
 ```
 
 
@@ -73,9 +81,9 @@ This repository contains examples using the `stable` and `master` branches of
 remoteStorage.js. You'll need to bind `127.0.0.1` to the host `local.dev` for
 the demo to work correctly.
 
-Run the example server on port 80:
+Run the example server:
 
-    sudo node example/server.js 80
+    sudo node example/server.js
 
 Create a user:
 

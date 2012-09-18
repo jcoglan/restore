@@ -39,9 +39,9 @@ var request = function(self, host, port, method, path, params, headers, callback
 
 module.exports = JS.Test.asyncSteps({
   start: function(port, callback) {
-    this._server = new Restore({store: this.store})
+    this._server = new Restore({store: this.store, http: {port: port}})
     this._port = port
-    this._server.listen(port)
+    this._server.boot()
     process.nextTick(callback)
   },
   
