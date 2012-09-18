@@ -27,6 +27,12 @@ JS.Test.describe("Storage", function() { with(this) {
     stub(store, "clientForToken").given("zebcoe", "root_token").yields([null, "admin.example.com"])
   }})
   
+  it("returns a 400 if the client tries to walk up the directory tree", function() { with(this) {
+    get( "/storage/zebcoe/locog/.%2E%2Fseats" )
+    check_status( 400 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+  }})
+  
   describe("OPTIONS", function() { with(this) {
     it("returns access control headers", function() { with(this) {
       options( "/storage/zebcoe/locog/seats", {} )
@@ -37,12 +43,6 @@ JS.Test.describe("Storage", function() { with(this) {
       check_header( "Cache-Control", "no-cache, no-store" )
       check_body( "" )
     }})
-  }})
-  
-  it("returns a 400 if the client tries to walk up the directory tree", function() { with(this) {
-    get( "/storage/zebcoe/locog/../seats" )
-    check_status( 400 )
-    check_header( "Access-Control-Allow-Origin", "*" )
   }})
   
   describe("GET", function() { with(this) {
