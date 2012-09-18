@@ -6,7 +6,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
   before(function() { this.start(4567) })
   after (function() { this.stop() })
   
-  define("host", "http://localhost")
+  define("host", "http://localhost:4567")
   
   it("returns host metadata as XRD", function() { with(this) {
     get( "/.well-known/host-meta", {} )
@@ -33,12 +33,12 @@ JS.Test.describe("WebFinger", function() { with(this) {
     check_json({
       "links": [
         {
-          "href": "http://localhost/storage/zebcoe",
+          "href": host + "/storage/zebcoe",
           "rel":  "remoteStorage",
           "type": "https://www.w3.org/community/rww/wiki/read-write-web-00#simple",
           "properties": {
             "auth-method":    "https://tools.ietf.org/html/draft-ietf-oauth-v2-26#section-4.2",
-            "auth-endpoint":  "http://localhost/oauth/zebcoe"
+            "auth-endpoint":  host + "/oauth/zebcoe"
           }
         }
       ]

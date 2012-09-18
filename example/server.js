@@ -17,8 +17,8 @@ server = new reStore({
   https:  {
     force:  true,
     port:   443,
-    key:    __dirname + '/ssl/server.key',
-    cert:   __dirname + '/ssl/server.crt'
+    key:    __dirname + '/../spec/ssl/server.key',
+    cert:   __dirname + '/../spec/ssl/server.crt'
   }
 });
 
