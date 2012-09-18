@@ -74,6 +74,49 @@ var server = new reStore({
 server.boot();
 ```
 
+### Serving over HTTPS
+
+Since remoteStorage is a system for storing arbitrary user-specific data, and
+since it makes use of OAuth 2.0, we recommend you serve it over a secure
+connection. You can boot the server to listen for HTTP or HTTPS requests or
+both. This configuration boots the app on two ports, one secure and one
+plaintext:
+
+```js
+var server = new reStore({
+  store:  store,
+  http:   {port: 80},
+  https:  {
+    force:  true,
+    port:   443,
+    key:    'path/to/ssl.key',
+    cert:   'path/to/ssl.crt'
+  }
+});
+
+server.boot();
+```
+
+The `force: true` line in the `https` section means the app will:
+
+* Return HTTPS URLs in WebFinger responses
+* Force sign-up and OAuth login pages onto an HTTPS connection
+* Refuse to process POST authentication requests over insecure connections
+* (TODO) Block insecure storage requests and revoke the client's access
+
+reStore considers the following requests to be secure:
+
+* reStore itself acts as an SSL terminator and the connection to it is encrypted
+* The `X-Forwarded-SSL` header has the value `on`
+* The `X-Forwarded-Proto` header has the value `https`
+* The `X-Forwarded-Scheme` header has the value `https`
+
+So you can have an SSL-terminating proxy in front of reStore as long as it sets
+one of those headers, and *does not* let external clients set them. In this
+setup, you can set `https.force = true` but not set `https.port`; this means
+reStore itself will not accept encrypted connections but will apply the above
+behaviour to enforce secure connections.
+
 
 ## Running the examples
 
