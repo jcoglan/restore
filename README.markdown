@@ -137,7 +137,9 @@ Serve the example app using Python:
     cd example
     python -m SimpleHTTPServer
 
-And open the example apps for each version:
+And open the example apps for each version. You may need to dismiss browser
+warnings about the self-signed certificate for `local.dev` before the clients
+will connect properly.
 
     open http://local.dev:8000/rs-stable.html
     open http://local.dev:8000/rs-master.html
