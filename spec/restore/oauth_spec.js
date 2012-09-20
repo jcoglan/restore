@@ -20,6 +20,41 @@ JS.Test.describe("OAuth", function() { with(this) {
     }
   }})
   
+  describe("with invalid client input", function() { with(this) {
+    before(function() { delete this.auth_params.state })
+    
+    it("returns an error if redirect_uri is missing", function() { with(this) {
+      delete auth_params.redirect_uri
+      get("/oauth/me", auth_params)
+      check_status( 400 )
+      check_body( "error=invalid_request" )
+    }})
+    
+    it("returns an error if client_id is missing", function() { with(this) {
+      delete auth_params.client_id
+      get("/oauth/me", auth_params)
+      check_redirect( "http://example.com/cb#error=invalid_request" )
+    }})
+    
+    it("returns an error if response_type is missing", function() { with(this) {
+      delete auth_params.response_type
+      get("/oauth/me", auth_params)
+      check_redirect( "http://example.com/cb#error=invalid_request" )
+    }})
+    
+    it("returns an error if response_type is not recognized", function() { with(this) {
+      auth_params.response_type = "wrong"
+      get("/oauth/me", auth_params)
+      check_redirect( "http://example.com/cb#error=unsupported_response_type" )
+    }})
+    
+    it("returns an error if scope is missing", function() { with(this) {
+      delete auth_params.scope
+      get("/oauth/me", auth_params)
+      check_redirect( "http://example.com/cb#error=invalid_scope" )
+    }})
+  }})
+  
   describe("with valid login credentials", function() { with(this) {
     before(function() { with(this) {
       expect(store, "authenticate")
@@ -57,8 +92,7 @@ JS.Test.describe("OAuth", function() { with(this) {
     it("redirects with an access token", function() { with(this) {
       stub(store, "authorize").yields([null, "a_token"])
       post("/oauth", auth_params)
-      check_status( 302 )
-      check_header( "Location", "http://example.com/cb#access_token=a_token&token_type=bearer&state=the_state" )
+      check_redirect( "http://example.com/cb#access_token=a_token&token_type=bearer&state=the_state" )
     }})
   }})
   

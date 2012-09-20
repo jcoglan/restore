@@ -90,6 +90,12 @@ module.exports = JS.Test.asyncSteps({
     process.nextTick(callback)
   },
   
+  check_redirect: function(url, callback) {
+    this.assertEqual(302, this.response.statusCode);
+    this.assertEqual(url, this.response.headers.location);
+    process.nextTick(callback);
+  },
+  
   check_body: function(expectedBody, callback) {
     var actualBody = this.response.body.replace(/^\s*|\s*$/g, '')
     if (typeof expectedBody === "string")
