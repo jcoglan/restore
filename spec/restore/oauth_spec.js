@@ -58,7 +58,7 @@ JS.Test.describe("OAuth", function() { with(this) {
       stub(store, "authorize").yields([null, "a_token"])
       post("/oauth", auth_params)
       check_status( 302 )
-      check_header( "Location", "http://example.com/cb#access_token=a_token&state=the_state" )
+      check_header( "Location", "http://example.com/cb#access_token=a_token&token_type=bearer&state=the_state" )
     }})
   }})
   
