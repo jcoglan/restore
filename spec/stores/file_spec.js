@@ -1,5 +1,5 @@
 var File = require("../../lib/stores/file"),
-    fs   = require("fs.extra")
+    rmrf = require("rimraf")
 
 JS.Test.describe("File store", function() { with(this) {
   before(function() { with(this) {
@@ -8,7 +8,7 @@ JS.Test.describe("File store", function() { with(this) {
   }})
   
   after(function(resume) { with(this) {
-    fs.rmrf(__dirname + "/../../tmp", resume)
+    rmrf(__dirname + "/../../tmp", resume)
   }})
   
   itShouldBehaveLike("storage backend")
