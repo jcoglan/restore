@@ -226,6 +226,20 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( "" )
       }})
     }})
+    
+    describe("when the store returns an error", function() { with(this) {
+      before(function() { with(this) {
+        header( "Authorization", "Bearer a_token" )
+        stub(store, "get").yields([new Error("We did something wrong")])
+      }})
+      
+      it("returns a 500 response with the error message", function() { with(this) {
+        get( "/storage/zebcoe/locog/seats", {} )
+        check_status( 500 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_body( "We did something wrong" )
+      }})
+    }})
   }})
   
   describe("PUT", function() { with(this) {
@@ -295,6 +309,20 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( "" )
       }})
     }})
+    
+    describe("when the store returns an error", function() { with(this) {
+      before(function() { with(this) {
+        header( "Authorization", "Bearer a_token" )
+        stub(store, "put").yields([new Error("Something is technically wrong")])
+      }})
+      
+      it("returns a 500 response with the error message", function() { with(this) {
+        put( "/storage/zebcoe/locog/seats", "a value" )
+        check_status( 500 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_body( "Something is technically wrong" )
+      }})
+    }})
   }})
   
   describe("DELETE", function() { with(this) {
@@ -329,6 +357,20 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 404 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
+      }})
+    }})
+    
+    describe("when the store returns an error", function() { with(this) {
+      before(function() { with(this) {
+        header( "Authorization", "Bearer a_token" )
+        stub(store, "delete").yields([new Error("OH NOES!")])
+      }})
+      
+      it("returns a 500 response with the error message", function() { with(this) {
+        this.delete( "/storage/zebcoe/locog/seats", {} )
+        check_status( 500 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_body( "OH NOES!" )
       }})
     }})
   }})
