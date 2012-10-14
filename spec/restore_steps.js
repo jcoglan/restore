@@ -22,10 +22,16 @@ var request = function(self, host, port, method, path, params, headers, callback
     options.path += "?" + query
   
   var request = http.request(options, function(response) {
-    var body = ""
-    response.addListener("data", function(c) { body += c.toString() })
+    var body = new Buffer(0)
+    response.addListener("data", function(chunk) {
+      var buffer = new Buffer(body.length + chunk.length)
+      body.copy(buffer)
+      chunk.copy(buffer, body.length)
+      body = buffer
+    })
     response.addListener("end", function() {
-      response.body = body
+      response.buffer = body
+      response.body = body.toString("utf8")
       self.response = response
       callback()
     })
@@ -100,6 +106,8 @@ module.exports = JS.Test.asyncSteps({
     var actualBody = this.response.body.replace(/^\s*|\s*$/g, '')
     if (typeof expectedBody === "string")
       this.assertEqual(expectedBody, actualBody)
+    else if (expectedBody.equals)
+      this.assertEqual(expectedBody, this.response.buffer)
     else
       this.assertMatch(expectedBody, actualBody)
     process.nextTick(callback)

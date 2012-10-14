@@ -3,6 +3,14 @@ var RestoreSteps = require("../restore_steps")
 JS.Test.describe("Storage", function() { with(this) {
   include(RestoreSteps)
   
+  define("buffer", function(string) {
+    return {
+      equals: function(other) {
+        return other instanceof Buffer && other.toString("utf8") === string
+      }
+    }
+  })
+  
   before(function() { this.start(4567) })
   after (function() { this.stop() })
   
@@ -49,7 +57,7 @@ JS.Test.describe("Storage", function() { with(this) {
     define("item", {
       type:     "custom/type",
       modified: new Date(2012, 1, 25, 13, 37),
-      value:    "a value"
+      value:    new Buffer("a value")
     })
     
     describe("when a valid access token is used", function() { with(this) {
@@ -153,7 +161,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_header( "Content-Type", "custom/type" )
         check_header( "ETag", "a213df409c704f6efd96811206f894e2" )
         check_header( "Last-Modified", "Sat, 25 Feb 2012 13:37:00 GMT" )
-        check_body( "a value" )
+        check_body( buffer("a value") )
       }})
       
       it("returns a 304 for conditional GET with If-None-Match", function() { with(this) {
@@ -249,12 +257,12 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
       
       it("tells the store to save the given value", function() { with(this) {
-        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", "a value").yielding([null])
+        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value")).yielding([null])
         put( "/storage/zebcoe/locog/seats", "a value" )
       }})
       
       it("tells the store to save a public value", function() { with(this) {
-        expect(store, "put").given("zebcoe", "/public/locog/seats", "text/plain", "a value").yielding([null])
+        expect(store, "put").given("zebcoe", "/public/locog/seats", "text/plain", buffer("a value")).yielding([null])
         put( "/storage/zebcoe/public/locog/seats", "a value" )
       }})
       
