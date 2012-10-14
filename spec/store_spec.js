@@ -1,9 +1,22 @@
+var fs   = require("fs"),
+    path = require("path")
+
 JS.Test.describe("Stores", function() { with(this) {
   sharedBehavior("storage backend", function() { with(this) {
     define("buffer", function(string) {
       var buffer = new Buffer(string)
       buffer.equals = function(other) {
         return other instanceof Buffer && other.toString("utf8") === string
+      }
+      return buffer
+    })
+    
+    define("file", function(filename) {
+      var buffer = fs.readFileSync(path.join(__dirname, filename)),
+          string = buffer.toString("hex")
+      
+      buffer.equals = function(other) {
+        return other instanceof Buffer && other.toString("hex") === string
       }
       return buffer
     })
@@ -154,6 +167,14 @@ JS.Test.describe("Stores", function() { with(this) {
           store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), function() {
             store.get("boris", "/photos/zipwire", function(error, item) {
               resume(function() { assertEqual( buffer("vertibo"), item.value ) })
+            })
+          })
+        }})
+        
+        it("stores binary data", function(resume) { with(this) {
+          store.put("boris", "/photos/whut", "image/jpeg", file("whut2.jpg"), function() {
+            store.get("boris", "/photos/whut", function(error, item) {
+              resume(function() { assertEqual( file("whut2.jpg"), item.value ) })
             })
           })
         }})

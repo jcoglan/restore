@@ -2,7 +2,7 @@ var reStore = require('../lib/restore'),
     store,
     server;
 
-var type = process.argv[3];
+var type = process.argv[2];
 
 if (type === 'redis')
   store = new reStore.Redis({database: 3});
