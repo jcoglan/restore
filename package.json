@@ -7,7 +7,7 @@
 , "version"         : "0.1.0"
 , "engines"         : {"node": ">=0.6.0"}
 , "main"            : "./lib/restore.js"
-, "dependencies"    : {"ejs": "", "mkdirp": "", "redis": "", "vault": ""}
+, "dependencies"    : {"ejs": "", "mkdirp": "", "redis": "", "hiredis": "", "vault": ""}
 , "devDependencies" : {"jsclass": "", "rimraf": ""}
 
 , "scripts"         : {"test": "node spec/runner.js"}
