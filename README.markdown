@@ -21,7 +21,7 @@ Make a Node script to set up the server:
 // server.js
 
 var reStore = require('restore'),
-    store   = new reStore.File({path: 'path/to/storage'}),
+    store   = new reStore.FileTree({path: 'path/to/storage'}),
     
     server  = new reStore({
                 store:  store
@@ -37,12 +37,9 @@ Boot the server on port 80:
 
 ### Storage backends
 
-reStore supports pluggable storage backends, and comes with three
-implementations out of the box:
+reStore supports pluggable storage backends, and comes with two implementations
+out of the box:
 
-* `reStore.File` - Stores each user's entire data set in a single JSON file on
-  disk. All stored data is base64-encoded. Suitable for holding small amounts of
-  data, and must only be run using a single server process.
 * `reStore.FileTree` - Uses the filesystem hierarchy and stores each item in its
   own individual file. Content and metadata are stored in separate files so the
   content does not need base64-encoding and can be hand-edited. Must only be run
@@ -56,9 +53,6 @@ arbitrary binary data with content types and modification times.
 They are configured as follows:
 
 ```js
-// To use the file store:
-var store = new reStore.File({path: 'path/to/storage'});
-
 // To use the file tree store:
 var store = new reStore.FileTree({path: 'path/to/storage'});
 
