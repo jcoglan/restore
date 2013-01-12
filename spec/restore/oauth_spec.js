@@ -2,12 +2,12 @@ var RestoreSteps = require("../restore_steps")
 
 JS.Test.describe("OAuth", function() { with(this) {
   include(RestoreSteps)
-  
+
   before(function() { this.start(4567) })
   after (function() { this.stop() })
-  
+
   define("store", {})
-  
+
   before(function() { with(this) {
     this.auth_params = {
       username:       "zebcoe",
@@ -19,95 +19,95 @@ JS.Test.describe("OAuth", function() { with(this) {
       state:          "the_state"
     }
   }})
-  
+
   describe("with invalid client input", function() { with(this) {
     before(function() { delete this.auth_params.state })
-    
+
     it("returns an error if redirect_uri is missing", function() { with(this) {
       delete auth_params.redirect_uri
       get("/oauth/me", auth_params)
       check_status( 400 )
       check_body( "error=invalid_request" )
     }})
-    
+
     it("returns an error if client_id is missing", function() { with(this) {
       delete auth_params.client_id
       get("/oauth/me", auth_params)
       check_redirect( "http://example.com/cb#error=invalid_request" )
     }})
-    
+
     it("returns an error if response_type is missing", function() { with(this) {
       delete auth_params.response_type
       get("/oauth/me", auth_params)
       check_redirect( "http://example.com/cb#error=invalid_request" )
     }})
-    
+
     it("returns an error if response_type is not recognized", function() { with(this) {
       auth_params.response_type = "wrong"
       get("/oauth/me", auth_params)
       check_redirect( "http://example.com/cb#error=unsupported_response_type" )
     }})
-    
+
     it("returns an error if scope is missing", function() { with(this) {
       delete auth_params.scope
       get("/oauth/me", auth_params)
       check_redirect( "http://example.com/cb#error=invalid_scope" )
     }})
   }})
-  
+
   describe("with valid login credentials", function() { with(this) {
     before(function() { with(this) {
       expect(store, "authenticate")
           .given( objectIncluding({username: "zebcoe", password: "locog"}) )
           .yielding( [null] )
     }})
-    
+
     describe("without explicit read/write permissions", function() { with(this) {
       before(function() { this.auth_params.scope = "the_scope" })
-        
+
       it("authorizes the client to read and write", function() { with(this) {
         expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r", "w"]}).yielding([null, "a_token"])
         post("/oauth", auth_params)
       }})
     }})
-    
+
     describe("with explicit read permission", function() { with(this) {
       before(function() { this.auth_params.scope = "the_scope:r" })
-        
+
       it("authorizes the client to read", function() { with(this) {
         expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r"]}).yielding([null, "a_token"])
         post("/oauth", auth_params)
       }})
     }})
-    
+
     describe("with explicit read/write permission", function() { with(this) {
       before(function() { this.auth_params.scope = "the_scope:rw" })
-        
+
       it("authorizes the client to read and write", function() { with(this) {
         expect(store, "authorize").given("the_client_id", "zebcoe", {the_scope: ["r", "w"]}).yielding([null, "a_token"])
         post("/oauth", auth_params)
       }})
     }})
-    
+
     it("redirects with an access token", function() { with(this) {
       stub(store, "authorize").yields([null, "a_token"])
       post("/oauth", auth_params)
       check_redirect( "http://example.com/cb#access_token=a_token&token_type=bearer&state=the_state" )
     }})
   }})
-  
+
   describe("with invalid login credentials", function() { with(this) {
     before(function() { with(this) {
       expect(store, "authenticate")
           .given( objectIncluding({username: "zebcoe", password: "locog"}) )
           .yielding( [new Error()] )
     }})
-    
+
     it("does not authorize the client", function() { with(this) {
       expect(store, "authorize").exactly(0)
       post("/oauth", auth_params)
     }})
-    
+
     it("returns a 401 response with the login form", function() { with(this) {
       post("/oauth", auth_params)
       check_status( 401 )

@@ -13,13 +13,13 @@ JS.Test.describe("Redis store", function() { with(this) {
       namespace:  String(new Date().getTime())
     })
   }})
-  
+
   after(function(resume) { with(this) {
     db.select(1, function() {
       db.flushdb(function() { resume() })
     })
   }})
-  
+
   itShouldBehaveLike("storage backend")
 }})
 

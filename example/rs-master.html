@@ -7,23 +7,23 @@
     <script type="text/javascript" src="./remoteStorage-master.js"></script>
   </head>
   <body>
-    
+
     <h1>remoteStorage example</h1>
-    
+
     <div id="remotestorage-connect"></div>
-    
+
     <script type="text/javascript">
       remoteStorage.displayWidget('remotestorage-connect');
-      
+
       remoteStorage.defineModule('vault', function(client) {
         return {name: 'vault', exports: client};
       });
-      
+
       remoteStorage.claimAccess('vault');
       remoteStorage.vault.storeObject('text/test', 'foo', {hello: 'world'});
       remoteStorage.vault.sync();
     </script>
-    
+
   </body>
 </html>
 

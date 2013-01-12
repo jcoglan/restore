@@ -13,50 +13,50 @@
         margin:       0;
         padding:      0;
       }
-      
+
       p, ul, form {
         margin:       1em auto;
         padding:      0;
         width:        600px;
       }
-      
+
       th {
         font-size:    80%;
         font-weight:  normal;
         text-align:   left;
       }
-      
+
       input {
         font-size:    80%;
       }
-      
+
       code {
         font-family:  Ubuntu Mono, Monaco, Courier New, monospace;
       }
     </style>
   </head>
   <body>
-    
+
     <p><code><%= client_id %></code> wants:</p>
-    
+
     <ul>
       <% scope.split(/\s+/).forEach(function(module) { %>
         <% var path = module.split(':') %>
         <li><b><%= access_strings[path[1] || 'rw'] %></b> access to <b><%= path[0].replace(/\/?$/, '/') %></b></li>
       <% }) %>
     </ul>
-    
+
     <% if (typeof error !== 'undefined') { %>
       <p class="error"><%= error %></p>
     <% } %>
-    
+
     <form method="POST" action="/oauth">
       <input type="hidden" name="client_id" value="<%= client_id %>">
       <input type="hidden" name="redirect_uri" value="<%= redirect_uri %>">
       <input type="hidden" name="response_type" value="<%= response_type %>">
       <input type="hidden" name="scope" value="<%= scope %>">
       <input type="hidden" name="state" value="<%= state %>">
-      
+
       <table>
         <tr>
           <th scope="row"><label for="username">Username</label></th>
@@ -67,10 +67,10 @@
           <td><input type="password" name="password" id="password"></td>
         </tr>
       </table>
-      
+
       <input type="submit" value="Allow">
     </form>
-    
+
   </body>
 </html>
 
