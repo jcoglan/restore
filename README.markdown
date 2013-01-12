@@ -66,9 +66,9 @@ var store = new reStore.Redis({
 
 // Then create the server with your store:
 var server = new reStore({
-                store:  store
-                http:   {port: process.argv[2]}
-              });
+               store:  store
+               http:   {port: process.argv[2]}
+             });
 
 server.boot();
 ```
