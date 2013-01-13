@@ -1,0 +1,6 @@
+[submodule "vendor/remoteStorage-stable"]
+	path = vendor/remoteStorage-stable
+	url = git://github.com/RemoteStorage/remoteStorage.js.git
+[submodule "vendor/remoteStorage-master"]
+	path = vendor/remoteStorage-master
+	url = git://github.com/RemoteStorage/remoteStorage.js.git

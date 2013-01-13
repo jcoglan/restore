@@ -19,7 +19,7 @@
         return {name: 'vault', exports: client};
       });
 
-      remoteStorage.claimAccess('vault');
+      remoteStorage.claimAccess('vault', 'rw');
       remoteStorage.vault.storeObject('text/test', 'foo', {hello: 'world'});
       remoteStorage.vault.sync();
     </script>

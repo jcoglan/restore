@@ -34,10 +34,10 @@ JS.Test.describe("WebFinger", function() { with(this) {
       "links": [
         {
           "href": host + "/storage/zebcoe",
-          "rel":  "remoteStorage",
-          "type": "https://www.w3.org/community/rww/wiki/read-write-web-00#simple",
+          "rel":  "remotestorage",
+          "type": "draft-dejong-remotestorage-00",
           "properties": {
-            "auth-method":    "https://tools.ietf.org/html/draft-ietf-oauth-v2-26#section-4.2",
+            "auth-method":    "http://tools.ietf.org/html/rfc6749#section-4.2",
             "auth-endpoint":  host + "/oauth/zebcoe"
           }
         }
