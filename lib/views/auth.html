@@ -41,10 +41,10 @@
       <b><%=e( username )%></b>:</p>
 
     <ul>
-      <% scope.split(/\s+/).forEach(function(module) { %>
-        <% var path = module.split(':') %>
-        <li><b><%=e( access_strings[path[1] || 'rw'] )%></b> access to <b><%=e( path[0].replace(/\/?$/, '/') )%></b></li>
-      <% }) %>
+      <% for (var path in permissions) { %>
+        <% var flags = permissions[path].join('') %>
+        <li><b><%=e( access_strings[flags] )%></b> access to <b><%=e( path.replace(/\/*$/, '/') )%></b></li>
+      <% } %>
     </ul>
 
     <% if (typeof error !== 'undefined') { %>
