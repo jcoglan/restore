@@ -8,7 +8,7 @@ the experimental stage, but is designed to be compatible with the 0.6
 [1]: http://www.w3.org/community/unhosted/wiki/RemoteStorage
 [2]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2011.10
 [3]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04
-[4]: http://remotestoragejs.com/
+[4]: http://remotestorage.io/
 
 YOU SHOULD NOT INSTALL IT ANYWHERE YET, THINGS ARE GOING TO CHANGE.
 
