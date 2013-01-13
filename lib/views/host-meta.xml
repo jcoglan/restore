@@ -2,6 +2,6 @@
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
   <Link rel="lrdd"
         type="application/xrd+xml"
-        template="<%= template_url %>" />
+        template="<%=e( template_url )%>" />
 </XRD>
 

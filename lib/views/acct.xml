@@ -2,7 +2,7 @@
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
   <Link rel="remoteStorage"
         api="simple"
-        auth="<%= auth_url %>"
-        template="<%= template_url %>" />
+        auth="<%=e( auth_url )%>"
+        template="<%=e( template_url )%>" />
 </XRD>
 
