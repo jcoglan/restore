@@ -323,11 +323,11 @@ JS.Test.describe("Stores", function() { with(this) {
             })
           }})
 
-          it("returns an empty listing for a non-existant directory", function(resume) { with(this) {
+          it("returns null for a non-existant directory", function(resume) { with(this) {
             store.get("boris", "/photos/foo/", function(error, items) {
               resume(function() {
                 assertNull( error )
-                assertEqual( [], items )
+                assertEqual( null, items )
               })
             })
           }})
