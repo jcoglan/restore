@@ -66,29 +66,43 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("asks the store for the item", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/locog/seats").yielding([null, item])
+        expect(store, "get").given("zebcoe", "/locog/seats", null).yielding([null, item])
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
 
       it("asks the store for a deep item", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/deep/dir/value").yielding([null, item])
+        expect(store, "get").given("zebcoe", "/deep/dir/value", null).yielding([null, item])
         get( "/storage/zebcoe@local.dev/deep/dir/value", {} )
       }})
 
       it("asks the store for a directory listing", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/locog/").yielding([null, item])
+        expect(store, "get").given("zebcoe", "/locog/", null).yielding([null, item])
         get( "/storage/zebcoe/locog/", {} )
       }})
 
       it("asks the store for a deep directory listing", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/deep/dir/").yielding([null, item])
+        expect(store, "get").given("zebcoe", "/deep/dir/", null).yielding([null, item])
         get( "/storage/zebcoe/deep/dir/", {} )
       }})
 
       it("asks the store for a root listing", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/").yielding([null, item])
+        expect(store, "get").given("zebcoe", "/", null).yielding([null, item])
         header( "Authorization", "Bearer root_token" )
         get( "/storage/zebcoe/", {} )
+      }})
+
+      it("asks the store for an item conditionally based on If-Modifed-Since", function() { with(this) {
+        var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
+        expect(store, "get").given("zebcoe", "/locog/seats", date).yielding([null, item])
+        header( "If-Modified-Since", date.toGMTString() )
+        get( "/storage/zebcoe/locog/seats", {} )
+      }})
+
+      it("asks the store for an item conditionally based on If-None-Match", function() { with(this) {
+        var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
+        expect(store, "get").given("zebcoe", "/locog/seats", date).yielding([null, item])
+        header( "If-None-Match", date.getTime().toString() )
+        get( "/storage/zebcoe/locog/seats", {} )
       }})
 
       it("does not ask the store for an item in an unauthorized directory", function() { with(this) {
@@ -128,7 +142,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("asks the store for a public item", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/public/locog/seats").yielding([null, item])
+        expect(store, "get").given("zebcoe", "/public/locog/seats", null).yielding([null, item])
         get( "/storage/zebcoe/public/locog/seats", {} )
       }})
 
@@ -149,10 +163,10 @@ JS.Test.describe("Storage", function() { with(this) {
     describe("when the store returns an item", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
-        stub(store, "get").yields([null, item])
       }})
 
       it("returns the value in the response", function() { with(this) {
+        stub(store, "get").yields([null, item])
         get( "/storage/zebcoe/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
@@ -164,19 +178,8 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( buffer("a value") )
       }})
 
-      it("returns a 304 for conditional GET with If-None-Match", function() { with(this) {
-        header( "If-None-Match", "1330177020000" )
-        get( "/storage/zebcoe/locog/seats", {} )
-        check_status( 304 )
-        check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "Cache-Control", "no-cache, no-store" )
-        check_header( "ETag", "1330177020000" )
-        check_header( "Last-Modified", "Sat, 25 Feb 2012 13:37:00 GMT" )
-        check_body( "" )
-      }})
-
-      it("returns a 304 for conditional GET with If-Modified-Since", function() { with(this) {
-        header( "If-Modified-Since", "Fri, 24 Feb 2012 13:37:00 GMT" )
+      it("returns a 304 for a failed conditional", function() { with(this) {
+        stub(store, "get").yields([null, item, true])
         get( "/storage/zebcoe/locog/seats", {} )
         check_status( 304 )
         check_header( "Access-Control-Allow-Origin", "*" )
@@ -253,13 +256,27 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("tells the store to save the given value", function() { with(this) {
-        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value")).yielding([null])
+        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), null).yielding([null])
         put( "/storage/zebcoe/locog/seats", "a value" )
       }})
 
       it("tells the store to save a public value", function() { with(this) {
-        expect(store, "put").given("zebcoe", "/public/locog/seats", "text/plain", buffer("a value")).yielding([null])
+        expect(store, "put").given("zebcoe", "/public/locog/seats", "text/plain", buffer("a value"), null).yielding([null])
         put( "/storage/zebcoe/public/locog/seats", "a value" )
+      }})
+
+      it("tells the store to save a value conditionally based on If-None-Match", function() { with(this) {
+        var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
+        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), date).yielding([null])
+        header( "If-None-Match", date.getTime().toString() )
+        put( "/storage/zebcoe/locog/seats", "a value" )
+      }})
+
+      it("tells the store to save a value conditionally based on If-Unmodified-Since", function() { with(this) {
+        var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
+        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), date).yielding([null])
+        header( "If-Unmodified-Since", date.toGMTString() )
+        put( "/storage/zebcoe/locog/seats", "a value" )
       }})
 
       it("does not tell the store to save a directory", function() { with(this) {
@@ -290,9 +307,9 @@ JS.Test.describe("Storage", function() { with(this) {
         stub(store, "put").yields([null, true, new Date(1347016875231)])
       }})
 
-      it("returns an empty 201 response", function() { with(this) {
+      it("returns an empty 200 response", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
-        check_status( 201 )
+        check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "ETag", "1347016875231" )
         check_header( "Last-Modified", "Fri, 07 Sep 2012 11:21:15 GMT" )
@@ -310,6 +327,23 @@ JS.Test.describe("Storage", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
+        check_header( "ETag", "1347016875231" )
+        check_header( "Last-Modified", "Fri, 07 Sep 2012 11:21:15 GMT" )
+        check_body( "" )
+      }})
+    }})
+
+    describe("when the store says there was a version conflict", function() { with(this) {
+      before(function() { with(this) {
+        header( "Authorization", "Bearer a_token" )
+        stub(store, "put").yields([null, false, new Date(1347016875231), true])
+      }})
+
+      it("returns an empty 409 response", function() { with(this) {
+        put( "/storage/zebcoe/locog/seats", "a value" )
+        check_status( 409 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_header( "ETag", "1347016875231" )
         check_header( "Last-Modified", "Fri, 07 Sep 2012 11:21:15 GMT" )
         check_body( "" )
       }})
@@ -331,30 +365,47 @@ JS.Test.describe("Storage", function() { with(this) {
   }})
 
   describe("DELETE", function() { with(this) {
-    it("tells the store to delete the given item", function() { with(this) {
-      expect(store, "delete").given("zebcoe", "/locog/seats").yielding([null])
+    before(function() { with(this) {
       header( "Authorization", "Bearer a_token" )
+    }})
+
+    it("tells the store to delete the given item", function() { with(this) {
+      expect(store, "delete").given("zebcoe", "/locog/seats", null).yielding([null])
+      this.delete( "/storage/zebcoe/locog/seats", {} )
+    }})
+
+    it("tells the store to delete an item conditionally based on If-None-Match", function() { with(this) {
+      var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
+      expect(store, "delete").given("zebcoe", "/locog/seats", date).yielding([null])
+      header( "If-None-Match", date.getTime().toString() )
+      this.delete( "/storage/zebcoe/locog/seats", {} )
+    }})
+
+    it("tells the store to delete an item conditionally based on If-Unmodified-Since", function() { with(this) {
+      var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
+      expect(store, "delete").given("zebcoe", "/locog/seats", date).yielding([null])
+      header( "If-Unmodified-Since", date.toGMTString() )
       this.delete( "/storage/zebcoe/locog/seats", {} )
     }})
 
     describe("when the store says the item was deleted", function() { with(this) {
       before(function() { with(this) {
-        header( "Authorization", "Bearer a_token" )
-        stub(store, "delete").yields([null, true])
+        stub(store, "delete").yields([null, true, new Date(1358121717830)])
       }})
 
       it("returns an empty 200 response", function() { with(this) {
         this.delete( "/storage/zebcoe/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
+        check_header( "ETag", "1358121717830" )
+        check_header( "Last-Modified", "Mon, 14 Jan 2013 00:01:57 GMT" )
         check_body( "" )
       }})
     }})
 
     describe("when the store says the item was not deleted", function() { with(this) {
       before(function() { with(this) {
-        header( "Authorization", "Bearer a_token" )
-        stub(store, "delete").yields([null, false])
+        stub(store, "delete").yields([null, false, new Date(1358121717830)])
       }})
 
       it("returns an empty 404 response", function() { with(this) {
@@ -365,9 +416,21 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
     }})
 
+    describe("when the store says there was a version conflict", function() { with(this) {
+      before(function() { with(this) {
+        stub(store, "delete").yields([null, false, new Date(1358121717830), true])
+      }})
+
+      it("returns an empty 409 response", function() { with(this) {
+        this.delete( "/storage/zebcoe/locog/seats", {} )
+        check_status( 409 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_body( "" )
+      }})
+    }})
+
     describe("when the store returns an error", function() { with(this) {
       before(function() { with(this) {
-        header( "Authorization", "Bearer a_token" )
         stub(store, "delete").yields([new Error("OH NOES!")])
       }})
 

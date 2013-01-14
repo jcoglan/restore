@@ -160,31 +160,31 @@ JS.Test.describe("Stores", function() { with(this) {
 
       describe("put", function() { with(this) {
         before(function(resume) { with(this) {
-          store.put("boris", "/photos/election", "image/jpeg", new Buffer("hair"), function() { resume() })
+          store.put("boris", "/photos/election", "image/jpeg", new Buffer("hair"), null, function() { resume() })
         }})
 
         it("sets the value of an item", function(resume) { with(this) {
-          store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), function() {
-            store.get("boris", "/photos/zipwire", function(error, item) {
+          store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), null, function() {
+            store.get("boris", "/photos/zipwire", null, function(error, item) {
               resume(function() { assertEqual( buffer("vertibo"), item.value ) })
             })
           })
         }})
 
         it("stores binary data", function(resume) { with(this) {
-          store.put("boris", "/photos/whut", "image/jpeg", file("whut2.jpg"), function() {
-            store.get("boris", "/photos/whut", function(error, item) {
+          store.put("boris", "/photos/whut", "image/jpeg", file("whut2.jpg"), null, function() {
+            store.get("boris", "/photos/whut", null, function(error, item) {
               resume(function() { assertEqual( file("whut2.jpg"), item.value ) })
             })
           })
         }})
 
         it("sets the value of a public item", function(resume) { with(this) {
-          store.put("boris", "/public/photos/zipwire", "image/poster", buffer("vertibo"), function() {
-            store.get("boris", "/public/photos/zipwire", function(error, item) {
+          store.put("boris", "/public/photos/zipwire", "image/poster", buffer("vertibo"), null, function() {
+            store.get("boris", "/public/photos/zipwire", null, function(error, item) {
               resume(function(resume) {
                 assertEqual( buffer("vertibo"), item.value )
-                store.get("boris", "/photos/zipwire", function(error, item) {
+                store.get("boris", "/photos/zipwire", null, function(error, item) {
                   resume(function() { assertNull( item ) })
                 })
               })
@@ -193,23 +193,23 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
 
         it("sets the value of a root item", function(resume) { with(this) {
-          store.put("zebcoe", "/manifesto", "text/plain", buffer("gizmos"), function() {
-            store.get("zebcoe", "/manifesto", function(error, item) {
+          store.put("zebcoe", "/manifesto", "text/plain", buffer("gizmos"), null, function() {
+            store.get("zebcoe", "/manifesto", null, function(error, item) {
               resume(function() { assertEqual( buffer("gizmos"), item.value ) })
             })
           })
         }})
 
         it("sets the value of a deep item", function(resume) { with(this) {
-          store.put("boris", "/deep/dir/secret", "text/plain", buffer("gizmos"), function() {
-            store.get("boris", "/deep/dir/secret", function(error, item) {
+          store.put("boris", "/deep/dir/secret", "text/plain", buffer("gizmos"), null, function() {
+            store.get("boris", "/deep/dir/secret", null, function(error, item) {
               resume(function() { assertEqual( buffer("gizmos"), item.value ) })
             })
           })
         }})
 
         it("returns true with a timestamp when a new item is created", function(resume) { with(this) {
-          store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), function(error, created, modified) {
+          store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), null, function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( created )
@@ -219,7 +219,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
 
         it("returns true with a timestamp when a new category is created", function(resume) { with(this) {
-          store.put("boris", "/documents/zipwire", "image/poster", buffer("vertibo"), function(error, created, modified) {
+          store.put("boris", "/documents/zipwire", "image/poster", buffer("vertibo"), null, function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( created )
@@ -229,7 +229,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
 
         it("returns false with a timestamp when an existing item is modified", function(resume) { with(this) {
-          store.put("boris", "/photos/election", "text/plain", buffer("hair"), function(error, created, modified) {
+          store.put("boris", "/photos/election", "text/plain", buffer("hair"), null, function(error, created, modified) {
             resume(function() {
               assertNull( error )
               assert( !created )
@@ -240,11 +240,11 @@ JS.Test.describe("Stores", function() { with(this) {
 
         describe("for a nested document", function() { with(this) {
           before(function(resume) { with(this) {
-            store.put("boris", "/photos/foo/bar/qux", "image/poster", buffer("vertibo"), resume)
+            store.put("boris", "/photos/foo/bar/qux", "image/poster", buffer("vertibo"), null, resume)
           }})
 
           it("creates the parent directory", function(resume) { with(this) {
-            store.get("boris", "/photos/foo/bar/", function(error, items) {
+            store.get("boris", "/photos/foo/bar/", null, function(error, items) {
               resume(function() {
                 assertEqual( [{name: "qux", modified: date}], items )
               })
@@ -252,7 +252,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
 
           it("creates the grandparent directory", function(resume) { with(this) {
-            store.get("boris", "/photos/foo/", function(error, items) {
+            store.get("boris", "/photos/foo/", null, function(error, items) {
               resume(function() {
                 assertEqual( [{name: "bar/", modified: date}], items )
               })
@@ -264,11 +264,11 @@ JS.Test.describe("Stores", function() { with(this) {
       describe("get", function() { with(this) {
         describe("for documents", function() { with(this) {
           before(function(resume) { with(this) {
-            store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), resume)
+            store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), null, resume)
           }})
 
           it("returns an existing resource", function(resume) { with(this) {
-            store.get("boris", "/photos/zipwire", function(error, item) {
+            store.get("boris", "/photos/zipwire", null, function(error, item) {
               resume(function() {
                 assertNull( error )
                 assertEqual( {type: "image/poster", modified: date, value: buffer("vertibo")}, item )
@@ -277,7 +277,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
 
           it("returns null for a non-existant key", function(resume) { with(this) {
-            store.get("boris", "/photos/lympics", function(error, item) {
+            store.get("boris", "/photos/lympics", null, function(error, item) {
               resume(function() {
                 assertNull( error )
                 assertNull( item )
@@ -286,7 +286,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
 
           it("returns null for a non-existant category", function(resume) { with(this) {
-            store.get("boris", "/madeup/lympics", function(error, item) {
+            store.get("boris", "/madeup/lympics", null, function(error, item) {
               resume(function() {
                 assertNull( error )
                 assertNull( item )
@@ -298,15 +298,15 @@ JS.Test.describe("Stores", function() { with(this) {
         describe("for directories", function() { with(this) {
           before(function(resume) { with(this) {
             // Example data taken from http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04#GET
-            store.put("boris", "/photos/bar/baz/boo", "text/plain", buffer("some content"), function() {
-              store.put("boris", "/photos/bla", "application/json", buffer('{"more": "content"}'), function() {
-                store.put("zebcoe", "/tv/shows", "application/json", buffer('{"The Day": "Today"}'), resume)
+            store.put("boris", "/photos/bar/baz/boo", "text/plain", buffer("some content"), null, function() {
+              store.put("boris", "/photos/bla", "application/json", buffer('{"more": "content"}'), null, function() {
+                store.put("zebcoe", "/tv/shows", "application/json", buffer('{"The Day": "Today"}'), null, resume)
               })
             })
           }})
 
           it("returns a directory listing for a category", function(resume) { with(this) {
-            store.get("boris", "/photos/", function(error, items) {
+            store.get("boris", "/photos/", null, function(error, items) {
               resume(function() {
                 assertNull( error )
                 assertEqual( [{name: "bar/", modified: date}, {name: "bla", modified: date}], items )
@@ -315,7 +315,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
 
           it("returns a directory listing for the root category", function(resume) { with(this) {
-            store.get("zebcoe", "/", function(error, items) {
+            store.get("zebcoe", "/", null, function(error, items) {
               resume(function() {
                 assertNull( error )
                 assertEqual( [{name: "tv/", modified: date}], items )
@@ -324,7 +324,7 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
 
           it("returns null for a non-existant directory", function(resume) { with(this) {
-            store.get("boris", "/photos/foo/", function(error, items) {
+            store.get("boris", "/photos/foo/", null, function(error, items) {
               resume(function() {
                 assertNull( error )
                 assertEqual( null, items )
@@ -336,22 +336,22 @@ JS.Test.describe("Stores", function() { with(this) {
 
       describe("delete", function() { with(this) {
         before(function(resume) { with(this) {
-          store.put("boris", "/photos/election", "image/jpeg", buffer("hair"), function() {
-            store.put("boris", "/photos/bar/baz/boo", "text/plain", buffer("some content"), resume)
+          store.put("boris", "/photos/election", "image/jpeg", buffer("hair"), null, function() {
+            store.put("boris", "/photos/bar/baz/boo", "text/plain", buffer("some content"), null, resume)
           })
         }})
 
         it("deletes an item", function(resume) { with(this) {
-          store.delete("boris", "/photos/election", function() {
-            store.get("boris", "/photos/election", function(error, item) {
+          store.delete("boris", "/photos/election", null, function() {
+            store.get("boris", "/photos/election", null, function(error, item) {
               resume(function() { assertNull( item ) })
             })
           })
         }})
 
         it("removes empty directories when items are deleted", function(resume) { with(this) {
-          store.delete("boris", "/photos/bar/baz/boo", function() {
-            store.get("boris", "/photos/", function(error, items) {
+          store.delete("boris", "/photos/bar/baz/boo", null, function() {
+            store.get("boris", "/photos/", null, function(error, items) {
               resume(function() {
                 assertNotEqual( arrayIncluding(objectIncluding({name: "bar/"})), items )
               })
@@ -360,7 +360,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
 
         it("returns true when an existing item is deleted", function(resume) { with(this) {
-          store.delete("boris", "/photos/election", function(error, deleted) {
+          store.delete("boris", "/photos/election", null, function(error, deleted) {
             resume(function() {
               assertNull( error )
               assert( deleted )
@@ -369,7 +369,7 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
 
         it("returns false when a non-existant item is deleted", function(resume) { with(this) {
-          store.delete("boris", "/photos/zipwire", function(error, deleted) {
+          store.delete("boris", "/photos/zipwire", null, function(error, deleted) {
             resume(function() {
               assertNull( error )
               assert( !deleted )
