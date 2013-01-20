@@ -51,7 +51,7 @@ JS.Test.describe("Storage", function() { with(this) {
   describe("GET", function() { with(this) {
     define("item", {
       type:     "custom/type",
-      modified: new Date(2012, 1, 25, 13, 37),
+      modified: new Date(Date.UTC(2012, 1, 25, 13, 37)),
       value:    new Buffer("a value")
     })
 
