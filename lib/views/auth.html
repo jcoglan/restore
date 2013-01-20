@@ -7,17 +7,50 @@
     <title>Authorize</title>
     <style type="text/css">
       body {
-        background:   #f4f4f4;
+        background:   #fff;
         color:        #464646;
-        font:         36px/1.5 Open Sans, FreeSans, Helvetica, Arial, sans-serif;
+        font:         24px/1.5 Open Sans, FreeSans, Helvetica, Arial, sans-serif;
         margin:       0;
         padding:      0;
+      }
+
+      .header {
+        background: #3c3c3c;
+        border-bottom: 4px solid #c6c6c6;
+        color: #fff;
+      }
+      h1 {
+        font-size: 2em;
+        font-weight: normal;
+        margin: 0;
+        padding: 0.5em 0;
+      }
+      h1 span {
+        color: #c6c6c6;
+        display: block;
+        font-size: 0.3em;
+        text-transform: uppercase;
+      }
+
+      .sub {
+        margin: 0 auto;
+        width: 600px;
       }
 
       p, ul, form {
         margin:       1em auto;
         padding:      0;
-        width:        600px;
+      }
+      ul {
+        border: 1px solid #d4d4d4;
+        border-left: none;
+        border-right: none;
+        padding: 1em 0;
+      }
+
+      .error {
+        color: #c93600;
+        font-weight: bold;
       }
 
       th {
@@ -29,43 +62,50 @@
       input {
         font-size:    80%;
       }
-
-      code {
-        font-family:  Ubuntu Mono, Monaco, Courier New, monospace;
-      }
     </style>
   </head>
   <body>
 
-    <p><code><%=e( client_id )%></code> wants to access these resources for
-      <b><%=e( username )%></b>:</p>
+    <div class="header">
+      <div class="sub">
+        <h1><span>RemoteStorage</span> <%=e( host )%></h1>
+      </div>
+    </div>
 
-    <ul>
-      <% for (var path in permissions) { %>
-        <% var flags = permissions[path].join('') %>
-        <li><b><%=e( access_strings[flags] )%></b> access to <b><%=e( path.replace(/\/*$/, '/') )%></b></li>
-      <% } %>
-    </ul>
+    <div class="form">
+      <div class="sub">
+        <p>The application <b><%=e( client_id )%></b> hosted at
+          <b><%=e( client_host )%></b> wants to access these resources for user
+          <b><%=e( username )%></b>:</p>
 
-    <% if (typeof error !== 'undefined') { %>
-      <p class="error"><%=e( error )%></p>
-    <% } %>
+        <ul>
+          <% for (var path in permissions) { %>
+            <% var flags = permissions[path].join('') %>
+            <li><b><%=e( access_strings[flags] )%></b> access to <b><%=e( path.replace(/^\/*/, '/') )%></b></li>
+          <% } %>
+        </ul>
 
-    <form method="POST" action="/oauth">
-      <input type="hidden" name="client_id" value="<%=e( client_id )%>">
-      <input type="hidden" name="redirect_uri" value="<%=e( redirect_uri )%>">
-      <input type="hidden" name="response_type" value="<%=e( response_type )%>">
-      <input type="hidden" name="scope" value="<%=e( scope )%>">
-      <input type="hidden" name="state" value="<%=e( state )%>">
-      <input type="hidden" name="username" value="<%=e( username )%>">
+        <% if (typeof error !== 'undefined') { %>
+          <p class="error"><%=e( error )%></p>
+        <% } %>
 
-      <p>
-        <label for="password">Password</label>:
-        <input type="password" name="password" id="password">
-      </p>
+        <form method="POST" action="/oauth">
+          <input type="hidden" name="client_id" value="<%=e( client_id )%>">
+          <input type="hidden" name="redirect_uri" value="<%=e( redirect_uri )%>">
+          <input type="hidden" name="response_type" value="<%=e( response_type )%>">
+          <input type="hidden" name="scope" value="<%=e( scope )%>">
+          <input type="hidden" name="state" value="<%=e( state )%>">
+          <input type="hidden" name="username" value="<%=e( username )%>">
 
-      <p><input type="submit" value="Allow"></p>
-    </form>
+          <p>
+            <label for="password">Password</label>:
+            <input type="password" name="password" id="password">
+          </p>
+
+          <p><input type="submit" value="Allow"></p>
+        </form>
+      </div>
+    </div>
 
   </body>
 </html>
