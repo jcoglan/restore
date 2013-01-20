@@ -16,23 +16,18 @@ JS.Test.describe("Storage", function() { with(this) {
 
   before(function() { with(this) {
     this.store = {}
-    stub(store, "authorizations").given("boris").yields([null, {}])
-    stub(store, "clientForToken").given("boris", "a_token").yields([new Error()])
+    stub(store, "permissions").given("boris", "a_token").yields([new Error()])
 
-    stub(store, "authorizations").given("zebcoe").yields([null, {
-      "www.example.com": {
-        "/locog/":     ["r","w"],
-        "/books/":     ["r"],
-        "/statuses/":  ["w"],
-        "/deep/dir/":  ["r","w"]
-      },
-      "admin.example.com": {
-        "/": ["r","w"]
-      }
+    stub(store, "permissions").given("zebcoe", "a_token").yields([null, {
+      "/locog/":     ["r","w"],
+      "/books/":     ["r"],
+      "/statuses/":  ["w"],
+      "/deep/dir/":  ["r","w"]
     }])
-    stub(store, "clientForToken").given("zebcoe", "a_token").yields([null, "www.example.com"])
-    stub(store, "clientForToken").given("zebcoe", "bad_token").yields([new Error()])
-    stub(store, "clientForToken").given("zebcoe", "root_token").yields([null, "admin.example.com"])
+    stub(store, "permissions").given("zebcoe", "root_token").yields([null, {
+      "/": ["r","w"]
+    }])
+    stub(store, "permissions").given("zebcoe", "bad_token").yields([new Error()])
   }})
 
   it("returns a 400 if the client uses invalid characters in the path", function() { with(this) {

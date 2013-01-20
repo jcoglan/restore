@@ -110,42 +110,17 @@ JS.Test.describe("Stores", function() { with(this) {
         })
       }})
 
-      describe("authorizations", function() { with(this) {
+      describe("permissions", function() { with(this) {
         it("returns the user's authorizations", function(resume) { with(this) {
-          store.authorizations("boris", function(error, auths) {
+          store.permissions("boris", token, function(error, auths) {
             resume(function() {
               assertEqual( {
-                  "www.example.com": {
-                    "/contacts/":   ["r"],
-                    "/deep/dir/":   ["r","w"],
-                    "/documents/":  ["w"],
-                    "/photos/":     ["r","w"]
-                  }
+                  "/contacts/":   ["r"],
+                  "/deep/dir/":   ["r","w"],
+                  "/documents/":  ["w"],
+                  "/photos/":     ["r","w"]
                 }, auths )
             })
-          })
-        }})
-      }})
-
-      describe("clientForToken", function() { with(this) {
-        it("returns the client for a valid token/user pair", function(resume) { with(this) {
-          store.clientForToken("boris", token, function(error, clientId) {
-            resume(function() {
-              assertNull( error )
-              assertEqual( "www.example.com", clientId )
-            })
-          })
-        }})
-
-        it("returns an error for the wrong user", function(resume) { with(this) {
-          store.clientForToken("zebcoe", token, function(error, clientId) {
-            resume(function() { assert( error ) })
-          })
-        }})
-
-        it("returns an error for the wrong token", function(resume) { with(this) {
-          store.clientForToken("boris", rootToken, function(error, clientId) {
-            resume(function() { assert( error ) })
           })
         }})
       }})
