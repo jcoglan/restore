@@ -13,7 +13,6 @@
                       , "ent": ""
                       , "mkdirp": ""
                       , "redis": ">= 0.8.2"
-                      , "vault-cipher": ""
                       }
 , "devDependencies" : { "jsclass": ""
                       , "rimraf": ""
