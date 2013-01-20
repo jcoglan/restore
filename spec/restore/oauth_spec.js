@@ -27,31 +27,31 @@ JS.Test.describe("OAuth", function() { with(this) {
       delete auth_params.redirect_uri
       get("/oauth/me", auth_params)
       check_status( 400 )
-      check_body( "error=invalid_request" )
+      check_body( "error=invalid_request&error_description=Required%20parameter%20%22redirect_uri%22%20is%20missing" )
     }})
 
     it("returns an error if client_id is missing", function() { with(this) {
       delete auth_params.client_id
       get("/oauth/me", auth_params)
-      check_redirect( "http://example.com/cb#error=invalid_request" )
+      check_redirect( "http://example.com/cb#error=invalid_request&error_description=Required%20parameter%20%22client_id%22%20is%20missing" )
     }})
 
     it("returns an error if response_type is missing", function() { with(this) {
       delete auth_params.response_type
       get("/oauth/me", auth_params)
-      check_redirect( "http://example.com/cb#error=invalid_request" )
+      check_redirect( "http://example.com/cb#error=invalid_request&error_description=Required%20parameter%20%22response_type%22%20is%20missing" )
     }})
 
     it("returns an error if response_type is not recognized", function() { with(this) {
       auth_params.response_type = "wrong"
       get("/oauth/me", auth_params)
-      check_redirect( "http://example.com/cb#error=unsupported_response_type" )
+      check_redirect( "http://example.com/cb#error=unsupported_response_type&error_description=Response%20type%20%22wrong%22%20is%20not%20supported" )
     }})
 
     it("returns an error if scope is missing", function() { with(this) {
       delete auth_params.scope
       get("/oauth/me", auth_params)
-      check_redirect( "http://example.com/cb#error=invalid_scope" )
+      check_redirect( "http://example.com/cb#error=invalid_scope&error_description=Parameter%20%22scope%22%20is%20invalid" )
     }})
   }})
 
@@ -112,7 +112,7 @@ JS.Test.describe("OAuth", function() { with(this) {
       post("/oauth", auth_params)
       check_status( 401 )
       check_header( "Content-Type","text/html" )
-      check_body( /<code>the_client_id<\/code> wants/ )
+      check_body( /application <b>the_client_id<\/b> hosted/ )
     }})
   }})
 }})
