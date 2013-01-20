@@ -1,5 +1,7 @@
 # reStore [![Build Status](https://secure.travis-ci.org/jcoglan/restore.png)](http://travis-ci.org/jcoglan/restore)
 
+### THIS PROJECT IS NOT PRODUCTION-READY YET. THINGS MAY STILL CHANGE, USE AT YOUR OWN RISK
+
 This is a simple [remoteStorage][1] server written in Node.js. It is still in
 the experimental stage, but is designed to be compatible with the 0.6
 ([RemoteStorage-2011.10][2]) and 0.7 ([RemoteStorage-2012.04][3]) versions of
@@ -9,8 +11,6 @@ the experimental stage, but is designed to be compatible with the 0.6
 [2]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2011.10
 [3]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04
 [4]: http://remotestorage.io/
-
-YOU SHOULD NOT INSTALL IT ANYWHERE YET, THINGS ARE GOING TO CHANGE.
 
 
 ## Usage
