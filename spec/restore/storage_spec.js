@@ -35,8 +35,8 @@ JS.Test.describe("Storage", function() { with(this) {
     stub(store, "clientForToken").given("zebcoe", "root_token").yields([null, "admin.example.com"])
   }})
 
-  it("returns a 400 if the client tries to walk up the directory tree", function() { with(this) {
-    get( "/storage/zebcoe/locog/.%2E%2Fseats" )
+  it("returns a 400 if the client uses invalid characters in the path", function() { with(this) {
+    get( "/storage/zebcoe/locog/./seats" )
     check_status( 400 )
     check_header( "Access-Control-Allow-Origin", "*" )
   }})
@@ -73,6 +73,11 @@ JS.Test.describe("Storage", function() { with(this) {
       it("asks the store for a deep item", function() { with(this) {
         expect(store, "get").given("zebcoe", "/deep/dir/value", null).yielding([null, item])
         get( "/storage/zebcoe@local.dev/deep/dir/value", {} )
+      }})
+
+      it("passes the path literally to the store", function() { with(this) {
+        expect(store, "get").given("zebcoe", "/locog/a%2Fpath", null).yielding([null, item])
+        get( "/storage/zebcoe/locog/a%2Fpath", {} )
       }})
 
       it("asks the store for a directory listing", function() { with(this) {
