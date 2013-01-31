@@ -8,7 +8,24 @@ JS.Test.describe("WebFinger", function() { with(this) {
 
   define("host", "http://localhost:4567")
 
-  it("returns host metadata as XRD", function() { with(this) {
+  it("returns host metadata as JSON", function() { with(this) {
+    get( "/.well-known/host-meta.json", {} )
+
+    check_status( 200 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+    check_header( "Content-Type", "application/json" )
+
+    check_json({
+      "links": [
+        {
+          "rel": "lrdd",
+          "template": host + "/webfinger/jrd/{uri}"
+        }
+      ]
+    })
+  }})
+
+   it("returns host metadata as XML", function() { with(this) {
     get( "/.well-known/host-meta", {} )
 
     check_status( 200 )
@@ -23,7 +40,42 @@ JS.Test.describe("WebFinger", function() { with(this) {
 </XRD>' )
   }})
 
-  it("returns host metadata as JSON", function() { with(this) {
+ it("returns account metadata as JSON", function() { with(this) {
+    get( "/webfinger/jrd/acct:zebcoe@locog", {} )
+
+    check_status( 200 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+    check_header( "Content-Type", "application/json" )
+
+    check_json({
+      "links": [
+        {
+          "rel": "remoteStorage",
+          "api": "simple",
+          "auth": host + "/oauth/zebcoe",
+          "template": host + "/storage/zebcoe/{category}"
+        }
+      ]
+    })
+  }})
+
+  it("returns account metadata as XML", function() { with(this) {
+    get( "/webfinger/xrd/acct:zebcoe@locog", {} )
+
+    check_status( 200 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+    check_header( "Content-Type", "application/xrd+xml" )
+
+    check_body( '<?xml version="1.0" encoding="UTF-8"?>\n\
+<XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n\
+  <Link rel="remoteStorage"\n\
+        api="simple"\n\
+        auth="' + host + '/oauth/zebcoe"\n\
+        template="' + host + '/storage/zebcoe/{category}" />\n\
+</XRD>' )
+  }})
+
+  it("returns resource metadata as JSON", function() { with(this) {
     get( "/.well-known/host-meta.json", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
@@ -45,16 +97,8 @@ JS.Test.describe("WebFinger", function() { with(this) {
     })
   }})
 
-  it("returns a 404 if no resource is given", function() { with(this) {
-    get( "/.well-known/host-meta.json" )
-
-    check_status( 404 )
-    check_header( "Access-Control-Allow-Origin", "*" )
-    check_body( "" )
-  }})
-
-  it("returns account metadata as XRD", function() { with(this) {
-    get( "/webfinger/xrd/acct:zebcoe@locog", {} )
+  it("returns resource metadata as XML", function() { with(this) {
+    get( "/.well-known/host-meta", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
@@ -62,10 +106,12 @@ JS.Test.describe("WebFinger", function() { with(this) {
 
     check_body( '<?xml version="1.0" encoding="UTF-8"?>\n\
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n\
-  <Link rel="remoteStorage"\n\
-        api="simple"\n\
-        auth="' + host + '/oauth/zebcoe"\n\
-        template="' + host + '/storage/zebcoe/{category}" />\n\
+  <Link href="http://localhost:4567/storage/zebcoe"\n\
+        rel="remotestorage"\n\
+        type="draft-dejong-remotestorage-00">\n\
+    <Property type="auth-method">http://tools.ietf.org/html/rfc6749#section-4.2</Property>\n\
+    <Property type="auth-endpoint">http://localhost:4567/oauth/zebcoe</Property>\n\
+  </Link>\n\
 </XRD>' )
   }})
 }})
