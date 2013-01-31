@@ -13,13 +13,12 @@
     <div id="remotestorage-connect"></div>
 
     <script type="text/javascript">
-      remoteStorage.displayWidget('remotestorage-connect');
-
       remoteStorage.defineModule('vault', function(client) {
         return {name: 'vault', exports: client};
       });
 
       remoteStorage.claimAccess('vault', 'rw');
+      remoteStorage.displayWidget('remotestorage-connect');
       remoteStorage.vault.storeObject('text/test', 'foo', {hello: 'world'});
     </script>
 
