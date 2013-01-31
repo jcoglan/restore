@@ -1,8 +1,6 @@
 var Redis = require("../../lib/stores/redis"),
     redis = require("redis")
 
-var db = redis.createClient(6379, "localhost")
-
 JS.Test.describe("Redis store", function() { with(this) {
   before(function() { with(this) {
     stub(require("../../lib/stores/core"), "hashRounds", 1)
@@ -15,6 +13,7 @@ JS.Test.describe("Redis store", function() { with(this) {
   }})
 
   after(function(resume) { with(this) {
+    var db = redis.createClient(6379, "localhost")
     db.select(1, function() {
       db.flushdb(function() { resume() })
     })
