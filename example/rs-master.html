@@ -17,9 +17,11 @@
         return {name: 'vault', exports: client};
       });
 
-      remoteStorage.claimAccess('vault', 'rw');
-      remoteStorage.displayWidget('remotestorage-connect');
-      remoteStorage.vault.storeObject('text/test', 'foo', {hello: 'world'});
+      remoteStorage.claimAccess('vault', 'rw').then(function() {
+        remoteStorage.displayWidget('remotestorage-connect');
+        remoteStorage.vault.storeObject('vaultdoc', 'foo', {hello: 'world'});
+        remoteStorage.vault.storeFile('text/html', 'deep/bar', '<p>Hello</p>');
+      });
     </script>
 
   </body>
