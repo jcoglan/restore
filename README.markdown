@@ -1,6 +1,19 @@
 # reStore [![Build Status](https://secure.travis-ci.org/jcoglan/restore.png)](http://travis-ci.org/jcoglan/restore)
 
-### THIS PROJECT IS NOT PRODUCTION-READY YET. THINGS MAY STILL CHANGE, USE AT YOUR OWN RISK
+### CAVEAT EMPTOR
+
+Although it may have been published to the `npm` repo, this project is still
+considered experimental. It has not been widely deployed, and I am in the
+process of rolling it out for personal use and within my company.
+
+As with any alpha-stage storage technology, you MUST expect that it will eat
+your data and take precautions against this. You SHOULD expect that its APIs
+and storage schemas will change before it is labelled stable. I MAY respond to
+bug reports but you MUST NOT expect that I will.
+
+Per the MIT license, **usage is entirely at your own risk**.
+
+## What is this?
 
 This is a simple [remoteStorage][1] server written in Node.js. It is still in
 the experimental stage, but is designed to be compatible with the 0.6
