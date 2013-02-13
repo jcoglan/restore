@@ -37,7 +37,7 @@ var reStore = require('restore'),
     store   = new reStore.FileTree({path: 'path/to/storage'}),
     
     server  = new reStore({
-                store:  store
+                store:  store,
                 http:   {port: process.argv[2]}
               });
 
@@ -79,7 +79,7 @@ var store = new reStore.Redis({
 
 // Then create the server with your store:
 var server = new reStore({
-               store:  store
+               store:  store,
                http:   {port: process.argv[2]}
              });
 
