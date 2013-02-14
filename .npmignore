@@ -1,6 +1,11 @@
 .git
 .gitignore
+.gitmodules
 .npmignore
+.travis.yml
 dump.rdb
-example/store
+example
 node_modules
+spec
+vendor
+
