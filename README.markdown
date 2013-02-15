@@ -114,7 +114,7 @@ The `force: true` line in the `https` section means the app will:
 * Return HTTPS URLs in WebFinger responses
 * Force sign-up and OAuth login pages onto an HTTPS connection
 * Refuse to process POST authentication requests over insecure connections
-* (TODO) Block insecure storage requests and revoke the client's access
+* Block insecure storage requests and revoke the client's access
 
 reStore considers the following requests to be secure:
 

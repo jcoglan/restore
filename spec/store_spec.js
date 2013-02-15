@@ -124,6 +124,20 @@ JS.Test.describe("Stores", function() { with(this) {
           })
         }})
       }})
+
+      describe("revokeAccess", function() { with(this) {
+        before(function(resume) { with(this) {
+          store.revokeAccess("boris", token, resume)
+        }})
+
+        it("removes the authorization from the store", function(resume) { with(this) {
+          store.permissions("boris", token, function(error, auths) {
+            resume(function() {
+              assertEqual( {}, auths )
+            })
+          })
+        }})
+      }})
     }})
 
     describe("storage methods", function() { with(this) {
