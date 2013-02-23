@@ -60,8 +60,8 @@ out of the box:
 * `reStore.Redis` - Stores data in a Redis database, and all stored data is
   base64-encoded. It can be run with any number of server processes.
 
-All the backends support the same st of features, including ability to store
-arbitrary binary data with content types and modification times.
+All the backends support the same set of features, including the ability to
+store arbitrary binary data with content types and modification times.
 
 They are configured as follows:
 
