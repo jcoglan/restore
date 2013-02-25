@@ -27,6 +27,13 @@ compatible with the 0.6 ([RemoteStorage-2011.10][2]) and 0.7
 [5]: http://remotestorage.io/
 
 
+## Installation
+
+```
+$ npm install restore
+```
+
+
 ## Usage
 
 Make a Node script to set up the server:
