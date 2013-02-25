@@ -143,13 +143,14 @@ JS.Test.describe("Stores", function() { with(this) {
     describe("storage methods", function() { with(this) {
       before(function() { with(this) {
         this.date = new Date(2012,1,25,13,37)
+        this.oldDate = new Date(1984,6,5,11,11)
         stub("new", "Date").returns(date)
         stub(Date, "now").returns(date.getTime()) // make Node 0.9 happy
       }})
 
       describe("put", function() { with(this) {
         before(function(resume) { with(this) {
-          store.put("boris", "/photos/election", "image/jpeg", new Buffer("hair"), null, function() { resume() })
+          store.put("boris", "/photos/election", "image/jpeg", buffer("hair"), null, function() { resume() })
         }})
 
         it("sets the value of an item", function(resume) { with(this) {
@@ -198,31 +199,34 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
 
         it("returns true with a timestamp when a new item is created", function(resume) { with(this) {
-          store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), null, function(error, created, modified) {
+          store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), null, function(error, created, modified, conflict) {
             resume(function() {
               assertNull( error )
               assert( created )
-              assertEqual( date, modified )
+              assertEqual( date.getTime(), modified.getTime() )
+              assert( !conflict )
             })
           })
         }})
 
         it("returns true with a timestamp when a new category is created", function(resume) { with(this) {
-          store.put("boris", "/documents/zipwire", "image/poster", buffer("vertibo"), null, function(error, created, modified) {
+          store.put("boris", "/documents/zipwire", "image/poster", buffer("vertibo"), null, function(error, created, modified, conflict) {
             resume(function() {
               assertNull( error )
               assert( created )
-              assertEqual( date, modified )
+              assertEqual( date.getTime(), modified.getTime() )
+              assert( !conflict )
             })
           })
         }})
 
         it("returns false with a timestamp when an existing item is modified", function(resume) { with(this) {
-          store.put("boris", "/photos/election", "text/plain", buffer("hair"), null, function(error, created, modified) {
+          store.put("boris", "/photos/election", "text/plain", buffer("hair"), null, function(error, created, modified, conflict) {
             resume(function() {
               assertNull( error )
               assert( !created )
-              assertEqual( date, modified )
+              assertEqual( date.getTime(), modified.getTime() )
+              assert( !conflict )
             })
           })
         }})
@@ -244,6 +248,43 @@ JS.Test.describe("Stores", function() { with(this) {
             store.get("boris", "/photos/foo/", null, function(error, items) {
               resume(function() {
                 assertEqual( [{name: "bar/", modified: date}], items )
+              })
+            })
+          }})
+        }})
+
+        describe("versioning", function() { with(this) {
+          it("does not set the value if a version is given for a non-existent item", function(resume) { with(this) {
+            store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), date, function() {
+              store.get("boris", "/photos/zipwire", null, function(error, item) {
+                resume(function() { assertNull( item ) })
+              })
+            })
+          }})
+
+          it("sets the value if the given version is current", function(resume) { with(this) {
+            store.put("boris", "/photos/election", "image/jpeg", buffer("mayor"), date, function() {
+              store.get("boris", "/photos/election", null, function(error, item) {
+                resume(function() { assertEqual( buffer("mayor"), item.value ) })
+              })
+            })
+          }})
+
+          it("does not set the value if the given version is not current", function(resume) { with(this) {
+            store.put("boris", "/photos/election", "image/jpeg", buffer("mayor"), oldDate, function() {
+              store.get("boris", "/photos/election", null, function(error, item) {
+                resume(function() { assertEqual( buffer("hair"), item.value ) })
+              })
+            })
+          }})
+
+          it("returns false with a conflict when the given version is not current", function(resume) { with(this) {
+            store.put("boris", "/documents/zipwire", "image/poster", buffer("vertibo"), oldDate, function(error, created, modified, conflict) {
+              resume(function() {
+                assertNull( error )
+                assert( !created )
+                assertNull( modified )
+                assert( conflict )
               })
             })
           }})
