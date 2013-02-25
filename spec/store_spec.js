@@ -298,30 +298,55 @@ JS.Test.describe("Stores", function() { with(this) {
           }})
 
           it("returns an existing resource", function(resume) { with(this) {
-            store.get("boris", "/photos/zipwire", null, function(error, item) {
+            store.get("boris", "/photos/zipwire", null, function(error, item, match) {
               resume(function() {
                 assertNull( error )
                 assertEqual( {type: "image/poster", modified: date, value: buffer("vertibo")}, item )
+                assert( !match )
               })
             })
           }})
 
           it("returns null for a non-existant key", function(resume) { with(this) {
-            store.get("boris", "/photos/lympics", null, function(error, item) {
+            store.get("boris", "/photos/lympics", null, function(error, item, match) {
               resume(function() {
                 assertNull( error )
                 assertNull( item )
+                assert( !match )
               })
             })
           }})
 
           it("returns null for a non-existant category", function(resume) { with(this) {
-            store.get("boris", "/madeup/lympics", null, function(error, item) {
+            store.get("boris", "/madeup/lympics", null, function(error, item, match) {
               resume(function() {
                 assertNull( error )
                 assertNull( item )
+                assert( !match )
               })
             })
+          }})
+
+          describe("versioning", function() { with(this) {
+            it("returns a match if the given version is current", function(resume) { with(this) {
+              store.get("boris", "/photos/zipwire", date, function(error, item, match) {
+                resume(function() {
+                  assertNull( error )
+                  assertEqual( {type: "image/poster", modified: date, value: buffer("vertibo")}, item )
+                  assert( match )
+                })
+              })
+            }})
+
+            it("returns no match if the given version is not current", function(resume) { with(this) {
+              store.get("boris", "/photos/zipwire", oldDate, function(error, item, match) {
+                resume(function() {
+                  assertNull( error )
+                  assertEqual( {type: "image/poster", modified: date, value: buffer("vertibo")}, item )
+                  assert( !match )
+                })
+              })
+            }})
           }})
         }})
 
