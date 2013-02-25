@@ -277,9 +277,20 @@ JS.Test.describe("Stores", function() { with(this) {
               })
             })
           }})
+ 
+          it("returns false with no conflict when the given version is current", function(resume) { with(this) {
+            store.put("boris", "/photos/election", "image/jpeg", buffer("mayor"), date, function(error, created, modified, conflict) {
+              resume(function() {
+                assertNull( error )
+                assert( !created )
+                assertEqual( date.getTime(), modified.getTime() )
+                assert( !conflict )
+              })
+            })
+          }})
 
           it("returns false with a conflict when the given version is not current", function(resume) { with(this) {
-            store.put("boris", "/documents/zipwire", "image/poster", buffer("vertibo"), oldDate, function(error, created, modified, conflict) {
+            store.put("boris", "/photos/election", "image/jpeg", buffer("mayor"), oldDate, function(error, created, modified, conflict) {
               resume(function() {
                 assertNull( error )
                 assert( !created )
@@ -415,21 +426,65 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
 
         it("returns true when an existing item is deleted", function(resume) { with(this) {
-          store.delete("boris", "/photos/election", null, function(error, deleted) {
+          store.delete("boris", "/photos/election", null, function(error, deleted, modified, conflict) {
             resume(function() {
               assertNull( error )
               assert( deleted )
+              assertEqual( date.getTime(), modified.getTime() )
+              assert( !conflict )
             })
           })
         }})
 
         it("returns false when a non-existant item is deleted", function(resume) { with(this) {
-          store.delete("boris", "/photos/zipwire", null, function(error, deleted) {
+          store.delete("boris", "/photos/zipwire", null, function(error, deleted, modified, conflict) {
             resume(function() {
               assertNull( error )
               assert( !deleted )
+              assertNull( modified )
+              assert( !conflict )
             })
           })
+        }})
+
+        describe("versioning", function() { with(this) {
+          it("deletes the item if the given version is current", function(resume) { with(this) {
+            store.delete("boris", "/photos/election", date, function() {
+              store.get("boris", "/photos/election", null, function(error, item) {
+                resume(function() { assertNull( item ) })
+              })
+            })
+          }})
+
+          it("does not delete the item if the given version is not current", function(resume) { with(this) {
+            store.delete("boris", "/photos/election", oldDate, function() {
+              store.get("boris", "/photos/election", null, function(error, item) {
+                resume(function() { assertEqual( buffer("hair"), item.value ) })
+              })
+            })
+          }})
+
+          it("returns true with no conflict if the given version is current", function(resume) { with(this) {
+            store.delete("boris", "/photos/election", date, function(error, deleted, modified, conflict) {
+              resume(function() {
+                assertNull( error )
+                assert( deleted )
+                assertEqual( date.getTime(), modified.getTime() )
+                assert( !conflict )
+              })
+            })
+          }})
+ 
+          it("returns false with a conflict if the given version is not current", function(resume) { with(this) {
+            store.delete("boris", "/photos/election", oldDate, function(error, deleted, modified, conflict) {
+              resume(function() {
+                assertNull( error )
+                assert( !deleted )
+                assertNull( modified )
+                assert( conflict )
+              })
+            })
+          }})
         }})
       }})
     }})
