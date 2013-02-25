@@ -15,15 +15,16 @@ Per the MIT license, **usage is entirely at your own risk**.
 
 ## What is this?
 
-This is a simple [remoteStorage][1] server written in Node.js. It is still in
-the experimental stage, but is designed to be compatible with the 0.6
-([RemoteStorage-2011.10][2]) and 0.7 ([RemoteStorage-2012.04][3]) versions of
-[remoteStorage.js][4].
+reStore [remoteStorage][1] server written for Node.js. It is designed to be
+compatible with the 0.6 ([RemoteStorage-2011.10][2]) and 0.7
+([RemoteStorage-2012.04][3], [draft-dejong-00][4]) versions of
+[remoteStorage.js][5].
 
 [1]: http://www.w3.org/community/unhosted/wiki/RemoteStorage
 [2]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2011.10
 [3]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04
-[4]: http://remotestorage.io/
+[4]: http://tools.ietf.org/id/draft-dejong-remotestorage-00.txt
+[5]: http://remotestorage.io/
 
 
 ## Usage
