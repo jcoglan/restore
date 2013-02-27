@@ -110,7 +110,8 @@ var server = new reStore({
     force:  true,
     port:   443,
     key:    'path/to/ssl.key',
-    cert:   'path/to/ssl.crt'
+    cert:   'path/to/ssl.crt',
+    ca:     'path/to/ca.pem'    // optional
   }
 });
 
