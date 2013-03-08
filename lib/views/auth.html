@@ -48,6 +48,11 @@
         padding: 1em 0;
       }
 
+      em {
+        font-style: normal;
+        font-weight: bold;
+      }
+
       .error {
         color: #c93600;
         font-weight: bold;
@@ -74,14 +79,14 @@
 
     <div class="form">
       <div class="sub">
-        <p>The application <b><%=e( client_id )%></b> hosted at
-          <b><%=e( client_host )%></b> wants to access these resources for user
-          <b><%=e( username )%></b>:</p>
+        <p>The application <em><%=e( client_id )%></em> hosted at
+          <em><%=e( client_host )%></em> wants to access these resources for user
+          <em><%=e( username )%></em>:</p>
 
         <ul>
           <% for (var path in permissions) { %>
             <% var flags = permissions[path].join('') %>
-            <li><b><%=e( access_strings[flags] )%></b> access to <b><%=e( path.replace(/^\/*/, '/') )%></b></li>
+            <li><em><%=e( access_strings[flags] )%></em> access to <em><%=e( path.replace(/^\/*/, '/') )%></em></li>
           <% } %>
         </ul>
 
