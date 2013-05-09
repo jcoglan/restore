@@ -112,7 +112,7 @@ JS.Test.describe("OAuth", function() { with(this) {
       post("/oauth", auth_params)
       check_status( 401 )
       check_header( "Content-Type","text/html" )
-      check_body( /application <b>the_client_id<\/b> hosted/ )
+      check_body( /application <em>the_client_id<\/em> hosted/ )
     }})
   }})
 }})
