@@ -39,7 +39,6 @@ $ npm install restore
 The following Node script will run a basic server:
 
 ```js
-// server.js
 process.umask(077);
 
 var reStore = require('restore'),
