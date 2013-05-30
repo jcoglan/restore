@@ -108,10 +108,10 @@ JS.Test.describe("Storage", function() { with(this) {
         get( "/storage/zebcoe/", {} )
       }})
 
-      it("asks the store for an item conditionally based on If-Modifed-Since", function() { with(this) {
+      it("asks the store for an item conditionally based on If-None-Match", function() { with(this) {
         var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
         expect(store, "get").given("zebcoe", "/locog/seats", date).yielding([null, item])
-        header( "If-Modified-Since", date.toGMTString() )
+        header( "If-Node-Match", date.getTime() )
         get( "/storage/zebcoe/locog/seats", {} )
       }})
 
@@ -289,10 +289,10 @@ JS.Test.describe("Storage", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
       }})
 
-      it("tells the store to save a value conditionally based on If-Unmodified-Since", function() { with(this) {
+      it("tells the store to save a value conditionally based on If-Match", function() { with(this) {
         var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
         expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), date).yielding([null])
-        header( "If-Unmodified-Since", date.toGMTString() )
+        header( "If-Match", date.getTime() )
         put( "/storage/zebcoe/locog/seats", "a value" )
       }})
 
@@ -398,10 +398,10 @@ JS.Test.describe("Storage", function() { with(this) {
       this.delete( "/storage/zebcoe/locog/seats", {} )
     }})
 
-    it("tells the store to delete an item conditionally based on If-Unmodified-Since", function() { with(this) {
+    it("tells the store to delete an item conditionally based on If-Match", function() { with(this) {
       var date = new Date("Sat, 25 Feb 2012 13:37:00 GMT")
       expect(store, "delete").given("zebcoe", "/locog/seats", date).yielding([null])
-      header( "If-Unmodified-Since", date.toGMTString() )
+      header( "If-Match", date.getTime() )
       this.delete( "/storage/zebcoe/locog/seats", {} )
     }})
 
