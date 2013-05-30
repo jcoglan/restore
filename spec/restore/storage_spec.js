@@ -194,10 +194,10 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( buffer("a value") )
       }})
 
-      it("returns a 304 for a failed conditional", function() { with(this) {
+      it("returns a 412 for a failed conditional", function() { with(this) {
         stub(store, "get").yields([null, item, true])
         get( "/storage/zebcoe/locog/seats", {} )
-        check_status( 304 )
+        check_status( 412 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
         check_header( "ETag", "1330177020000" )
@@ -350,9 +350,9 @@ JS.Test.describe("Storage", function() { with(this) {
         stub(store, "put").yields([null, false, 1347016875231, true])
       }})
 
-      it("returns an empty 409 response", function() { with(this) {
+      it("returns an empty 412 response", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
-        check_status( 409 )
+        check_status( 412 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "ETag", "1347016875231" )
         check_body( "" )
@@ -428,9 +428,9 @@ JS.Test.describe("Storage", function() { with(this) {
         stub(store, "delete").yields([null, false, 1358121717830, true])
       }})
 
-      it("returns an empty 409 response", function() { with(this) {
+      it("returns an empty 412 response", function() { with(this) {
         this.delete( "/storage/zebcoe/locog/seats", {} )
-        check_status( 409 )
+        check_status( 412 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
       }})
