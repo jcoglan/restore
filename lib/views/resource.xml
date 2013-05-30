@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
 <% for (var i = 0, n = links.length; i < n; i++) { -%>
-  <Link href="<%=e( links[i].href )%>"
-        rel="<%=e( links[i].rel )%>"
-        type="<%=e( links[i].type )%>">
+  <Link href="<%= links[i].href %>"
+        rel="<%= links[i].rel %>"
+        type="<%= links[i].type %>">
 <% for (var key in links[i].properties) { i-%>
-    <Property type="<%=e( key )%>"><%=e( links[i].properties[key] )%></Property>
+    <Property type="<%= key %>"><%= links[i].properties[key] %></Property>
 <% } -%>
   </Link>
 <% } -%>

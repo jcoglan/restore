@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">
 <% for (var i = 0, n = links.length; i < n; i++) { -%>
-  <Link rel="<%=e( links[i].rel )%>"
-        api="<%=e( links[i].api )%>"
-        auth="<%=e( links[i].auth )%>"
-        template="<%=e( links[i].template )%>" />
+  <Link rel="<%= links[i].rel %>"
+        api="<%= links[i].api %>"
+        auth="<%= links[i].auth %>"
+        template="<%= links[i].template %>" />
 <% } -%>
 </XRD>
 

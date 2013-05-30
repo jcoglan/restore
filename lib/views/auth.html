@@ -1,120 +1,38 @@
-<!doctype html>
+<div class="form">
+  <div class="sub">
+    <p>The application <em><%= client_id %></em> hosted at
+      <em><%= client_host %></em> wants to access these resources for user
+      <em><%= username %></em>:</p>
 
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <link href="<%=e( scheme )%>://fonts.googleapis.com/css?family=Ubuntu+Mono|Open+Sans:400italic,400,700" rel="stylesheet" type="text/css">
-    <title>Authorize</title>
-    <style type="text/css">
-      body {
-        background:   #fff;
-        color:        #464646;
-        font:         24px/1.5 Open Sans, FreeSans, Helvetica, Arial, sans-serif;
-        margin:       0;
-        padding:      0;
-      }
+    <ul>
+      <% for (var path in permissions) { %>
+        <% var flags = permissions[path].join('') %>
+        <li><em><%= access_strings[flags] %></em> access to <em><%= path.replace(/^\/*/, '/') %></em></li>
+      <% } %>
+    </ul>
 
-      .header {
-        background: #3c3c3c;
-        border-bottom: 4px solid #c6c6c6;
-        color: #fff;
-      }
-      h1 {
-        font-size: 2em;
-        font-weight: normal;
-        margin: 0;
-        padding: 0.5em 0;
-      }
-      h1 span {
-        color: #c6c6c6;
-        display: block;
-        font-size: 0.3em;
-        text-transform: uppercase;
-      }
+    <% if (typeof error !== 'undefined') { %>
+      <p class="error"><%= error %></p>
+    <% } %>
 
-      .sub {
-        margin: 0 auto;
-        width: 600px;
-      }
+    <form method="POST" action="/oauth">
+      <input type="hidden" name="client_id" value="<%= client_id %>">
+      <input type="hidden" name="redirect_uri" value="<%= redirect_uri %>">
+      <input type="hidden" name="response_type" value="<%= response_type %>">
+      <input type="hidden" name="scope" value="<%= scope %>">
+      <input type="hidden" name="state" value="<%= state %>">
+      <input type="hidden" name="username" value="<%= username %>">
 
-      p, ul, form {
-        margin:       1em auto;
-        padding:      0;
-      }
-      ul {
-        border: 1px solid #d4d4d4;
-        border-left: none;
-        border-right: none;
-        padding: 1em 0;
-      }
+      <p>
+        <label for="password">Password</label>:
+        <input type="password" name="password" id="password">
+      </p>
 
-      em {
-        font-style: normal;
-        font-weight: bold;
-      }
-
-      .error {
-        color: #c93600;
-        font-weight: bold;
-      }
-
-      th {
-        font-size:    80%;
-        font-weight:  normal;
-        text-align:   left;
-      }
-
-      input {
-        font-size:    80%;
-      }
-    </style>
-  </head>
-  <body>
-
-    <div class="header">
-      <div class="sub">
-        <h1><span>Remote Storage</span> <%=e( host )%></h1>
-      </div>
-    </div>
-
-    <div class="form">
-      <div class="sub">
-        <p>The application <em><%=e( client_id )%></em> hosted at
-          <em><%=e( client_host )%></em> wants to access these resources for user
-          <em><%=e( username )%></em>:</p>
-
-        <ul>
-          <% for (var path in permissions) { %>
-            <% var flags = permissions[path].join('') %>
-            <li><em><%=e( access_strings[flags] )%></em> access to <em><%=e( path.replace(/^\/*/, '/') )%></em></li>
-          <% } %>
-        </ul>
-
-        <% if (typeof error !== 'undefined') { %>
-          <p class="error"><%=e( error )%></p>
-        <% } %>
-
-        <form method="POST" action="/oauth">
-          <input type="hidden" name="client_id" value="<%=e( client_id )%>">
-          <input type="hidden" name="redirect_uri" value="<%=e( redirect_uri )%>">
-          <input type="hidden" name="response_type" value="<%=e( response_type )%>">
-          <input type="hidden" name="scope" value="<%=e( scope )%>">
-          <input type="hidden" name="state" value="<%=e( state )%>">
-          <input type="hidden" name="username" value="<%=e( username )%>">
-
-          <p>
-            <label for="password">Password</label>:
-            <input type="password" name="password" id="password">
-          </p>
-
-          <p>
-            <input type="submit" name="allow" value="Allow">
-            <input type="submit" name="deny" value="Deny">
-          </p>
-        </form>
-      </div>
-    </div>
-
-  </body>
-</html>
+      <p>
+        <input type="submit" name="allow" value="Allow">
+        <input type="submit" name="deny" value="Deny">
+      </p>
+    </form>
+  </div>
+</div>
 
