@@ -216,7 +216,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
-        check_json( {"bar/": 12345888888, "bla": 1234544444} )
+        check_json( {"bar/": "12345888888", "bla": "1234544444"} )
       }})
     }})
 
