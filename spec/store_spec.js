@@ -142,10 +142,10 @@ JS.Test.describe("Stores", function() { with(this) {
 
     describe("storage methods", function() { with(this) {
       before(function() { with(this) {
-        this.date = new Date(2012,1,25,13,37)
-        this.oldDate = new Date(1984,6,5,11,11)
-        stub("new", "Date").returns(date)
-        stub(Date, "now").returns(date.getTime()) // make Node 0.9 happy
+        this.date = Date.UTC(2012,1,25,13,37)
+        this.oldDate = Date.UTC(1984,6,5,11,11)
+        stub("new", "Date").returns({getTime: function() { return date }})
+        stub(Date, "now").returns(date) // make Node 0.9 happy
       }})
 
       describe("put", function() { with(this) {
@@ -203,7 +203,7 @@ JS.Test.describe("Stores", function() { with(this) {
             resume(function() {
               assertNull( error )
               assert( created )
-              assertEqual( date.getTime(), modified.getTime() )
+              assertEqual( date, modified )
               assert( !conflict )
             })
           })
@@ -214,7 +214,7 @@ JS.Test.describe("Stores", function() { with(this) {
             resume(function() {
               assertNull( error )
               assert( created )
-              assertEqual( date.getTime(), modified.getTime() )
+              assertEqual( date, modified )
               assert( !conflict )
             })
           })
@@ -225,7 +225,7 @@ JS.Test.describe("Stores", function() { with(this) {
             resume(function() {
               assertNull( error )
               assert( !created )
-              assertEqual( date.getTime(), modified.getTime() )
+              assertEqual( date, modified )
               assert( !conflict )
             })
           })
@@ -283,7 +283,7 @@ JS.Test.describe("Stores", function() { with(this) {
               resume(function() {
                 assertNull( error )
                 assert( !created )
-                assertEqual( date.getTime(), modified.getTime() )
+                assertEqual( date, modified )
                 assert( !conflict )
               })
             })
@@ -447,7 +447,7 @@ JS.Test.describe("Stores", function() { with(this) {
             resume(function() {
               assertNull( error )
               assert( deleted )
-              assertEqual( date.getTime(), modified.getTime() )
+              assertEqual( date, modified )
               assert( !conflict )
             })
           })
@@ -486,7 +486,7 @@ JS.Test.describe("Stores", function() { with(this) {
               resume(function() {
                 assertNull( error )
                 assert( deleted )
-                assertEqual( date.getTime(), modified.getTime() )
+                assertEqual( date, modified )
                 assert( !conflict )
               })
             })
