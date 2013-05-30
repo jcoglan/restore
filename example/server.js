@@ -17,7 +17,8 @@ server = new reStore({
     port:   443,
     key:    __dirname + '/../spec/ssl/server.key',
     cert:   __dirname + '/../spec/ssl/server.crt'
-  }
+  },
+  cacheViews: false
 });
 
 server.boot();
