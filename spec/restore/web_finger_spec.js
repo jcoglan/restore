@@ -90,7 +90,8 @@ JS.Test.describe("WebFinger", function() { with(this) {
           "type": "draft-dejong-remotestorage-01",
           "properties": {
             "auth-method":    "http://tools.ietf.org/html/rfc6749#section-4.2",
-            "auth-endpoint":  host + "/oauth/zebcoe"
+            "auth-endpoint":  host + "/oauth/zebcoe",
+            "http://tools.ietf.org/html/rfc6749#section-4.2": host + "/oauth/zebcoe"
           }
         }
       ]
@@ -111,6 +112,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
         type="draft-dejong-remotestorage-01">\n\
     <Property type="auth-method">http://tools.ietf.org/html/rfc6749#section-4.2</Property>\n\
     <Property type="auth-endpoint">http://localhost:4567/oauth/zebcoe</Property>\n\
+    <Property type="http://tools.ietf.org/html/rfc6749#section-4.2">http://localhost:4567/oauth/zebcoe</Property>\n\
   </Link>\n\
 </XRD>' )
   }})
