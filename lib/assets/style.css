@@ -7,7 +7,7 @@ body {
 }
 
 .header {
-  background: #3c3c3c;
+  background: #3c3c40;
   border-bottom: 4px solid #c6c6c6;
   color: #fff;
 }
@@ -38,6 +38,12 @@ ul {
   border-left: none;
   border-right: none;
   padding: 1em 0;
+}
+
+a {
+  color: #f4a903;
+  font-weight: bold;
+  text-decoration: none;
 }
 
 em {
