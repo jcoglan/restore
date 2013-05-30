@@ -320,9 +320,9 @@ JS.Test.describe("Storage", function() { with(this) {
         stub(store, "put").yields([null, true, 1347016875231])
       }})
 
-      it("returns an empty 200 response", function() { with(this) {
+      it("returns an empty 201 response", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
-        check_status( 200 )
+        check_status( 201 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "ETag", "1347016875231" )
         check_body( "" )
