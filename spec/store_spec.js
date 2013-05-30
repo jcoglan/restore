@@ -397,6 +397,23 @@ JS.Test.describe("Stores", function() { with(this) {
               })
             })
           }})
+
+          describe("with a document with the same name as a directory", function() { with(this) {
+            before(function(resume) { with(this) {
+              store.put("boris", "/photos.d", "application/json", buffer('{"The Day": "Today"}'), null, function(error) {
+                resume(function() { assertNull( error ) })
+              })
+            }})
+
+            it("returns a directory listing for a category", function(resume) { with(this) {
+              store.get("boris", "/photos/", null, function(error, items) {
+                resume(function() {
+                  assertNull( error )
+                  assertEqual( [{name: "bar/", modified: date}, {name: "bla", modified: date}], items )
+                })
+              })
+            }})
+          }})
         }})
       }})
 

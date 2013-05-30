@@ -30,8 +30,20 @@ JS.Test.describe("Storage", function() { with(this) {
     stub(store, "permissions").given("zebcoe", "bad_token").yields([new Error()])
   }})
 
+  it("returns a 400 if the client uses path traversal in the path", function() { with(this) {
+    get( "/storage/zebcoe/locog/../seats" )
+    check_status( 400 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+  }})
+
   it("returns a 400 if the client uses invalid characters in the path", function() { with(this) {
-    get( "/storage/zebcoe/locog/./seats" )
+    get( "/storage/zebcoe/locog/$eats" )
+    check_status( 400 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+  }})
+
+  it("returns a 400 if the client uses a zero-length path", function() { with(this) {
+    get( "/storage/zebcoe" )
     check_status( 400 )
     check_header( "Access-Control-Allow-Origin", "*" )
   }})
@@ -63,6 +75,11 @@ JS.Test.describe("Storage", function() { with(this) {
       it("asks the store for the item", function() { with(this) {
         expect(store, "get").given("zebcoe", "/locog/seats", null).yielding([null, item])
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
+      }})
+
+      it("asks the store for items containing dots", function() { with(this) {
+        expect(store, "get").given("zebcoe", "/locog/seats.gif", null).yielding([null, item])
+        get( "/storage/zebcoe@local.dev/locog/seats.gif", {} )
       }})
 
       it("asks the store for a deep item", function() { with(this) {
