@@ -10,7 +10,6 @@
 
 , "dependencies"    : { "async": ""
                       , "ejs": ""
-                      , "ent": ""
                       , "mkdirp": ""
                       , "redis": ">= 0.8.2"
                       }
