@@ -18,6 +18,9 @@ server = new reStore({
     key:    __dirname + '/../spec/ssl/server.key',
     cert:   __dirname + '/../spec/ssl/server.crt'
   },
+  allow: {
+    signup: true
+  },
   cacheViews: false
 });
 

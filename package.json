@@ -5,7 +5,7 @@
 , "keywords"        : ["remoteStorage", "webfinger", "oauth", "webdav"]
 
 , "version"         : "0.1.0"
-, "engines"         : {"node": ">=0.6.0"}
+, "engines"         : {"node": ">=0.8.0"}
 , "main"            : "./lib/restore.js"
 
 , "dependencies"    : { "async": ""

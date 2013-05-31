@@ -23,7 +23,7 @@ JS.Test.describe("Stores", function() { with(this) {
 
     describe("createUser", function() { with(this) {
       before(function() { with(this) {
-        this.params = {username: "zebcoe", password: "locog"}
+        this.params = {username: "zebcoe", email: "zeb@example.com", password: "locog"}
       }})
 
       describe("with valid parameters", function() { with(this) {
@@ -44,6 +44,16 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
       }})
 
+      describe("with no email", function() { with(this) {
+        before(function() { delete this.params.email })
+
+        it("returns an error", function(resume) { with(this) {
+          store.createUser(params, function(error) {
+            resume(function() { assertEqual( "Email must not be blank", error.message ) })
+          })
+        }})
+      }})
+
       describe("with no password", function() { with(this) {
         before(function() { delete this.params.password })
 
@@ -54,9 +64,9 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
       }})
 
-      describe("with an exising user", function() { with(this) {
+      describe("with an existing user", function() { with(this) {
         before(function(resume) { with(this) {
-          store.createUser({username: "zebcoe", password: "hi"}, resume)
+          store.createUser({username: "zebcoe", email: "zeb@example.com", password: "hi"}, resume)
         }})
 
         it("returns an error", function(resume) { with(this) {
@@ -69,7 +79,7 @@ JS.Test.describe("Stores", function() { with(this) {
 
     describe("authenticate", function() { with(this) {
       before(function(resume) { with(this) {
-        store.createUser({username: "boris", password: "zipwire"}, resume)
+        store.createUser({username: "boris", email: "boris@example.com", password: "zipwire"}, resume)
       }})
 
       it("returns no error for valid username-password pairs", function(resume) { with(this) {
@@ -97,10 +107,10 @@ JS.Test.describe("Stores", function() { with(this) {
         this.rootToken = null
         var permissions = {documents: ["w"], photos: ["r","w"], contacts: ["r"], "deep/dir": ["r","w"]}
 
-        store.createUser({username: "boris", password: "dangle"}, function() {
+        store.createUser({username: "boris", email: "boris@example.com", password: "dangle"}, function() {
           store.authorize("www.example.com", "boris", permissions, function(error, accessToken) {
             token = accessToken
-            store.createUser({username: "zebcoe", password: "locog"}, function() {
+            store.createUser({username: "zebcoe", email: "zeb@example.com", password: "locog"}, function() {
               store.authorize("admin.example.com", "zebcoe", {"": ["r","w"]}, function(error, accessToken) {
                 rootToken = accessToken
                 resume()

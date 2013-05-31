@@ -3,12 +3,19 @@ body {
   color: #464646;
   font: 24px/1.5 Open Sans, FreeSans, Helvetica, Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  padding: 0 0 4em;
+}
+
+.sub {
+  margin: 0 auto;
+  position: relative;
+  width: 600px;
 }
 
 .header {
   background: #3c3c40;
   border-bottom: 4px solid #c6c6c6;
+  position: relative;
 }
 h1 {
   color: #fff;
@@ -27,17 +34,36 @@ h1 span {
   font-size: 0.3em;
   text-transform: uppercase;
 }
-
-.sub {
-  margin: 0 auto;
-  width: 600px;
+.nav {
+  bottom: 1.7em;
+  font-size: 0.6em;
+  list-style: none;
+  position: absolute;
+  right: 0;
+}
+.nav li {
+  display: inline;
+  margin: 0 0 0 1.2em;
+}
+.nav a {
+  font-weight: normal;
+  text-decoration: none;
+}
+.nav a:hover {
+  text-decoration: underline;
 }
 
-p, ul, form {
+h2 {
+  color: #999;
+  font-size: 1.5em;
+  font-weight: normal;
+  margin: 1em 0 0.5em;
+}
+p, .content ul, form {
   margin: 1em auto;
   padding: 0;
 }
-ul {
+.content ul {
   border: 1px solid #d4d4d4;
   border-left: none;
   border-right: none;
@@ -55,15 +81,40 @@ em {
   font-weight: bold;
 }
 
+.status {
+  color: #ccc;
+  font-size: 10em;
+  font-weight: bold;
+  margin: 0;
+  text-align: center;
+}
+.message {
+  border-top: 1px solid #ccc;
+  margin: 0;
+  padding: 1em 0 0;
+  text-align: center;
+}
 .error {
   color: #c93600;
   font-weight: bold;
 }
 
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+tr {
+  border: 1px solid #ccc;
+  border-left: none;
+  border-right: none;
+}
 th {
   font-size: 0.8em;
   font-weight: normal;
   text-align: left;
+}
+th, td {
+  padding: 0.4em 1em;
 }
 
 input {
