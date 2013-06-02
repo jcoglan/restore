@@ -23,13 +23,13 @@ var request = function(self, host, port, method, path, params, headers, callback
 
   var request = http.request(options, function(response) {
     var body = new Buffer(0)
-    response.addListener("data", function(chunk) {
+    response.on("data", function(chunk) {
       var buffer = new Buffer(body.length + chunk.length)
       body.copy(buffer)
       chunk.copy(buffer, body.length)
       body = buffer
     })
-    response.addListener("end", function() {
+    response.on("end", function() {
       response.buffer = body
       response.body = body.toString("utf8")
       self.response = response
