@@ -19,7 +19,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
       "links": [
         {
           "rel": "lrdd",
-          "template": host + "/webfinger/jrd/{uri}"
+          "template": host + "/webfinger/jrd?resource={uri}"
         }
       ]
     })
@@ -36,12 +36,12 @@ JS.Test.describe("WebFinger", function() { with(this) {
 <XRD xmlns="http://docs.oasis-open.org/ns/xri/xrd-1.0">\n\
   <Link rel="lrdd"\n\
         type="application/xrd+xml"\n\
-        template="' + host + '/webfinger/xrd/{uri}" />\n\
+        template="' + host + '/webfinger/xrd?resource={uri}" />\n\
 </XRD>' )
   }})
 
  it("returns account metadata as JSON", function() { with(this) {
-    get( "/webfinger/jrd/acct:zebcoe@locog", {} )
+    get( "/webfinger/jrd", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
@@ -60,7 +60,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
   }})
 
   it("returns account metadata as XML", function() { with(this) {
-    get( "/webfinger/xrd/acct:zebcoe@locog", {} )
+    get( "/webfinger/xrd", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
