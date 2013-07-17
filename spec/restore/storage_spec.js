@@ -208,7 +208,7 @@ JS.Test.describe("Storage", function() { with(this) {
     describe("when the store returns a directory listing", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
-        stub(store, "get").yields([null, [{name: "bla", modified: 1234544444}, {name: "bar/", modified: 12345888888}]])
+        stub(store, "get").yields([null, { children: [{name: "bla", modified: 1234544444}, {name: "bar/", modified: 12345888888}], modified: 12345888888 }])
       }})
 
       it("returns the listing as JSON", function() { with(this) {
@@ -216,6 +216,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
+        check_header( "ETag", "12345888888" )
         check_json( {"bar/": "12345888888", "bla": "1234544444"} )
       }})
     }})
@@ -223,7 +224,7 @@ JS.Test.describe("Storage", function() { with(this) {
     describe("when the store returns an empty directory listing", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
-        stub(store, "get").yields([null, []])
+        stub(store, "get").yields([null, { children: [], modified: 12345888888 }])
       }})
 
       it("returns a 200 response with an empty JSON object", function() { with(this) {
@@ -231,6 +232,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
+        check_header( "ETag", "12345888888" )
         check_json( {} )
       }})
     }})
