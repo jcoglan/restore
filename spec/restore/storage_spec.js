@@ -56,7 +56,7 @@ JS.Test.describe("Storage", function() { with(this) {
       check_status( 200 )
       check_header( "Access-Control-Allow-Origin", "*" )
       check_header( "Access-Control-Allow-Methods", "GET, PUT, DELETE" )
-      check_header( "Access-Control-Allow-Headers", "Authorization, Content-Length, Content-Type, Origin, X-Requested-With" )
+      check_header( "Access-Control-Allow-Headers", "Authorization, Content-Length, Content-Type, Origin, X-Requested-With, If-None-Match" )
       check_header( "Cache-Control", "no-cache, no-store" )
       check_body( "" )
     }})
