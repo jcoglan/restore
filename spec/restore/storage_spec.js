@@ -192,7 +192,7 @@ JS.Test.describe("Storage", function() { with(this) {
       it("returns a 412 for a failed conditional", function() { with(this) {
         stub(store, "get").yields([null, item, true])
         get( "/storage/zebcoe/locog/seats", {} )
-        check_status( 412 )
+        check_status( 304 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
         check_header( "ETag", "1330177020000" )
