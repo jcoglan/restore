@@ -13,6 +13,7 @@
                       , "ejs": ""
                       , "mkdirp": ""
                       , "redis": ">= 0.8.2"
+                      , "mongodb": ">= 1.2.0"
                       }
 , "devDependencies" : { "jstest": ""
                       , "rimraf": ""

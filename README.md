@@ -129,7 +129,7 @@ behaviour to enforce secure connections.
 
 ### Storage backends
 
-reStore supports pluggable storage backends, and comes with two implementations
+reStore supports pluggable storage backends, and comes with three implementations
 out of the box:
 
 * `reStore.FileTree` - Uses the filesystem hierarchy and stores each item in
@@ -138,6 +138,8 @@ out of the box:
   be run using a single server process.
 * `reStore.Redis` - Stores data in a Redis database, and all stored data is
   base64-encoded. It can be run with any number of server processes.
+* `reStore.MongoDB` - Stores data in a MongoDB database, and all data is
+  stored in binary. It can be run with any number of server processes.
 
 All the backends support the same set of features, including the ability to
 store arbitrary binary data with content types and modification times.
@@ -153,6 +155,15 @@ var store = new reStore.Redis({
   host:     'redis.example.com',    // default is 'localhost'
   port:     1234,                   // default is 6379
   database: 2,                      // default is 0
+  password: 'unhosted'              // default is no password
+});
+
+// To use the MongoDB store:
+var store = new reStore.MongoDB({
+  host:     'mongodb.example.com',  // default is 'localhost'
+  port:     1234,                   // default is 27017
+  database: 'mydb',                 // default is 'restore'
+  username: 'unhosted',             // default is no password
   password: 'unhosted'              // default is no password
 });
 
