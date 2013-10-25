@@ -1,4 +1,5 @@
-var RestoreSteps = require("../restore_steps")
+var RestoreSteps = require("../restore_steps"),
+    JS = require("jstest")
 
 JS.Test.describe("Storage", function() { with(this) {
   include(RestoreSteps)
@@ -10,9 +11,6 @@ JS.Test.describe("Storage", function() { with(this) {
       }
     }
   })
-
-  before(function() { this.start(4567) })
-  after (function() { this.stop() })
 
   before(function() { with(this) {
     this.store = {}
@@ -31,6 +29,9 @@ JS.Test.describe("Storage", function() { with(this) {
 
     this.modifiedTimestamp = Date.UTC(2012, 1, 25, 13, 37)
   }})
+
+  before(function() { this.start(4567) })
+  after (function() { this.stop() })
 
   it("returns a 400 if the client uses path traversal in the path", function() { with(this) {
     get( "/storage/zebcoe/locog/../seats" )
@@ -108,12 +109,6 @@ JS.Test.describe("Storage", function() { with(this) {
         expect(store, "get").given("zebcoe", "/", null).yielding([null, item])
         header( "Authorization", "Bearer root_token" )
         get( "/storage/zebcoe/", {} )
-      }})
-
-      it("asks the store for an item conditionally based on If-None-Match", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null, item])
-        header( "If-Node-Match", modifiedTimestamp )
-        get( "/storage/zebcoe/locog/seats", {} )
       }})
 
       it("asks the store for an item conditionally based on If-None-Match", function() { with(this) {

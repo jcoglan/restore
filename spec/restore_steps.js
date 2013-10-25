@@ -1,6 +1,7 @@
 var Restore = require("../lib/restore"),
     http    = require("http"),
-    qs      = require("querystring")
+    qs      = require("querystring"),
+    JS      = require("jstest")
 
 var request = function(self, host, port, method, path, params, headers, callback) {
   var options = {

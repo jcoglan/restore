@@ -1,7 +1,6 @@
 process.env.SILENT = '1'
 
-require('jsclass')
-JS.require('JS.Test')
+var JS = require('jstest')
 
 require('./restore/web_finger_spec')
 require('./restore/oauth_spec')

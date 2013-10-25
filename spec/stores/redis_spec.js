@@ -1,5 +1,6 @@
 var Redis = require("../../lib/stores/redis"),
-    redis = require("redis")
+    redis = require("redis"),
+    JS    = require("jstest")
 
 JS.Test.describe("Redis store", function() { with(this) {
   before(function() { with(this) {

@@ -1,5 +1,6 @@
 var FileTree = require("../../lib/stores/file_tree"),
-    rmrf     = require("rimraf")
+    rmrf     = require("rimraf"),
+    JS       = require("jstest")
 
 JS.Test.describe("FileTree store", function() { with(this) {
   before(function() { with(this) {

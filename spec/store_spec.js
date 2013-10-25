@@ -1,5 +1,6 @@
 var fs   = require("fs"),
-    path = require("path")
+    path = require("path"),
+    JS   = require("jstest")
 
 JS.Test.describe("Stores", function() { with(this) {
   sharedBehavior("storage backend", function() { with(this) {

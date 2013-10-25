@@ -1,4 +1,5 @@
-var RestoreSteps = require("../restore_steps")
+var RestoreSteps = require("../restore_steps"),
+    JS = require("jstest")
 
 JS.Test.describe("WebFinger", function() { with(this) {
   include(RestoreSteps)
