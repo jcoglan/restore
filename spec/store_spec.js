@@ -323,7 +323,7 @@ JS.Test.describe("Stores", function() { with(this) {
             store.get("boris", "/photos/zipwire", null, function(error, item, match) {
               resume(function() {
                 assertNull( error )
-                assertEqual( {type: "image/poster", modified: date, value: buffer("vertibo")}, item )
+                assertEqual( {length: 7, type: "image/poster", modified: date, value: buffer("vertibo")}, item )
                 assert( !match )
               })
             })
@@ -354,7 +354,7 @@ JS.Test.describe("Stores", function() { with(this) {
               store.get("boris", "/photos/zipwire", date, function(error, item, match) {
                 resume(function() {
                   assertNull( error )
-                  assertEqual( {type: "image/poster", modified: date, value: buffer("vertibo")}, item )
+                  assertEqual( {length: 7, type: "image/poster", modified: date, value: buffer("vertibo")}, item )
                   assert( match )
                 })
               })
@@ -364,7 +364,7 @@ JS.Test.describe("Stores", function() { with(this) {
               store.get("boris", "/photos/zipwire", oldDate, function(error, item, match) {
                 resume(function() {
                   assertNull( error )
-                  assertEqual( {type: "image/poster", modified: date, value: buffer("vertibo")}, item )
+                  assertEqual( {length: 7, type: "image/poster", modified: date, value: buffer("vertibo")}, item )
                   assert( !match )
                 })
               })
