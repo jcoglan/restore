@@ -11,10 +11,10 @@ else
 
 server = new reStore({
   store:  store,
-  http:   {port: 8090},
+  http:   {port: 80},
   https:  {
     force:  true,
-    port:   4439,
+    port:   443,
     cert:   __dirname + '/ssl/server.crt',
     key:    __dirname + '/ssl/server.key'
   },
