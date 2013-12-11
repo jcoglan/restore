@@ -250,7 +250,7 @@ JS.Test.describe("Stores", function() { with(this) {
           it("creates the parent directory", function(resume) { with(this) {
             store.get("boris", "/photos/foo/bar/", null, function(error, items) {
               resume(function() {
-                assertEqual( [{name: "qux", modified: date}], items )
+                assertEqual( { children: [{name: "qux", modified: date}], modified: date }, items )
               })
             })
           }})
@@ -258,7 +258,7 @@ JS.Test.describe("Stores", function() { with(this) {
           it("creates the grandparent directory", function(resume) { with(this) {
             store.get("boris", "/photos/foo/", null, function(error, items) {
               resume(function() {
-                assertEqual( [{name: "bar/", modified: date}], items )
+                assertEqual( { children: [{name: "bar/", modified: date}], modified: date }, items )
               })
             })
           }})
@@ -386,7 +386,7 @@ JS.Test.describe("Stores", function() { with(this) {
             store.get("boris", "/photos/", null, function(error, items) {
               resume(function() {
                 assertNull( error )
-                assertEqual( [{name: "bar/", modified: date}, {name: "bla", modified: date}], items )
+                assertEqual( { children: [{name: "bar/", modified: date}, {name: "bla", modified: date}], modified: date }, items )
               })
             })
           }})
@@ -395,7 +395,7 @@ JS.Test.describe("Stores", function() { with(this) {
             store.get("zebcoe", "/", null, function(error, items) {
               resume(function() {
                 assertNull( error )
-                assertEqual( [{name: "tv/", modified: date}], items )
+                assertEqual( { children: [{name: "tv/", modified: date}], modified: date }, items )
               })
             })
           }})
@@ -420,7 +420,7 @@ JS.Test.describe("Stores", function() { with(this) {
               store.get("boris", "/photos/", null, function(error, items) {
                 resume(function() {
                   assertNull( error )
-                  assertEqual( [{name: "bar/", modified: date}, {name: "bla", modified: date}], items )
+                  assertEqual( { children: [{name: "bar/", modified: date}, {name: "bla", modified: date}], modified: date }, items )
                 })
               })
             }})
