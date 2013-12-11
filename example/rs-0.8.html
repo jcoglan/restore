@@ -1,0 +1,29 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>remoteStorage[master] example</title>
+    <script type="text/javascript" src="./remotestorage-0.8.js"></script>
+  </head>
+  <body>
+
+    <h1>remoteStorage example</h1>
+
+    <div id="remotestorage-connect"></div>
+
+    <script type="text/javascript">
+      RemoteStorage.defineModule('vault', function(client) {
+        return {name: 'vault', exports: client};
+      });
+
+      remoteStorage.access.claim('vault', 'rw');
+      remoteStorage.displayWidget();
+
+      remoteStorage.vault.storeObject('vaultdoc', 'foo', {hello: 'world'});
+      remoteStorage.vault.storeFile('text/html', 'deep/bar', '<p>Hello</p>');
+    </script>
+
+  </body>
+</html>
+
