@@ -4,3 +4,6 @@
 [submodule "vendor/remotestorage-0.7"]
 	path = vendor/remotestorage-0.7
 	url = git://github.com/remotestorage/remotestorage.js.git
+[submodule "vendor/remotestorage-0.8"]
+	path = vendor/remotestorage-0.8
+	url = git://github.com/remotestorage/remotestorage.js.git
