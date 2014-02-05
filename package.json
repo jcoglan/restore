@@ -13,7 +13,7 @@
                       , "ejs": ""
                       , "mkdirp": ""
                       , "redis": ">= 0.8.2"
-                      , "remotestorage-server": ">= 0.2.0"
+                      , "remotestorage-server": ">= 0.2.3"
                       }
 , "devDependencies" : { "jstest": ""
                       , "rimraf": ""

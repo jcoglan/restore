@@ -223,17 +223,16 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( buffer("a value") )
       }})
 
-      it("returns a 412 for a failed conditional", function() { with(this) {
+      it("returns a 304 for a failed conditional", function() { with(this) {
         expect(store, "get").given("content:zebcoe@local.dev/locog/seats").yielding([null, item.value])
         expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, item.modified.toString()])
-        expect(store, "get").given("contentType:zebcoe@local.dev/locog/seats").yielding([null, item.type])
-        //TODO: header( "If-None-Match", "\"1330177020000\"" )
+        header( "If-None-Match", "\"1330177020000\"" )
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
-        //TODO: check_status( 304 )
+        check_status( 304 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
         check_header( "ETag", "\"1330177020000\"" )
-        //TODO: check_body( "" )
+        check_body( "" )
       }})
     }})
 
