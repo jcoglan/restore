@@ -261,11 +261,14 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
     }})
 
-/*
     describe("when the store returns an empty directory listing", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
-        stub(store, "get").yields([null, { children: [], modified: 12345888888 }])
+        var items = {
+        };
+        var modified = '12345888888';
+        expect(store, "get").given("content:zebcoe@local.dev/locog/seats/").yielding([null, items])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats/").yielding([null, modified])
       }})
 
       it("returns a 200 response with an empty JSON object", function() { with(this) {
@@ -273,7 +276,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
-        check_header( "ETag", "12345888888" )
+        check_header( "ETag", "\"12345888888\"" )
         check_json( {} )
       }})
     }})
@@ -281,14 +284,14 @@ JS.Test.describe("Storage", function() { with(this) {
     describe("when the item does not exist", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
-        stub(store, "get").yields([null, undefined])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/seats").yielding([null, undefined])
       }})
 
       it("returns an empty 404 response", function() { with(this) {
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 404 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_body( "" )
+        check_body( buffer("404 Not Found") )
       }})
     }})
 
@@ -302,11 +305,12 @@ JS.Test.describe("Storage", function() { with(this) {
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 500 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_body( "We did something wrong" )
+        check_body( "500 Internal Server Error" )
       }})
     }})
   }})
 
+/*
   describe("PUT", function() { with(this) {
     describe("when a valid access token is used", function() { with(this) {
       before(function() { with(this) {
@@ -491,7 +495,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( "OH NOES!" )
       }})
     }})
-  */
   }})
+  */
 }})
 
