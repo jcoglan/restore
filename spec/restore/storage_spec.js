@@ -14,8 +14,9 @@ JS.Test.describe("Storage", function() { with(this) {
 
   before(function() { with(this) {
     this.store = {}
-    stub(store, "permissions").given("boris", "a_token").yields([new Error()])
 
+    //Bearer a_token
+    stub(store, "permissions").given("boris", "a_token").yields([new Error()])
     stub(store, "permissions").given("zebcoe", "a_token").yields([null, {
       "/locog/":     ["r","w"],
       "/books/":     ["r"],
@@ -28,10 +29,18 @@ JS.Test.describe("Storage", function() { with(this) {
       "zebcoe@local.dev/statuses/:rw",
       "zebcoe@local.dev/deep/dir/:rw"
     ]])
+    
+    //Bearer root_token
     stub(store, "permissions").given("zebcoe", "root_token").yields([null, {
       "/": ["r","w"]
     }])
+    stub(store, "queryToken").given("root_token").yields([null, [
+      "zebcoe@local.dev/:rw"
+    ]])
+    
+    //Bearer bad_token
     stub(store, "permissions").given("zebcoe", "bad_token").yields([new Error()])
+    stub(store, "queryToken").given("bad_token").yields([null, undefined])
 
     this.modifiedTimestamp = Date.UTC(2012, 1, 25, 13, 37)
   }})
@@ -64,7 +73,7 @@ JS.Test.describe("Storage", function() { with(this) {
       check_header( "Access-Control-Allow-Headers", "Authorization, Content-Length, Content-Type, If-Match, If-None-Match, Origin, X-Requested-With" )
       check_header( "Access-Control-Allow-Methods", "GET, PUT, DELETE" )
       check_header( "Access-Control-Allow-Origin", "*" )
-      check_header( "Access-Control-Expose-Headers", "Content-Length, Content-Type, ETag" )
+      check_header( "Access-Control-Expose-Headers", "Content-Type, Content-Length, ETag" )
       check_header( "Cache-Control", "no-cache, no-store" )
       check_body( "" )
     }})
@@ -88,34 +97,47 @@ JS.Test.describe("Storage", function() { with(this) {
         expect(store, "get").given("contentType:zebcoe@local.dev/locog/seats").yielding([null, item.type])
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
-/*
+
       it("asks the store for items containing dots", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/locog/seats.gif", null).yielding([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/seats.gif").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats.gif").yielding([null, item.modified])
+        expect(store, "get").given("contentType:zebcoe@local.dev/locog/seats.gif").yielding([null, item.type])
         get( "/storage/zebcoe@local.dev/locog/seats.gif", {} )
       }})
 
       it("asks the store for a deep item", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/deep/dir/value", null).yielding([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/deep/dir/value").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/deep/dir/value").yielding([null, item.modified])
+        expect(store, "get").given("contentType:zebcoe@local.dev/deep/dir/value").yielding([null, item.type])
         get( "/storage/zebcoe@local.dev/deep/dir/value", {} )
       }})
 
       it("passes the path literally to the store", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/locog/a%2Fpath", null).yielding([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/a%2Fpath").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/a%2Fpath").yielding([null, item.modified])
+        expect(store, "get").given("contentType:zebcoe@local.dev/locog/a%2Fpath").yielding([null, item.type])
         get( "/storage/zebcoe/locog/a%2Fpath", {} )
       }})
 
+/*
       it("asks the store for a directory listing", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/locog/", null).yielding([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/").yielding([null, item.modified])
+        expect(store, "get").given("contentType:zebcoe@local.dev/locog/").yielding([null, item.type])
         get( "/storage/zebcoe/locog/", {} )
       }})
 
       it("asks the store for a deep directory listing", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/deep/dir/", null).yielding([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/deep/dir/").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/deep/dir/").yielding([null, item.modified])
+        expect(store, "get").given("contentType:zebcoe@local.dev/deep/dir/").yielding([null, item.type])
         get( "/storage/zebcoe/deep/dir/", {} )
       }})
 
       it("asks the store for a root listing", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/", null).yielding([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/").yielding([null, item.modified])
+        expect(store, "get").given("contentType:zebcoe@local.dev/").yielding([null, item.type])
         header( "Authorization", "Bearer root_token" )
         get( "/storage/zebcoe/", {} )
       }})
