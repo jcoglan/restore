@@ -40,7 +40,7 @@ var request = function(self, host, port, method, path, params, headers, callback
 
   if (method === "POST" || method === "PUT")
     request.write(query)
-
+console.log('req.end', query)
   request.end()
 }
 
