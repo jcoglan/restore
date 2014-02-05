@@ -204,35 +204,40 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
     }})
 
-/*
     describe("when the store returns an item", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
       }})
 
       it("returns the value in the response", function() { with(this) {
-        stub(store, "get").yields([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/seats").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, item.modified.toString()])
+        expect(store, "get").given("contentType:zebcoe@local.dev/locog/seats").yielding([null, item.type])
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
         check_header( "Content-Length", "7" )
         check_header( "Content-Type", "custom/type" )
-        check_header( "ETag", "1330177020000" )
+        check_header( "ETag", "\"1330177020000\"" )
         check_body( buffer("a value") )
       }})
 
       it("returns a 412 for a failed conditional", function() { with(this) {
-        stub(store, "get").yields([null, item, true])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/seats").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, item.modified.toString()])
+        expect(store, "get").given("contentType:zebcoe@local.dev/locog/seats").yielding([null, item.type])
+        //TODO: header( "If-None-Match", "\"1330177020000\"" )
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
-        check_status( 304 )
+        //TODO: check_status( 304 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
-        check_header( "ETag", "1330177020000" )
-        check_body( "" )
+        check_header( "ETag", "\"1330177020000\"" )
+        //TODO: check_body( "" )
       }})
     }})
 
+/*
     describe("when the store returns a directory listing", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
