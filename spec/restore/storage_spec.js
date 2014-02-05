@@ -46,13 +46,12 @@ JS.Test.describe("Storage", function() { with(this) {
     stub(store, "permissions").given("zebcoe", "bad_token").yields([new Error()])
     stub(store, "queryToken").given("bad_token").yields([null, undefined])
 
-    this.modifiedTimestamp = Date.UTC(2012, 1, 25, 13, 37)
+    this.modifiedTimestamp = Date.UTC(2012, 1, 25, 13, 37).toString()
   }})
 
   before(function() { this.start(4567) })
   after (function() { this.stop() })
 
-/*
   it("returns a 400 if the client uses path traversal in the path", function() { with(this) {
     get( "/storage/zebcoe@local.dev/locog/../seats" )
     check_status( 400 )
@@ -314,14 +313,13 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
     }})
   }})
-*/
 
   describe("PUT", function() { with(this) {
     describe("when a valid access token is used", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
       }})
-/*
+      
       it("tells the store to save the given value", function() { with(this) {
         expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, '123'])
         
@@ -339,7 +337,8 @@ JS.Test.describe("Storage", function() { with(this) {
         expect(store, "put").given("contentType:zebcoe@local.dev/locog/seats", 'text/plain').yielding([null])
         
         put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
-      }})*/
+      }})
+
       it("tells the store to save a public value", function() { with(this) {
         expect(store, "get").given("revision:zebcoe@local.dev/public/locog/seats").yielding([null, '123'])
         
@@ -362,19 +361,45 @@ JS.Test.describe("Storage", function() { with(this) {
         put( "/storage/zebcoe@local.dev/public/locog/seats", "a value" )
       }})
 
-/*
       it("tells the store to save a value conditionally based on If-None-Match", function() { with(this) {
-        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), modifiedTimestamp).yielding([null])
-        header( "If-None-Match", modifiedTimestamp )
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, '123'])
+        
+        expect(store, "get").given("content:zebcoe@local.dev/locog/").yielding([null, undefined])
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, undefined])
+        
+        expect(store, "put").given("content:zebcoe@local.dev/locog/seats", buffer("a value")).yielding([null])
+        expect(store, "put").given("content:zebcoe@local.dev/locog/", {seats: true}).yielding([null])
+        expect(store, "put").given("content:zebcoe@local.dev/", {'locog/': true}).yielding([null])
+        
+        expect(store, "put").given("revision:zebcoe@local.dev/locog/seats", '9e4647f796987297ce25c638aa6797954b40b730').yielding([null])
+        expect(store, "put").given("revision:zebcoe@local.dev/locog/", '17e3a1238e9efb98de86d2f3313e6123445a6088').yielding([null])
+        expect(store, "put").given("revision:zebcoe@local.dev/", '453ec93e4a3cd34a3a9b970cbe214f2376292b80').yielding([null])
+        
+        expect(store, "put").given("contentType:zebcoe@local.dev/locog/seats", 'text/plain').yielding([null])
+        
+        header( "If-None-Match", '"' + modifiedTimestamp + '"' )
         put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
       }})
 
       it("tells the store to save a value conditionally based on If-Match", function() { with(this) {
-        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), modifiedTimestamp).yielding([null])
-        header( "If-Match", modifiedTimestamp )
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp])
+        
+        expect(store, "get").given("content:zebcoe@local.dev/locog/").yielding([null, undefined])
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, undefined])
+        
+        expect(store, "put").given("content:zebcoe@local.dev/locog/seats", buffer("a value")).yielding([null])
+        expect(store, "put").given("content:zebcoe@local.dev/locog/", {seats: true}).yielding([null])
+        expect(store, "put").given("content:zebcoe@local.dev/", {'locog/': true}).yielding([null])
+        
+        expect(store, "put").given("revision:zebcoe@local.dev/locog/seats", '9e4647f796987297ce25c638aa6797954b40b730').yielding([null])
+        expect(store, "put").given("revision:zebcoe@local.dev/locog/", '17e3a1238e9efb98de86d2f3313e6123445a6088').yielding([null])
+        expect(store, "put").given("revision:zebcoe@local.dev/", '453ec93e4a3cd34a3a9b970cbe214f2376292b80').yielding([null])
+        
+        expect(store, "put").given("contentType:zebcoe@local.dev/locog/seats", 'text/plain').yielding([null])
+        //expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), modifiedTimestamp).yielding([null])
+        header( "If-Match", '"' + modifiedTimestamp + '"' )
         put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
       }})
-
       it("does not tell the store to save a directory", function() { with(this) {
         expect(store, "put").exactly(0)
         put( "/storage/zebcoe@local.dev/locog/seats/", "a value" )
@@ -384,7 +409,6 @@ JS.Test.describe("Storage", function() { with(this) {
         expect(store, "put").exactly(0)
         put( "/storage/zebcoe@local.dev/books/house_of_leaves", "a value" )
       }})
-      */
     }})
 /*
     describe("when an invalid access token is used", function() { with(this) {
