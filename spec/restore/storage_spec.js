@@ -126,8 +126,8 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("asks the store for a directory listing", function() { with(this) {
-        expect(store, "get").given("content:zebcoe@local.dev/locog/").yielding([null, item.value])
-        expect(store, "get").given("revision:zebcoe@local.dev/locog/").yielding([null, item.modified])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/").yielding([null, emptyDir.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/").yielding([null, emptyDir.modified])
         get( "/storage/zebcoe@local.dev/locog/", {} )
       }})
 
@@ -172,7 +172,7 @@ JS.Test.describe("Storage", function() { with(this) {
         get( "/storage/boris@local.dev/locog/seats", {} )
       }})
     }})
-/*
+
     describe("when an invalid access token is used", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer bad_token" )
@@ -184,7 +184,9 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("asks the store for a public item", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/public/locog/seats", null).yielding([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/public/locog/seats").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/public/locog/seats").yielding([null, item.modified])
+        expect(store, "get").given("contentType:zebcoe@local.dev/public/locog/seats").yielding([null, item.type])
         get( "/storage/zebcoe@local.dev/public/locog/seats", {} )
       }})
 
@@ -198,10 +200,11 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 401 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
-        check_header( "WWW-Authenticate", 'Bearer realm="localhost:4567" error="invalid_token"' )
+        check_header( "WWW-Authenticate", 'Bearer realm="remoteStorage" error="invalid_token"' )
       }})
     }})
 
+/*
     describe("when the store returns an item", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
