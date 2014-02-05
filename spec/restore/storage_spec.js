@@ -49,13 +49,13 @@ JS.Test.describe("Storage", function() { with(this) {
   after (function() { this.stop() })
 
   it("returns a 400 if the client uses path traversal in the path", function() { with(this) {
-    get( "/storage/zebcoe/locog/../seats" )
+    get( "/storage/zebcoe@local.dev/locog/../seats" )
     check_status( 400 )
     check_header( "Access-Control-Allow-Origin", "*" )
   }})
 
   it("returns a 400 if the client uses invalid characters in the path", function() { with(this) {
-    get( "/storage/zebcoe/locog/$eats" )
+    get( "/storage/zebcoe@local.dev/locog/$eats" )
     check_status( 400 )
     check_header( "Access-Control-Allow-Origin", "*" )
   }})
@@ -68,7 +68,7 @@ JS.Test.describe("Storage", function() { with(this) {
 
   describe("OPTIONS", function() { with(this) {
     it("returns access control headers", function() { with(this) {
-      options( "/storage/zebcoe/locog/seats", {} )
+      options( "/storage/zebcoe@local.dev/locog/seats", {} )
       check_status( 200 )
       check_header( "Access-Control-Allow-Headers", "Authorization, Content-Length, Content-Type, If-Match, If-None-Match, Origin, X-Requested-With" )
       check_header( "Access-Control-Allow-Methods", "GET, PUT, DELETE" )
@@ -84,6 +84,12 @@ JS.Test.describe("Storage", function() { with(this) {
       type:     "custom/type",
       modified: 1330177020000,
       value:    new Buffer("a value")
+    })
+
+    define("emptyDir", {
+      type:     "application/json",
+      modified: 1330177020000,
+      value:    {}
     })
 
     describe("when a valid access token is used", function() { with(this) {
@@ -116,63 +122,55 @@ JS.Test.describe("Storage", function() { with(this) {
         expect(store, "get").given("content:zebcoe@local.dev/locog/a%2Fpath").yielding([null, item.value])
         expect(store, "get").given("revision:zebcoe@local.dev/locog/a%2Fpath").yielding([null, item.modified])
         expect(store, "get").given("contentType:zebcoe@local.dev/locog/a%2Fpath").yielding([null, item.type])
-        get( "/storage/zebcoe/locog/a%2Fpath", {} )
+        get( "/storage/zebcoe@local.dev/locog/a%2Fpath", {} )
       }})
 
-/*
       it("asks the store for a directory listing", function() { with(this) {
         expect(store, "get").given("content:zebcoe@local.dev/locog/").yielding([null, item.value])
         expect(store, "get").given("revision:zebcoe@local.dev/locog/").yielding([null, item.modified])
-        expect(store, "get").given("contentType:zebcoe@local.dev/locog/").yielding([null, item.type])
-        get( "/storage/zebcoe/locog/", {} )
+        get( "/storage/zebcoe@local.dev/locog/", {} )
       }})
 
       it("asks the store for a deep directory listing", function() { with(this) {
-        expect(store, "get").given("content:zebcoe@local.dev/deep/dir/").yielding([null, item.value])
-        expect(store, "get").given("revision:zebcoe@local.dev/deep/dir/").yielding([null, item.modified])
-        expect(store, "get").given("contentType:zebcoe@local.dev/deep/dir/").yielding([null, item.type])
-        get( "/storage/zebcoe/deep/dir/", {} )
+        expect(store, "get").given("content:zebcoe@local.dev/deep/dir/").yielding([null, emptyDir.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/deep/dir/").yielding([null, emptyDir.modified])
+        get( "/storage/zebcoe@local.dev/deep/dir/", {} )
       }})
 
       it("asks the store for a root listing", function() { with(this) {
-        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, item.value])
-        expect(store, "get").given("revision:zebcoe@local.dev/").yielding([null, item.modified])
-        expect(store, "get").given("contentType:zebcoe@local.dev/").yielding([null, item.type])
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, emptyDir.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/").yielding([null, emptyDir.modified])
         header( "Authorization", "Bearer root_token" )
-        get( "/storage/zebcoe/", {} )
+        get( "/storage/zebcoe@local.dev/", {} )
       }})
 
       it("asks the store for an item conditionally based on If-None-Match", function() { with(this) {
-        expect(store, "get").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null, item])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/seats").yielding([null, item.value])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, item.modified])
+        expect(store, "get").given("contentType:zebcoe@local.dev/locog/seats").yielding([null, item.type])
         header( "If-None-Match", modifiedTimestamp )
-        get( "/storage/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
 
       it("does not ask the store for an item in an unauthorized directory", function() { with(this) {
         expect(store, "get").exactly(0)
-        get( "/storage/zebcoe/jsconf/tickets", {} )
+        get( "/storage/zebcoe@local.dev/jsconf/tickets", {} )
       }})
 
       it("does not ask the store for an item in a too-broad directory", function() { with(this) {
         expect(store, "get").exactly(0)
-        get( "/storage/zebcoe/deep/nothing", {} )
+        get( "/storage/zebcoe@local.dev/deep/nothing", {} )
       }})
 
       it("does not ask the store for an unauthorized directory", function() { with(this) {
         expect(store, "get").exactly(0)
-        get( "/storage/zebcoe/deep/", {} )
-      }})
-
-      it("does not ask the store for an item in a read-unauthorized directory", function() { with(this) {
-        expect(store, "get").exactly(0)
-        get( "/storage/zebcoe/statuses/first", {} )
+        get( "/storage/zebcoe@local.dev/deep/", {} )
       }})
 
       it("does not ask the store for an item for another user", function() { with(this) {
         expect(store, "get").exactly(0)
-        get( "/storage/boris/locog/seats", {} )
+        get( "/storage/boris@local.dev/locog/seats", {} )
       }})
-        */
     }})
 /*
     describe("when an invalid access token is used", function() { with(this) {
@@ -182,21 +180,21 @@ JS.Test.describe("Storage", function() { with(this) {
 
       it("does not ask the store for the item", function() { with(this) {
         expect(store, "get").exactly(0)
-        get( "/storage/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
 
       it("asks the store for a public item", function() { with(this) {
         expect(store, "get").given("zebcoe", "/public/locog/seats", null).yielding([null, item])
-        get( "/storage/zebcoe/public/locog/seats", {} )
+        get( "/storage/zebcoe@local.dev/public/locog/seats", {} )
       }})
 
       it("does not ask the store for a public directory", function() { with(this) {
         expect(store, "get").exactly(0)
-        get( "/storage/zebcoe/public/locog/seats/", {} )
+        get( "/storage/zebcoe@local.dev/public/locog/seats/", {} )
       }})
 
       it("returns an OAuth error", function() { with(this) {
-        get( "/storage/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 401 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -211,7 +209,7 @@ JS.Test.describe("Storage", function() { with(this) {
 
       it("returns the value in the response", function() { with(this) {
         stub(store, "get").yields([null, item])
-        get( "/storage/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -223,7 +221,7 @@ JS.Test.describe("Storage", function() { with(this) {
 
       it("returns a 412 for a failed conditional", function() { with(this) {
         stub(store, "get").yields([null, item, true])
-        get( "/storage/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 304 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -239,7 +237,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns the listing as JSON", function() { with(this) {
-        get( "/storage/zebcoe/locog/seats/", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats/", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -255,7 +253,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns a 200 response with an empty JSON object", function() { with(this) {
-        get( "/storage/zebcoe/locog/seats/", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats/", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
@@ -271,7 +269,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns an empty 404 response", function() { with(this) {
-        get( "/storage/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 404 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
@@ -285,7 +283,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns a 500 response with the error message", function() { with(this) {
-        get( "/storage/zebcoe/locog/seats", {} )
+        get( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 500 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "We did something wrong" )
@@ -301,34 +299,34 @@ JS.Test.describe("Storage", function() { with(this) {
 
       it("tells the store to save the given value", function() { with(this) {
         expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), null).yielding([null])
-        put( "/storage/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
       }})
 
       it("tells the store to save a public value", function() { with(this) {
         expect(store, "put").given("zebcoe", "/public/locog/seats", "text/plain", buffer("a value"), null).yielding([null])
-        put( "/storage/zebcoe/public/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/public/locog/seats", "a value" )
       }})
 
       it("tells the store to save a value conditionally based on If-None-Match", function() { with(this) {
         expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), modifiedTimestamp).yielding([null])
         header( "If-None-Match", modifiedTimestamp )
-        put( "/storage/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
       }})
 
       it("tells the store to save a value conditionally based on If-Match", function() { with(this) {
         expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), modifiedTimestamp).yielding([null])
         header( "If-Match", modifiedTimestamp )
-        put( "/storage/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
       }})
 
       it("does not tell the store to save a directory", function() { with(this) {
         expect(store, "put").exactly(0)
-        put( "/storage/zebcoe/locog/seats/", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats/", "a value" )
       }})
 
       it("does not tell the store to save to a write-unauthorized directory", function() { with(this) {
         expect(store, "put").exactly(0)
-        put( "/storage/zebcoe/books/house_of_leaves", "a value" )
+        put( "/storage/zebcoe@local.dev/books/house_of_leaves", "a value" )
       }})
     }})
 
@@ -339,7 +337,7 @@ JS.Test.describe("Storage", function() { with(this) {
 
       it("does not tell the store to save the given value", function() { with(this) {
         expect(store, "put").exactly(0)
-        put( "/storage/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
       }})
     }})
 
@@ -350,7 +348,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns an empty 201 response", function() { with(this) {
-        put( "/storage/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
         check_status( 201 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "ETag", "1347016875231" )
@@ -365,7 +363,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns an empty 200 response", function() { with(this) {
-        put( "/storage/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "ETag", "1347016875231" )
@@ -380,7 +378,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns an empty 412 response", function() { with(this) {
-        put( "/storage/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
         check_status( 412 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "ETag", "1347016875231" )
@@ -395,7 +393,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns a 500 response with the error message", function() { with(this) {
-        put( "/storage/zebcoe/locog/seats", "a value" )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
         check_status( 500 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "Something is technically wrong" )
@@ -410,19 +408,19 @@ JS.Test.describe("Storage", function() { with(this) {
 
     it("tells the store to delete the given item", function() { with(this) {
       expect(store, "delete").given("zebcoe", "/locog/seats", null).yielding([null])
-      this.delete( "/storage/zebcoe/locog/seats", {} )
+      this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
     }})
 
     it("tells the store to delete an item conditionally based on If-None-Match", function() { with(this) {
       expect(store, "delete").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null])
       header( "If-None-Match", modifiedTimestamp )
-      this.delete( "/storage/zebcoe/locog/seats", {} )
+      this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
     }})
 
     it("tells the store to delete an item conditionally based on If-Match", function() { with(this) {
       expect(store, "delete").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null])
       header( "If-Match", modifiedTimestamp )
-      this.delete( "/storage/zebcoe/locog/seats", {} )
+      this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
     }})
 
     describe("when the store says the item was deleted", function() { with(this) {
@@ -431,7 +429,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns an empty 200 response", function() { with(this) {
-        this.delete( "/storage/zebcoe/locog/seats", {} )
+        this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "ETag", "1358121717830" )
@@ -445,7 +443,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns an empty 404 response", function() { with(this) {
-        this.delete( "/storage/zebcoe/locog/seats", {} )
+        this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 404 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
@@ -458,7 +456,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns an empty 412 response", function() { with(this) {
-        this.delete( "/storage/zebcoe/locog/seats", {} )
+        this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 412 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "" )
@@ -471,7 +469,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns a 500 response with the error message", function() { with(this) {
-        this.delete( "/storage/zebcoe/locog/seats", {} )
+        this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 500 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_body( "OH NOES!" )
