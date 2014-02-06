@@ -410,7 +410,6 @@ JS.Test.describe("Storage", function() { with(this) {
         put( "/storage/zebcoe@local.dev/books/house_of_leaves", "a value" )
       }})
     }})
-/*
     describe("when an invalid access token is used", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer bad_token" )
@@ -428,15 +427,30 @@ JS.Test.describe("Storage", function() { with(this) {
         stub(store, "put").yields([null, true, 1347016875231])
       }})
 
-      it("returns an empty 201 response", function() { with(this) {
+      it("returns an empty 200 response", function() { with(this) {
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp])
+        
+        expect(store, "get").given("content:zebcoe@local.dev/locog/").yielding([null, undefined])
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, undefined])
+        
+        expect(store, "put").given("content:zebcoe@local.dev/locog/seats", buffer("a value")).yielding([null])
+        expect(store, "put").given("content:zebcoe@local.dev/locog/", {seats: true}).yielding([null])
+        expect(store, "put").given("content:zebcoe@local.dev/", {'locog/': true}).yielding([null])
+        
+        expect(store, "put").given("revision:zebcoe@local.dev/locog/seats", '9e4647f796987297ce25c638aa6797954b40b730').yielding([null])
+        expect(store, "put").given("revision:zebcoe@local.dev/locog/", '17e3a1238e9efb98de86d2f3313e6123445a6088').yielding([null])
+        expect(store, "put").given("revision:zebcoe@local.dev/", '453ec93e4a3cd34a3a9b970cbe214f2376292b80').yielding([null])
+        
+        expect(store, "put").given("contentType:zebcoe@local.dev/locog/seats", 'text/plain').yielding([null])
         put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
-        check_status( 201 )
+        check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "ETag", "1347016875231" )
+        check_header( "ETag", "\"9e4647f796987297ce25c638aa6797954b40b730\"" )
         check_body( "" )
       }})
     }})
 
+/*
     describe("when the store says the item was not created but updated", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
