@@ -228,7 +228,6 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns a 304 for a failed conditional", function() { with(this) {
-        expect(store, "get").given("content:zebcoe@local.dev/locog/seats").yielding([null, item.value])
         expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, item.modified.toString()])
         header( "If-None-Match", "\"1330177020000\"" )
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
@@ -288,7 +287,7 @@ JS.Test.describe("Storage", function() { with(this) {
     describe("when the item does not exist", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
-        expect(store, "get").given("content:zebcoe@local.dev/locog/seats").yielding([null, undefined])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, undefined])
       }})
 
       it("returns an empty 404 response", function() { with(this) {
@@ -503,71 +502,99 @@ JS.Test.describe("Storage", function() { with(this) {
     }})
   }})
 
-/*
   describe("DELETE", function() { with(this) {
     before(function() { with(this) {
       header( "Authorization", "Bearer a_token" )
+      expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp ])
     }})
 
-    it("tells the store to delete the given item", function() { with(this) {
-      expect(store, "delete").given("zebcoe", "/locog/seats", null).yielding([null])
-      this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
-    }})
-
-    it("tells the store to delete an item conditionally based on If-None-Match", function() { with(this) {
-      expect(store, "delete").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null])
-      header( "If-None-Match", modifiedTimestamp )
-      this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
-    }})
-
-    it("tells the store to delete an item conditionally based on If-Match", function() { with(this) {
-      expect(store, "delete").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null])
-      header( "If-Match", modifiedTimestamp )
-      this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
-    }})
-
-    describe("when the store says the item was deleted", function() { with(this) {
+    describe("when deletion is successful", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "delete").yields([null, true, 1358121717830])
+        expect(store, "get").given("content:zebcoe@local.dev/locog/").yielding([null, { seats: true } ])
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, { 'locog/': true } ])
+        
+        expect(store, "delete").given("content:zebcoe@local.dev/locog/seats").yielding([null])
+        expect(store, "delete").given("revision:zebcoe@local.dev/locog/seats").yielding([null])
+        expect(store, "delete").given("contentType:zebcoe@local.dev/locog/seats").yielding([null])
+        
+        expect(store, "put").given("content:zebcoe@local.dev/locog/", {}).yielding([null])
+        expect(store, "put").given("revision:zebcoe@local.dev/locog/", 'bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f').yielding([null])
+        
+        expect(store, "put").given("content:zebcoe@local.dev/", {}).yielding([null])
+        expect(store, "put").given("revision:zebcoe@local.dev/", 'bf21a9e8fbc5a3846fb05b4fa0859e0917b2202f').yielding([null])
+      }})
+
+      it("tells the store to delete the given item", function() { with(this) {
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, { 'locog/': true } ])
+        this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
+      }})
+
+      it("tells the store to delete an item conditionally based on If-None-Match", function() { with(this) {
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, { 'locog/': true } ])
+        header( "If-None-Match", '"abc"' )
+        this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
+      }})
+
+      it("tells the store to delete an item conditionally based on If-Match", function() { with(this) {
+        expect(store, "get").given("content:zebcoe@local.dev/").yielding([null, { 'locog/': true } ])
+        header( "If-Match", '"' + modifiedTimestamp + '"' )
+        this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
 
       it("returns an empty 200 response", function() { with(this) {
         this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "ETag", "1358121717830" )
         check_body( "" )
       }})
     }})
 
-    describe("when the store says the item was not deleted", function() { with(this) {
+    describe("when the store says the item does not exist", function() { with(this) {
       before(function() { with(this) {
-        stub(store, "delete").yields([null, false, 1358121717830])
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, undefined ])
       }})
 
       it("returns an empty 404 response", function() { with(this) {
         this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 404 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_body( "" )
+        check_body( "404 Not Found" )
       }})
     }})
 
-    describe("when the store says there was a version conflict", function() { with(this) {
+    describe("when the store says there was a version conflict If-Match", function() { with(this) {
       before(function() { with(this) {
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp ])
         stub(store, "delete").yields([null, false, 1358121717830, true])
       }})
 
       it("returns an empty 412 response", function() { with(this) {
+        header( "If-Match", '"abc"' )
         this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 412 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_body( "" )
+        check_body( "412 Precondition failed" )
+      }})
+    }})
+
+    describe("when the store says there was a version conflict If-None-Match", function() { with(this) {
+      before(function() { with(this) {
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp ])
+        stub(store, "delete").yields([null, false, 1358121717830, true])
+      }})
+
+      it("returns an empty 412 response", function() { with(this) {
+        header( "If-None-Match", '"' + modifiedTimestamp + '"' )
+        this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
+        check_status( 412 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_body( "412 Precondition failed" )
       }})
     }})
 
     describe("when the store returns an error", function() { with(this) {
       before(function() { with(this) {
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp ])
         stub(store, "delete").yields([new Error("OH NOES!")])
       }})
 
@@ -575,10 +602,9 @@ JS.Test.describe("Storage", function() { with(this) {
         this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
         check_status( 500 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_body( "OH NOES!" )
+        check_body( "500 Internal Server Error" )
       }})
     }})
   }})
-  */
 }})
 
