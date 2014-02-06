@@ -450,34 +450,39 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
     }})
 
-/*
-    describe("when the store says the item was not created but updated", function() { with(this) {
-      before(function() { with(this) {
-        header( "Authorization", "Bearer a_token" )
-        stub(store, "put").yields([null, false, 1347016875231])
-      }})
-
-      it("returns an empty 200 response", function() { with(this) {
-        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
-        check_status( 200 )
-        check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "ETag", "1347016875231" )
-        check_body( "" )
-      }})
-    }})
-
-    describe("when the store says there was a version conflict", function() { with(this) {
+    describe("when the store says there was a version conflict creating", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
         stub(store, "put").yields([null, false, 1347016875231, true])
       }})
 
       it("returns an empty 412 response", function() { with(this) {
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp])
+        
+        header ( 'If-None-Match', '*' )
         put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
         check_status( 412 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "ETag", "1347016875231" )
-        check_body( "" )
+        check_header( "ETag", "\"" + modifiedTimestamp + "\"" )
+        check_body( "412 Precondition failed" )
+      }})
+    }})
+
+    describe("when the store says there was a version conflict updating", function() { with(this) {
+      before(function() { with(this) {
+        header( "Authorization", "Bearer a_token" )
+        stub(store, "put").yields([null, false, 1347016875231, true])
+      }})
+
+      it("returns an empty 412 response", function() { with(this) {
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp])
+        
+        header ( 'If-Match', '"abc"' )
+        put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
+        check_status( 412 )
+        check_header( "Access-Control-Allow-Origin", "*" )
+        check_header( "ETag", "\"" + modifiedTimestamp + "\"" )
+        check_body( "412 Precondition failed" )
       }})
     }})
 
@@ -488,13 +493,14 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("returns a 500 response with the error message", function() { with(this) {
+        expect(store, "get").given("revision:zebcoe@local.dev/locog/seats").yielding([null, modifiedTimestamp])
+        
         put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
         check_status( 500 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_body( "Something is technically wrong" )
+        check_body( "500 Internal Server Error" )
       }})
     }})
-    */
   }})
 
 /*
