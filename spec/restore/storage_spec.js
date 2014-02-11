@@ -51,11 +51,13 @@ JS.Test.describe("Storage", function() { with(this) {
 
   before(function() { this.start(4567) })
   after (function() { this.stop() })
+
   it("returns a 400 if the client uses path traversal in the path", function() { with(this) {
     get( "/storage/zebcoe@local.dev/locog/../seats" )
     check_status( 400 )
     check_header( "Access-Control-Allow-Origin", "*" )
   }})
+
   it("returns a 400 if the client uses invalid characters in the path", function() { with(this) {
     get( "/storage/zebcoe@local.dev/locog/$eats" )
     check_status( 400 )
@@ -80,6 +82,7 @@ JS.Test.describe("Storage", function() { with(this) {
       check_body( "" )
     }})
   }})
+
   describe("GET", function() { with(this) {
     define("item", {
       type:     new Buffer("custom/type", 'utf-8'),
@@ -92,10 +95,12 @@ JS.Test.describe("Storage", function() { with(this) {
       modified: new Buffer('1330177020000', 'utf-8'),
       value:    new Buffer(JSON.stringify({}), 'utf-8')
     })
+
     describe("when a valid access token is used", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
       }})
+
       it("asks the store for the item", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "content:/locog/seats").yielding([null, item.value])
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, item.modified])
@@ -142,6 +147,7 @@ JS.Test.describe("Storage", function() { with(this) {
         header( "Authorization", "Bearer root_token" )
         get( "/storage/zebcoe@local.dev/", {} )
       }})
+
       it("asks the store for an item conditionally based on If-None-Match", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "content:/locog/seats").yielding([null, new Buffer(item.value, 'utf-8')])
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, new Buffer(item.modified.toString(), 'utf-8')])
@@ -149,6 +155,7 @@ JS.Test.describe("Storage", function() { with(this) {
         header( "If-None-Match", '"boo"' )
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
+
       it("does not ask the store for an item in an unauthorized directory", function() { with(this) {
         expect(store, "getItem").exactly(0)
         get( "/storage/zebcoe@local.dev/jsconf/tickets", {} )
@@ -169,20 +176,24 @@ JS.Test.describe("Storage", function() { with(this) {
         get( "/storage/boris@local.dev/locog/seats", {} )
       }})
     }})
+
     describe("when an invalid access token is used", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer bad_token" )
       }})
+    
       it("does not ask the store for the item", function() { with(this) {
         expect(store, "getItem").exactly(0)
         get( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
+      
       it("asks the store for a public item", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "content:/public/locog/seats").yielding([null, item.value])
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/public/locog/seats").yielding([null, item.modified])
         expect(store, "getItem").given("zebcoe@local.dev", "contentType:/public/locog/seats").yielding([null, item.type])
         get( "/storage/zebcoe@local.dev/public/locog/seats", {} )
       }})
+      
       it("does not ask the store for a public directory", function() { with(this) {
         expect(store, "getItem").exactly(0)
         get( "/storage/zebcoe@local.dev/public/locog/seats/", {} )
@@ -196,10 +207,12 @@ JS.Test.describe("Storage", function() { with(this) {
         check_header( "WWW-Authenticate", 'Bearer realm="remoteStorage" error="invalid_token"' )
       }})
     }})
+    
     describe("when the store returns an item", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
       }})
+      
       it("returns the value in the response", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "content:/locog/seats").yielding([null, item.value])
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, item.modified])
@@ -213,6 +226,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_header( "ETag", "\"1330177020000\"" )
         check_body( buffer("a value") )
       }})
+      
       it("returns a 304 for a failed conditional", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, new Buffer(item.modified.toString(), 'utf-8')])
         header( "If-None-Match", "\"1330177020000\"" )
@@ -224,6 +238,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( "" )
       }})
     }})
+    
     describe("when the store returns a directory listing", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
@@ -303,6 +318,7 @@ JS.Test.describe("Storage", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
       }})
+      
       it("tells the store to save the given value", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, new Buffer('123', 'utf-8')])
         
@@ -321,6 +337,7 @@ JS.Test.describe("Storage", function() { with(this) {
         
         put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
       }})
+      
       it("tells the store to save a public value", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/public/locog/seats").yielding([null, new Buffer('123', 'utf-8')])
         
@@ -342,6 +359,7 @@ JS.Test.describe("Storage", function() { with(this) {
         
         put( "/storage/zebcoe@local.dev/public/locog/seats", "a value" )
       }})
+      
       it("tells the store to save a value conditionally based on If-None-Match", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, new Buffer('123', 'utf-8')])
         
@@ -363,7 +381,7 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
 
       it("tells the store to save a value conditionally based on If-Match", function() { with(this) {
-        expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, buffer(modifiedTimestamp)])
+        expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, new Buffer(modifiedTimestamp, 'utf-8')])
         
         expect(store, "getItem").given("zebcoe@local.dev", "content:/locog/").yielding([null, undefined])
         expect(store, "getItem").given("zebcoe@local.dev", "content:/").yielding([null, undefined])
@@ -381,6 +399,7 @@ JS.Test.describe("Storage", function() { with(this) {
         header( "If-Match", '"' + modifiedTimestamp + '"' )
         put( "/storage/zebcoe@local.dev/locog/seats", "a value" )
       }})
+      
       it("does not tell the store to save a directory", function() { with(this) {
         expect(store, "putItem").exactly(0)
         put( "/storage/zebcoe@local.dev/locog/seats/", "a value" )
@@ -390,7 +409,6 @@ JS.Test.describe("Storage", function() { with(this) {
         expect(store, "putItem").exactly(0)
         put( "/storage/zebcoe@local.dev/books/house_of_leaves", "a value" )
       }})
-
     }})
 
     describe("when an invalid access token is used", function() { with(this) {
@@ -451,6 +469,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( "412 Precondition failed" )
       }})
     }})
+
     describe("when the store says there was a version conflict updating", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
@@ -468,6 +487,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( "412 Precondition failed" )
       }})
     }})
+
     describe("when the store returns an error", function() { with(this) {
       before(function() { with(this) {
         header( "Authorization", "Bearer a_token" )
@@ -484,11 +504,13 @@ JS.Test.describe("Storage", function() { with(this) {
       }})
     }})
   }})
+
   describe("DELETE", function() { with(this) {
     before(function() { with(this) {
       header( "Authorization", "Bearer a_token" )
       expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, buffer(modifiedTimestamp) ])
     }})
+    
     describe("when deletion is successful", function() { with(this) {
       before(function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "content:/locog/").yielding([null, new Buffer(JSON.stringify({ seats: true }), 'utf-8') ])
@@ -508,6 +530,7 @@ JS.Test.describe("Storage", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "content:/").yielding([null, new Buffer(JSON.stringify({ 'locog/': true }), 'utf-8') ])
         this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
+      
       it("tells the store to delete an item conditionally based on If-None-Match", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "content:/").yielding([null, new Buffer(JSON.stringify({ 'locog/': true }), 'utf-8') ])
         header( "If-None-Match", '"abc"' )
@@ -520,6 +543,7 @@ JS.Test.describe("Storage", function() { with(this) {
         header( "If-Match", '"' + modifiedTimestamp.toString() + '"' )
         this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
       }})
+      
       it("returns an empty 200 response", function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "content:/").yielding([null, new Buffer(JSON.stringify({ 'locog/': true }), 'utf-8') ])
         this.delete( "/storage/zebcoe@local.dev/locog/seats", {} )
@@ -556,6 +580,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_body( "412 Precondition failed" )
       }})
     }})
+    
     describe("when the store says there was a version conflict If-None-Match", function() { with(this) {
       before(function() { with(this) {
         expect(store, "getItem").given("zebcoe@local.dev", "revision:/locog/seats").yielding([null, new Buffer(modifiedTimestamp, 'utf-8') ])
