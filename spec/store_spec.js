@@ -136,6 +136,25 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
       }})
 
+      describe("queryToken", function() { with(this) {
+        it("returns the user's authorizations", function(resume) { with(this) {
+          store.queryToken("boris", token, function(error, auths) {
+            resume(function() {
+              assertEqual( [
+                  "/contacts/:r",
+                  "/public/contacts/:r",
+                  "/deep/dir/:rw",
+                  "/public/deep/dir/:rw",
+                  "/documents/:rw",
+                  "/public/documents/:rw",
+                  "/photos/:rw",
+                  "/public/photos/:rw"
+                ].sort(), auths.sort() )
+            })
+          })
+        }})
+      }})
+
       describe("revokeAccess", function() { with(this) {
         before(function(resume) { with(this) {
           store.revokeAccess("boris", token, resume)
