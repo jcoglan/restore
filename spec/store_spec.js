@@ -548,17 +548,17 @@ JS.Test.describe("Stores", function() { with(this) {
         })
       }})
 
-/*      it("stores binary data", function(resume) { with(this) {
+      it("stores binary data", function(resume) { with(this) {
         store.putItem("boris", "test:/photos/whut", file("whut2.jpg"), function(err1) {
           store.getItem("boris", "test:/photos/whut", function(err2, item) {
             resume(function() {
               assertEqual( err1, null )
               assertEqual( err2, null )
-              assertEqual( file("whut2.jpg"), item.value )
+              assertEqual( file("whut2.jpg"), item )
             })
           })
         })
-      }})*/
+      }})
       
       it("deletes the value of an item", function(resume) { with(this) {
         store.putItem("boris", "test:/photos/zipwire", buffer("vertibo"), function(err1) {
