@@ -535,6 +535,51 @@ JS.Test.describe("Stores", function() { with(this) {
         }})
       }})
     }})
+    describe("item storage methods", function() { with(this) {
+      it("sets the value of an item", function(resume) { with(this) {
+        store.putItem("boris", "test:/photos/zipwire", buffer("vertibo"), function(err1) {
+          store.getItem("boris", "test:/photos/zipwire", function(err2, item) {
+            resume(function() {
+              assertEqual( err1, null )
+              assertEqual( err2, null )
+              assertEqual( buffer("vertibo"), item )
+            })
+          })
+        })
+      }})
+
+/*      it("stores binary data", function(resume) { with(this) {
+        store.putItem("boris", "test:/photos/whut", file("whut2.jpg"), function(err1) {
+          store.getItem("boris", "test:/photos/whut", function(err2, item) {
+            resume(function() {
+              assertEqual( err1, null )
+              assertEqual( err2, null )
+              assertEqual( file("whut2.jpg"), item.value )
+            })
+          })
+        })
+      }})*/
+      
+      it("deletes the value of an item", function(resume) { with(this) {
+        store.putItem("boris", "test:/photos/zipwire", buffer("vertibo"), function(err1) {
+          store.getItem("boris", "test:/photos/zipwire", function(err2, item2) {
+            store.deleteItem("boris", "test:/photos/zipwire", function(err3) {
+              store.getItem("boris", "test:/photos/zipwire", function(err4, item4) {
+                resume(function() {
+                  assertEqual( err1, null )
+                  assertEqual( err2, null )
+                  assertEqual( err3, null )
+                  assertEqual( err4, null )
+                  assertEqual( buffer("vertibo"), item2 )
+                  assertEqual( undefined, item4 )
+                })
+              })
+            })
+          })
+        })
+      }})
+    }})
+
   }})
 }})
 
