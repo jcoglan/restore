@@ -100,6 +100,27 @@ JS.Test.describe("WebFinger", function() { with(this) {
     })
   }})
 
+  it("returns resource metadata as per rfc7033", function() { with(this) {
+    get( "/.well-known/webfinger", {resource: "acct:zebcoe@locog"} )
+
+    check_status( 200 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+    check_header( "Content-Type", "application/json" )
+
+    check_json({
+      "links": [
+        {
+          "href": host + "/storage/zebcoe",
+          "rel":  "remotestorage",
+          "type": "draft-dejong-remotestorage-01",
+          "properties": {
+            "http://tools.ietf.org/html/rfc6749#section-4.2":  host + "/oauth/zebcoe"
+          }
+        }
+      ]
+    })
+  }})
+
   it("returns resource metadata as XML", function() { with(this) {
     get( "/.well-known/host-meta", {resource: "acct:zebcoe@locog"} )
 

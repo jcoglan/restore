@@ -1,3 +1,4 @@
+//process.env.DEBUG = true
 process.env.SILENT = '1'
 
 var JS = require('jstest')
