@@ -1,4 +1,4 @@
-### 0.2.0 / TODO
+### 0.2.0 / 2014-02-22
 
 * Allow dots in pathnames, but block path traversal attempts
 * Respond with `304` for conditional `GET` instead of `412`
@@ -6,6 +6,7 @@
 * Add a `ca` option to the HTTPS config
 * Storage engines now take versions as timestamps, not Dates
 * User accounts now require an email address
+* Change file naming to accommodate dots in names, automatically migrate old files
 * Fix some locking problems in the filesystem backend
 * Add nice HTML views for home page, sign-up form, error pages
 
