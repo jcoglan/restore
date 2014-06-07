@@ -114,7 +114,7 @@ JS.Test.describe("Storage", function() { with(this) {
 
       it("asks the store for an item conditionally based on If-None-Match", function() { with(this) {
         expect(store, "get").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null, item])
-        header( "If-None-Match", modifiedTimestamp )
+        header( "If-None-Match", '"' + modifiedTimestamp + '"' )
         get( "/storage/zebcoe/locog/seats", {} )
       }})
 
@@ -186,7 +186,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_header( "Cache-Control", "no-cache, no-store" )
         check_header( "Content-Length", "7" )
         check_header( "Content-Type", "custom/type" )
-        check_header( "ETag", "1330177020000" )
+        check_header( "ETag", '"1330177020000"' )
         check_body( buffer("a value") )
       }})
 
@@ -196,7 +196,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 304 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
-        check_header( "ETag", "1330177020000" )
+        check_header( "ETag", '"1330177020000"' )
         check_body( "" )
       }})
     }})
@@ -212,7 +212,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
-        check_header( "ETag", "12345888888" )
+        check_header( "ETag", '"12345888888"' )
         check_json( {"bar/": "12345888888", "bla": "1234544444"} )
       }})
     }})
@@ -228,7 +228,7 @@ JS.Test.describe("Storage", function() { with(this) {
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
         check_header( "Cache-Control", "no-cache, no-store" )
-        check_header( "ETag", "12345888888" )
+        check_header( "ETag", '"12345888888"' )
         check_json( {} )
       }})
     }})
@@ -280,13 +280,13 @@ JS.Test.describe("Storage", function() { with(this) {
 
       it("tells the store to save a value conditionally based on If-None-Match", function() { with(this) {
         expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), modifiedTimestamp).yielding([null])
-        header( "If-None-Match", modifiedTimestamp )
+        header( "If-None-Match", '"' + modifiedTimestamp + '"' )
         put( "/storage/zebcoe/locog/seats", "a value" )
       }})
 
       it("tells the store to save a value conditionally based on If-Match", function() { with(this) {
         expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), modifiedTimestamp).yielding([null])
-        header( "If-Match", modifiedTimestamp )
+        header( "If-Match", '"' + modifiedTimestamp + '"' )
         put( "/storage/zebcoe/locog/seats", "a value" )
       }})
 
@@ -322,7 +322,7 @@ JS.Test.describe("Storage", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
         check_status( 201 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "ETag", "1347016875231" )
+        check_header( "ETag", '"1347016875231"' )
         check_body( "" )
       }})
     }})
@@ -337,7 +337,7 @@ JS.Test.describe("Storage", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "ETag", "1347016875231" )
+        check_header( "ETag", '"1347016875231"' )
         check_body( "" )
       }})
     }})
@@ -352,7 +352,7 @@ JS.Test.describe("Storage", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
         check_status( 412 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "ETag", "1347016875231" )
+        check_header( "ETag", '"1347016875231"' )
         check_body( "" )
       }})
     }})
@@ -384,13 +384,13 @@ JS.Test.describe("Storage", function() { with(this) {
 
     it("tells the store to delete an item conditionally based on If-None-Match", function() { with(this) {
       expect(store, "delete").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null])
-      header( "If-None-Match", modifiedTimestamp )
+      header( "If-None-Match", '"' + modifiedTimestamp + '"' )
       this.delete( "/storage/zebcoe/locog/seats", {} )
     }})
 
     it("tells the store to delete an item conditionally based on If-Match", function() { with(this) {
       expect(store, "delete").given("zebcoe", "/locog/seats", modifiedTimestamp).yielding([null])
-      header( "If-Match", modifiedTimestamp )
+      header( "If-Match", '"' + modifiedTimestamp + '"' )
       this.delete( "/storage/zebcoe/locog/seats", {} )
     }})
 
@@ -403,7 +403,7 @@ JS.Test.describe("Storage", function() { with(this) {
         this.delete( "/storage/zebcoe/locog/seats", {} )
         check_status( 200 )
         check_header( "Access-Control-Allow-Origin", "*" )
-        check_header( "ETag", "1358121717830" )
+        check_header( "ETag", '"1358121717830"' )
         check_body( "" )
       }})
     }})
