@@ -28,4 +28,3 @@ will connect properly.
 
     open http://local.dev:8000/rs-stable.html
     open http://local.dev:8000/rs-master.html
-

@@ -14,4 +14,3 @@ JS.Test.describe("FileTree store", function() { with(this) {
 
   itShouldBehaveLike("storage backend")
 }})
-

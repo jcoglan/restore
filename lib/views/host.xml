@@ -6,4 +6,3 @@
         template="<%= links[i].template %>" />
 <% } -%>
 </XRD>
-

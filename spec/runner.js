@@ -11,4 +11,3 @@ require('./stores/file_tree_spec')
 require('./stores/redis_spec')
 
 JS.Test.autorun()
-

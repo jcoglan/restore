@@ -448,4 +448,3 @@ JS.Test.describe("Storage", function() { with(this) {
     }})
   }})
 }})
-

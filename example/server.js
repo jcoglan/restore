@@ -25,4 +25,3 @@ server = new reStore({
 });
 
 server.boot();
-

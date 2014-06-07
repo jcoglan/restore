@@ -120,4 +120,3 @@ JS.Test.describe("WebFinger", function() { with(this) {
 </XRD>' )
   }})
 }})
-

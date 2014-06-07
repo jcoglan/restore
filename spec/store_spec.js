@@ -518,4 +518,3 @@ JS.Test.describe("Stores", function() { with(this) {
     }})
   }})
 }})
-

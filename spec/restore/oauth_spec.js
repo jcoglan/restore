@@ -117,4 +117,3 @@ JS.Test.describe("OAuth", function() { with(this) {
     }})
   }})
 }})
-

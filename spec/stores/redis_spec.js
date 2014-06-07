@@ -22,4 +22,3 @@ JS.Test.describe("Redis store", function() { with(this) {
 
   itShouldBehaveLike("storage backend")
 }})
-
