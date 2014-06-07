@@ -447,7 +447,7 @@ JS.Test.describe("Stores", function() { with(this) {
           store.delete("boris", "/photos/bar/baz/boo", null, function() {
             store.get("boris", "/photos/", null, function(error, items) {
               resume(function() {
-                assertNotEqual( arrayIncluding(objectIncluding({name: "bar/"})), items )
+                assertNotEqual( arrayIncluding(objectIncluding({name: "bar/"})), items.children )
               })
             })
           })
