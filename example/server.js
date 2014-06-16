@@ -1,6 +1,7 @@
 var reStore = require('../lib/restore'),
     store,
-    server;
+    server,
+    fs = require('fs');
 
 var type = process.argv[2];
 
@@ -15,8 +16,9 @@ server = new reStore({
   https:  {
     force:  true,
     port:   443,
-    cert:   __dirname + '/ssl/server.crt',
-    key:    __dirname + '/ssl/server.key'
+    certText:   fs.readFileSync(__dirname + '/ssl/server.crt'),
+    keyText:    fs.readFileSync(__dirname + '/ssl/server.key'),
+    caText:   fs.readFileSync(__dirname + '/ssl/chain.ca')
   },
   allow: {
     signup: true
