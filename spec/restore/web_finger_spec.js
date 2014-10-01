@@ -9,12 +9,12 @@ JS.Test.describe("WebFinger", function() { with(this) {
 
   define("host", "http://localhost:4567")
 
-  it("returns host metadata as JSON", function() { with(this) {
-    get( "/.well-known/host-meta.json", {} )
+  it("default returns host metadata as JSON", function() { with(this) {
+    get( "/.well-known/webfinger", {} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
-    check_header( "Content-Type", "application/json" )
+    check_header( "Content-Type", "application/jrd+json" )
 
     check_json({
       "links": [
@@ -26,8 +26,25 @@ JS.Test.describe("WebFinger", function() { with(this) {
     })
   }})
 
-   it("returns host metadata as XML", function() { with(this) {
-    get( "/.well-known/host-meta", {} )
+  it("returns host metadata as JSON", function() { with(this) {
+    get( "/.well-known/webfinger.json", {} )
+
+    check_status( 200 )
+    check_header( "Access-Control-Allow-Origin", "*" )
+    check_header( "Content-Type", "application/jrd+json" )
+
+    check_json({
+      "links": [
+        {
+          "rel": "lrdd",
+          "template": host + "/webfinger/jrd?resource={uri}"
+        }
+      ]
+    })
+  }})
+
+  it("returns host metadata as XML", function() { with(this) {
+    get( "/.well-known/webfinger.xml", {} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
@@ -46,7 +63,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
-    check_header( "Content-Type", "application/json" )
+    check_header( "Content-Type", "application/jrd+json" )
 
     check_json({
       "links": [
@@ -77,11 +94,11 @@ JS.Test.describe("WebFinger", function() { with(this) {
   }})
 
   it("returns resource metadata as JSON", function() { with(this) {
-    get( "/.well-known/host-meta.json", {resource: "acct:zebcoe@locog"} )
+    get( "/.well-known/webfinger.json", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
-    check_header( "Content-Type", "application/json" )
+    check_header( "Content-Type", "application/jrd+json" )
 
     check_json({
       "links": [
@@ -101,7 +118,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
   }})
 
   it("returns resource metadata as XML", function() { with(this) {
-    get( "/.well-known/host-meta", {resource: "acct:zebcoe@locog"} )
+    get( "/.well-known/webfinger.xml", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
