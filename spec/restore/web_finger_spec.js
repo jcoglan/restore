@@ -9,7 +9,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
 
   define("host", "http://localhost:4567")
 
-  it("default returns host metadata as JSON", function() { with(this) {
+  it("returns webfinger data as JRD+JSON", function() { with(this) {
     get( "/.well-known/webfinger", {} )
 
     check_status( 200 )
@@ -27,11 +27,11 @@ JS.Test.describe("WebFinger", function() { with(this) {
   }})
 
   it("returns host metadata as JSON", function() { with(this) {
-    get( "/.well-known/webfinger.json", {} )
+    get( "/.well-known/host-meta.json", {} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
-    check_header( "Content-Type", "application/jrd+json" )
+    check_header( "Content-Type", "application/json" )
 
     check_json({
       "links": [
@@ -44,7 +44,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
   }})
 
   it("returns host metadata as XML", function() { with(this) {
-    get( "/.well-known/webfinger.xml", {} )
+    get( "/.well-known/host-meta", {} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
@@ -58,7 +58,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
 </XRD>' )
   }})
 
- it("returns account metadata as JSON", function() { with(this) {
+  it("returns account metadata as JSON", function() { with(this) {
     get( "/webfinger/jrd", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
@@ -94,11 +94,11 @@ JS.Test.describe("WebFinger", function() { with(this) {
   }})
 
   it("returns resource metadata as JSON", function() { with(this) {
-    get( "/.well-known/webfinger.json", {resource: "acct:zebcoe@locog"} )
+    get( "/.well-known/host-meta.json", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
-    check_header( "Content-Type", "application/jrd+json" )
+    check_header( "Content-Type", "application/json" )
 
     check_json({
       "links": [
@@ -118,7 +118,7 @@ JS.Test.describe("WebFinger", function() { with(this) {
   }})
 
   it("returns resource metadata as XML", function() { with(this) {
-    get( "/.well-known/webfinger.xml", {resource: "acct:zebcoe@locog"} )
+    get( "/.well-known/host-meta", {resource: "acct:zebcoe@locog"} )
 
     check_status( 200 )
     check_header( "Access-Control-Allow-Origin", "*" )
