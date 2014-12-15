@@ -54,6 +54,12 @@ JS.Test.describe("OAuth", function() { with(this) {
       get("/oauth/me", auth_params)
       check_redirect( "http://example.com/cb#error=invalid_scope&error_description=Parameter%20%22scope%22%20is%20invalid" )
     }})
+
+    it("returns an error if username is missing", function() { with(this) {
+      delete auth_params.username
+      post("/oauth", auth_params)
+      check_status(400)
+    }})
   }})
 
   describe("with valid login credentials", function() { with(this) {
