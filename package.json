@@ -10,7 +10,7 @@
 , "main"            : "./lib/restore.js"
 
 , "dependencies"    : { "async": ""
-                      , "ejs": ""
+                      , "ejs": ">= 2.0.0"
                       , "mkdirp": ""
                       , "redis": ">= 0.8.2"
                       }
