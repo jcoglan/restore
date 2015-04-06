@@ -7,9 +7,9 @@ considered experimental. It has not been widely deployed, and I am in the
 process of rolling it out for personal use and within my company.
 
 As with any alpha-stage storage technology, you MUST expect that it will eat
-your data and take precautions against this. You SHOULD expect that its APIs
-and storage schemas will change before it is labelled stable. I MAY respond to
-bug reports but you MUST NOT expect that I will.
+your data and take precautions against this. You SHOULD expect that its APIs and
+storage schemas will change before it is labelled stable. I MAY respond to bug
+reports but you MUST NOT expect that I will.
 
 Per the MIT license, **usage is entirely at your own risk**.
 
@@ -132,10 +132,10 @@ behaviour to enforce secure connections.
 reStore supports pluggable storage backends, and comes with two implementations
 out of the box:
 
-* `reStore.FileTree` - Uses the filesystem hierarchy and stores each item in
-  its own individual file. Content and metadata are stored in separate files so
-  the content does not need base64-encoding and can be hand-edited. Must only
-  be run using a single server process.
+* `reStore.FileTree` - Uses the filesystem hierarchy and stores each item in its
+  own individual file. Content and metadata are stored in separate files so the
+  content does not need base64-encoding and can be hand-edited. Must only be run
+  using a single server process.
 * `reStore.Redis` - Stores data in a Redis database, and all stored data is
   base64-encoded. It can be run with any number of server processes.
 
@@ -170,22 +170,21 @@ server.boot();
 
 (The MIT License)
 
-Copyright (c) 2012-2014 James Coglan
+Copyright (c) 2012-2015 James Coglan
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the 'Software'), to deal in
 the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
