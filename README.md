@@ -15,16 +15,16 @@ Per the MIT license, **usage is entirely at your own risk**.
 
 ## What is this?
 
-reStore [remoteStorage][1] server written for Node.js. It is designed to be
-compatible with the 0.6 ([RemoteStorage-2011.10][2]) and 0.7
-([RemoteStorage-2012.04][3], [draft-dejong-00][4]) versions of
-[remoteStorage.js][5].
+reStore [RemoteStorage][1] server written for Node.js. It is designed to be
+compatible with [RemoteStorage.js][2] from version 0.6 onwards, covering
+versions [RemoteStorage-2011.10][3], [RemoteStorage-2012.04][4], and
+[draft-dejong][5] of the protocol.
 
 [1]: http://www.w3.org/community/unhosted/wiki/RemoteStorage
-[2]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2011.10
-[3]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04
-[4]: http://tools.ietf.org/id/draft-dejong-remotestorage-00.txt
-[5]: http://remotestorage.io/
+[2]: http://remotestorage.io/
+[3]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2011.10
+[4]: http://www.w3.org/community/unhosted/wiki/RemoteStorage-2012.04
+[5]: http://tools.ietf.org/id/draft-dejong-remotestorage.txt
 
 
 ## Installation
@@ -80,7 +80,7 @@ database and to any files containing the database access credentials.
 
 ### Serving over HTTPS
 
-Since remoteStorage is a system for storing arbitrary user-specific data, and
+Since RemoteStorage is a system for storing arbitrary user-specific data, and
 since it makes use of OAuth 2.0, we recommend you serve it over a secure
 connection. You can boot the server to listen for HTTP or HTTPS requests or
 both. This configuration boots the app on two ports, one secure and one
