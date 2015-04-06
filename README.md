@@ -52,6 +52,20 @@ var reStore = require('restore'),
 server.boot();
 ```
 
+The server does not allow users to sign up, out of the box. If you need to allow
+that, use the `allow.signup` option:
+
+```js
+var server = new reStore({
+               store: store,
+               http:  {port: 8000},
+               allow: {signup: true}
+             });
+```
+
+If you navigate to `http://localhost:8000/` you should then see a sign-up link
+in the navigation.
+
 
 ### Storage security
 
