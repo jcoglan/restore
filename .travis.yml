@@ -8,3 +8,6 @@ node_js:
 
 services:
   - redis-server
+
+before_install:
+  - '[ "${TRAVIS_NODE_VERSION}" != "0.8" ] || npm install -g npm@~1.4.0'
