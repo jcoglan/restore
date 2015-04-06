@@ -284,6 +284,12 @@ JS.Test.describe("Storage", function() { with(this) {
         put( "/storage/zebcoe/locog/seats", "a value" )
       }})
 
+      it("tells the store to create a value conditionally based on If-None-Match", function() { with(this) {
+        expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), "*").yielding([null])
+        header( "If-None-Match", "*" )
+        put( "/storage/zebcoe/locog/seats", "a value" )
+      }})
+
       it("tells the store to save a value conditionally based on If-Match", function() { with(this) {
         expect(store, "put").given("zebcoe", "/locog/seats", "text/plain", buffer("a value"), modifiedTimestamp).yielding([null])
         header( "If-Match", '"' + modifiedTimestamp + '"' )

@@ -273,6 +273,14 @@ JS.Test.describe("Stores", function() { with(this) {
             })
           }})
 
+          it("sets the value if * is given for a non-existent item", function(resume) { with(this) {
+            store.put("boris", "/photos/zipwire", "image/poster", buffer("vertibo"), "*", function() {
+              store.get("boris", "/photos/zipwire", null, function(error, item) {
+                resume(function() { assertEqual( buffer("vertibo"), item.value ) })
+              })
+            })
+          }})
+
           it("sets the value if the given version is current", function(resume) { with(this) {
             store.put("boris", "/photos/election", "image/jpeg", buffer("mayor"), date, function() {
               store.get("boris", "/photos/election", null, function(error, item) {
@@ -283,6 +291,14 @@ JS.Test.describe("Stores", function() { with(this) {
 
           it("does not set the value if the given version is not current", function(resume) { with(this) {
             store.put("boris", "/photos/election", "image/jpeg", buffer("mayor"), oldDate, function() {
+              store.get("boris", "/photos/election", null, function(error, item) {
+                resume(function() { assertEqual( buffer("hair"), item.value ) })
+              })
+            })
+          }})
+
+          it("does not set the value if * is given for an existing item", function(resume) { with(this) {
+            store.put("boris", "/photos/election", "image/jpeg", buffer("mayor"), "*", function() {
               store.get("boris", "/photos/election", null, function(error, item) {
                 resume(function() { assertEqual( buffer("hair"), item.value ) })
               })
