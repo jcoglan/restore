@@ -1,4 +1,4 @@
-# reStore [![Build Status](https://secure.travis-ci.org/jcoglan/restore.png)](http://travis-ci.org/jcoglan/restore)
+# reStore [![Build Status](https://secure.travis-ci.org/jcoglan/restore.svg)](http://travis-ci.org/jcoglan/restore)
 
 ### CAVEAT EMPTOR
 
