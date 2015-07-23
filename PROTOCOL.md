@@ -191,6 +191,8 @@ the server supports `Range` on `GET` requests and `false` otherwise. ([RFC
 
 Scope format: `*:rw`, `*:r`, `<module>:rw`, `<module>:r`
 
+Item names can contain any character except for `/` and null (`\0`).
+
 Access tokens may also appear via the `access_token` parameter if the server's
 WebFinger response indicates so.
 
