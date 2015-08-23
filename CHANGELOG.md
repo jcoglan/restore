@@ -2,6 +2,7 @@
 
 * Support the `/.well-known/webfinger` endpoint with options extension
 * Support `If-None-Match: *` on `PUT` requests
+* Support passing OAuth tokens via the `access_token` parameter
 * Return `ETag` header with double quotes
 * Return` Access-Control-Expose-Headers` on `GET`/`PUT`/`DELETE`, not just `OPTIONS`
 * Make all the write operations in the Redis backend atomic
