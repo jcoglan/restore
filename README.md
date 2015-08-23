@@ -46,11 +46,14 @@ var reStore = require('restore'),
     
     server  = new reStore({
                 store:  store,
-                http:   {port: 8000}
+                http:   {host: '127.0.0.1', port: 8000}
               });
 
 server.boot();
 ```
+
+The `host` option is optional and specifies the hostname the server will listen
+on. Its default value is `0.0.0.0`, meaning it will listen on all interfaces.
 
 The server does not allow users to sign up, out of the box. If you need to allow
 that, use the `allow.signup` option:
@@ -58,7 +61,7 @@ that, use the `allow.signup` option:
 ```js
 var server = new reStore({
                store: store,
-               http:  {port: 8000},
+               http:  {host: '127.0.0.1', port: 8000},
                allow: {signup: true}
              });
 ```
@@ -103,9 +106,13 @@ plaintext:
 ```js
 var server = new reStore({
   store:  store,
-  http:   {port: 8000},
+  http:   {
+    host: '127.0.0.1',
+    port: 8000
+  },
   https:  {
     force:  true,
+    host:   '127.0.0.1',
     port:   4343,
     key:    'path/to/ssl.key',
     cert:   'path/to/ssl.crt',

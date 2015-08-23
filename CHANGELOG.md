@@ -1,5 +1,6 @@
 ### 0.3.0 / 2015-08-23
 
+* Allow the HTTP/HTTPS listening hostname to be specified
 * Support the `/.well-known/webfinger` endpoint with options extension
 * Support `If-None-Match: *` on `PUT` requests
 * Support passing OAuth tokens via the `access_token` parameter
