@@ -1,0 +1,16 @@
+{
+  "allow_signup": true,
+  "storage_path": "/home/les/remoteStorage",
+  "cache_views": true,
+  "http": {
+    "host": "0.0.0.0",
+    "port": 8000
+  },
+  "https": {
+    "enable": true,
+    "force": true,
+    "port": 4443,
+    "cert": "/etc/letsencrypt/live/mystuff.ns0.it/cert.pem",
+    "key": "/etc/letsencrypt/live/mystuff.ns0.it/privkey.pem"
+  }
+}
