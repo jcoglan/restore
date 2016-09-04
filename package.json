@@ -1,29 +1,43 @@
-{ "name"            : "restore"
-, "description"     : "Simple remoteStorage server"
-, "homepage"        : "http://github.com/jcoglan/restore"
-, "author"          : "James Coglan <jcoglan@gmail.com> (http://jcoglan.com/)"
-, "keywords"        : ["remoteStorage", "webfinger", "oauth", "webdav"]
-, "license"         : "MIT"
-
-, "version"         : "0.3.0"
-, "engines"         : {"node": ">=0.8.0"}
-, "main"            : "./lib/restore.js"
-
-, "dependencies"    : { "async": ""
-                      , "ejs": ">= 2.0.0"
-                      , "lockfile": ">= 1.0.0"
-                      , "mkdirp": ""
-                      , "redis": ">= 0.8.2"
-                      }
-, "devDependencies" : { "jstest": ""
-                      , "rimraf": ""
-                      }
-
-, "scripts"         : {"test": "node spec/runner.js"}
-
-, "repository"      : { "type"  : "git"
-                      , "url"   : "git://github.com/jcoglan/restore.git"
-                      }
-
-, "bugs"            : {"url": "http://github.com/jcoglan/restore/issues"}
+{
+  "name": "restore",
+  "description": "Simple remoteStorage server",
+  "homepage": "http://github.com/jcoglan/restore",
+  "author": "James Coglan <jcoglan@gmail.com> (http://jcoglan.com/)",
+  "keywords": [
+    "remoteStorage",
+    "webfinger",
+    "oauth",
+    "webdav"
+  ],
+  "license": "MIT",
+  "version": "0.3.0",
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "bin": {
+    "reStore": "./bin/server.js"
+  },
+  "main": "./lib/restore.js",
+  "dependencies": {
+    "argparse": "^1.0.7",
+    "async": "",
+    "ejs": ">= 2.0.0",
+    "lockfile": ">= 1.0.0",
+    "mkdirp": "",
+    "redis": ">= 0.8.2"
+  },
+  "devDependencies": {
+    "jstest": "",
+    "rimraf": ""
+  },
+  "scripts": {
+    "test": "node spec/runner.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jcoglan/restore.git"
+  },
+  "bugs": {
+    "url": "http://github.com/jcoglan/restore/issues"
+  }
 }
