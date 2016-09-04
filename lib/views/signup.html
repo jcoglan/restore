@@ -1,6 +1,6 @@
 <h2>Sign up</h2>
 
-<form method="post" action="/signup">
+<form method="post" action="<%= baseURL %>/signup">
   <% if (error) { %>
     <p class="error"><%= error.message %></p>
   <% } %>
