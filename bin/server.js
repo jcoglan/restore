@@ -32,26 +32,9 @@ var remoteStorageServer = {
       description: 'NodeJS remoteStorage server'
     })
 
-    parser.addArgument (['-C','--cert'], 
-      { help: `ssl certificate (${__dirname}/ssl/server.crt)`, 
-      default: __dirname + '/ssl/server.crt'})
-    
-    parser.addArgument (['-K','--key'], 
-      { help: `ssl certificate (${__dirname}/ssl/server.key)`, 
-      default: __dirname + '/ssl/server.key'})
-
-    parser.addArgument(['-p','--path'], {
-      help: 'path used to store user\'s data',
-      default: 'remoteStorageData'
-    })
-
     parser.addArgument(['-c','--conf'], {
-      help: 'configuration file (use -j to create an example)'
-    })
-
-    parser.addArgument(['-j','--conf-example'], {
-      help: 'print out a configuration example',
-      action: 'storeTrue'
+      help: 'Path to configuration',
+      required: true
     })
 
     return parser.parseArgs()
