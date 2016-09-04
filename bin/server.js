@@ -1,32 +1,20 @@
 #!/usr/bin/env node
 
-const conf_example = 
-`{
-  // allow new user to register !
-  allow_signup: false
-  storage_path: '/home/les/remoteStorage',
-  cache_views: true,
-  http: {
-    port: 8000
-  },
-  
-  https: {
-    enable: true,
-    force: true,
-    port: 4443,
-    cert: '/etc/ssl/server.crt',
-    key: '/etc/ssl/server.key'
-  }
-}`
-
-const reStore = require('../lib/restore')
-const path = require('path')
+var reStore = require('../lib/restore')
+var path = require('path')
+var fs = require('fs')
 
 var remoteStorageServer = {
 
-  parseArgs () {
-    const ArgumentParser = require('argparse').ArgumentParser
-    const parser = new ArgumentParser({
+  // read and return configuration file
+  readConf: function(confPath) {
+    return JSON.parse(fs.readFileSync(confPath, 'utf8'))
+  },
+
+  // parse cli args
+  parseArgs: function() {
+    var ArgumentParser = require('argparse').ArgumentParser
+    var parser = new ArgumentParser({
       version: '1.0.0',
       addHelp: true,
       description: 'NodeJS remoteStorage server'
@@ -40,34 +28,22 @@ var remoteStorageServer = {
     return parser.parseArgs()
   },
 
-  checkConf (conf) {
-
-  },
-
-  init () {
+  init: function() {
     const args = this.parseArgs()
     let conf = {}
 
-    if (args.conf_example) {
-      console.log(conf_example)
-      return
-    }
-
-    if (args.conf) {
-      try {
-        conf = require(path.join(__dirname, args.conf))
-      } catch(e) {
-        console.error(`[ERROR] Reading '${args.conf}'`)
-        return     
-      }
+    try {
+      conf = this.readConf(args.conf)
+    } catch(e) {
+      console.error( e.toString() )
+      return -1
     }
     
-    console.log(`[INFO] Starting remoteStorage engine:
-    http://${conf.http.host}:${conf.http.port}!`)
+    console.log('[INFO] Starting remoteStorage: http://' + conf.http.host + ':' + conf.http.port)
 
     process.umask(077)
-    const store = new reStore.FileTree({path: conf.storage_path});
-    const server = new reStore({
+    var store = new reStore.FileTree({path: conf.storage_path});
+    var server = new reStore({
       store,
       http: {
         host: conf.http.host,
