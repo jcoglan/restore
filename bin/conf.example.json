@@ -7,10 +7,11 @@
     "port": 8000
   },
   "https": {
-    "enable": true,
-    "force": true,
+    "enable": false,
+    "force": false,
     "port": 4443,
-    "cert": "/etc/letsencrypt/live/mystuff.ns0.it/cert.pem",
-    "key": "/etc/letsencrypt/live/mystuff.ns0.it/privkey.pem"
-  }
+    "cert": "/etc/letsencrypt/live/example.com/cert.pem",
+    "key": "/etc/letsencrypt/live/example.com/privkey.pem"
+  },
+  "baseURL": ""
 }

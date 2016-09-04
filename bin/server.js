@@ -44,6 +44,7 @@ var remoteStorageServer = {
     process.umask(077)
     var store = new reStore.FileTree({path: conf.storage_path});
     var server = new reStore({
+      baseURL: conf.baseURL,
       store,
       http: {
         host: conf.http.host,
@@ -51,7 +52,7 @@ var remoteStorageServer = {
       },
       https: {
         host: conf.https.host,
-        port: conf.https.port,
+        port: conf.https.enable && conf.https.port,
         force: conf.https.force,
         cert: conf.https.cert,
         key: conf.https.key
