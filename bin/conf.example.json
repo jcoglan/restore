@@ -1,6 +1,6 @@
 {
   "allow_signup": true,
-  "storage_path": "/home/les/remoteStorage",
+  "storage_path": "/usr/share/reStore",
   "cache_views": true,
   "http": {
     "host": "0.0.0.0",

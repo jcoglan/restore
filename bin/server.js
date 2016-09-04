@@ -14,23 +14,38 @@ var remoteStorageServer = {
   // parse cli args
   parseArgs: function() {
     var ArgumentParser = require('argparse').ArgumentParser
+    var version = require(__dirname + '/../package.json').version
     var parser = new ArgumentParser({
-      version: '1.0.0',
+      version: version,
       addHelp: true,
-      description: 'NodeJS remoteStorage server'
+      description: 'NodeJS remoteStorage server / ' + version
     })
 
     parser.addArgument(['-c','--conf'], {
       help: 'Path to configuration',
-      required: true
+    })
+
+    parser.addArgument(['-e','--exampleConf'], {
+      help: 'Print configuration example',
+      action: 'storeTrue'
     })
 
     return parser.parseArgs()
   },
 
   init: function() {
-    const args = this.parseArgs()
-    let conf = {}
+    var args = this.parseArgs()
+    var conf = {}
+
+    if (args.exampleConf) {
+      console.log(fs.readFileSync(__dirname + '/conf.example.json', 'utf8'))
+      return -1
+    }
+
+    if (!args.conf) {
+      console.error('[ERR] Configuration file needed (help with -h)')
+      return -1
+    }
 
     try {
       conf = this.readConf(args.conf)
