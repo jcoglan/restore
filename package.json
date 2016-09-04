@@ -14,6 +14,9 @@
   "engines": {
     "node": ">=0.8.0"
   },
+  "bin": {
+    "reStore": "./bin/server.js"
+  },
   "main": "./lib/restore.js",
   "dependencies": {
     "argparse": "^1.0.7",
