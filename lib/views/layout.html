@@ -5,7 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link href="<%= scheme %>://fonts.googleapis.com/css?family=Ubuntu+Mono|Open+Sans:400italic,400,700" rel="stylesheet" type="text/css">
     <title><%= title %></title>
-    <link rel="stylesheet" type="text/css" href="<%= baseURL %>/assets/style.css">
+    <link rel="stylesheet" type="text/css" href="<%= basePath %>/assets/style.css">
   </head>
   <body>
 
@@ -14,8 +14,8 @@
         <h1><span>Remote Storage</span> <a href="/"><%= host %></a></h1>
 
         <ul class="nav">
-          <li><a href="<%= baseURL %>/">Home</a></li>
-          <% if (signup) { %><li><a href="<%= baseURL %>/signup">Sign up</a></li><% } %>
+          <li><a href="<%= basePath %>/">Home</a></li>
+          <% if (signup) { %><li><a href="<%= basePath %>/signup">Sign up</a></li><% } %>
         </ul>
       </div>
     </div>
