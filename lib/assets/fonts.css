@@ -1,0 +1,42 @@
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-weight: 400;
+  font-style: normal;
+  src: url('/fonts/Ubuntu-Mono-regular/Ubuntu-Mono-regular.eot');
+  src: url('/fonts/Ubuntu-Mono-regular/Ubuntu-Mono-regular.eot?#iefix') format('embedded-opentype'),
+       local('Ubuntu Mono'),
+       local('Ubuntu-Mono-regular'),
+       url('/fonts/Ubuntu-Mono-regular/Ubuntu-Mono-regular.woff2') format('woff2'),
+       url('/fonts/Ubuntu-Mono-regular/Ubuntu-Mono-regular.woff') format('woff'),
+       url('/fonts/Ubuntu-Mono-regular/Ubuntu-Mono-regular.ttf') format('truetype'),
+       url('/fonts/Ubuntu-Mono-regular/Ubuntu-Mono-regular.svg#UbuntuMono') format('svg');
+}
+
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-weight: 700;
+  font-style: normal;
+  src: url('/fonts/Ubuntu-Mono-700/Ubuntu-Mono-700.eot');
+  src: url('/fonts/Ubuntu-Mono-700/Ubuntu-Mono-700.eot?#iefix') format('embedded-opentype'),
+       local('Ubuntu Mono Bold'),
+       local('Ubuntu-Mono-700'),
+       url('/fonts/Ubuntu-Mono-700/Ubuntu-Mono-700.woff2') format('woff2'),
+       url('/fonts/Ubuntu-Mono-700/Ubuntu-Mono-700.woff') format('woff'),
+       url('/fonts/Ubuntu-Mono-700/Ubuntu-Mono-700.ttf') format('truetype'),
+       url('/fonts/Ubuntu-Mono-700/Ubuntu-Mono-700.svg#UbuntuMono') format('svg');
+}
+
+@font-face {
+  font-family: 'Ubuntu Mono';
+  font-weight: 400;
+  font-style: italic;
+  src: url('/fonts/Ubuntu-Mono-italic/Ubuntu-Mono-italic.eot');
+  src: url('/fonts/Ubuntu-Mono-italic/Ubuntu-Mono-italic.eot?#iefix') format('embedded-opentype'),
+       local('Ubuntu Mono Italic'),
+       local('Ubuntu-Mono-italic'),
+       url('/fonts/Ubuntu-Mono-italic/Ubuntu-Mono-italic.woff2') format('woff2'),
+       url('/fonts/Ubuntu-Mono-italic/Ubuntu-Mono-italic.woff') format('woff'),
+       url('/fonts/Ubuntu-Mono-italic/Ubuntu-Mono-italic.ttf') format('truetype'),
+       url('/fonts/Ubuntu-Mono-italic/Ubuntu-Mono-italic.svg#UbuntuMono') format('svg');
+}
+
